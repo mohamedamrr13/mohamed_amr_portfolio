@@ -13,6 +13,7 @@ class MyPortfolio extends StatelessWidget {
     return MaterialApp(
       home: HomeScreen(),
       theme: ThemeData(fontFamily: 'SpaceGrotesk'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

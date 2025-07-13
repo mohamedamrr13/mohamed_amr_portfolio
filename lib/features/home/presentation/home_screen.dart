@@ -15,10 +15,16 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.primaryColorDark,
         leadingWidth: double.maxFinite,
-        title: CustomText(
-          "Mohamed Amr",
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
+        title: Row(
+          children: [
+            Icon(Icons.developer_mode, color: AppColors.white, size: 28),
+            SizedBox(width: 7),
+            CustomText(
+              "Mohamed Amr",
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ],
         ),
 
         bottom: PreferredSize(
@@ -26,12 +32,9 @@ class HomeScreen extends StatelessWidget {
           child: Divider(thickness: 0.3),
         ),
         actionsPadding: EdgeInsets.symmetric(horizontal: 16),
-
         actions: [
           CustomButton(
             onPressed: () {},
-
-            margin: EdgeInsets.only(right: 8),
             shrinkWrap: true,
             backgroundColor: AppColors.buttonColorDark,
             child: CustomText(
@@ -42,7 +45,6 @@ class HomeScreen extends StatelessWidget {
           ),
           CustomButton(
             onPressed: () {},
-            margin: EdgeInsets.only(right: 8),
             shrinkWrap: true,
             backgroundColor: AppColors.buttonColorDark,
             child: CustomText(
@@ -53,8 +55,6 @@ class HomeScreen extends StatelessWidget {
           ),
           CustomButton(
             onPressed: () {},
-
-            margin: EdgeInsets.only(right: 8),
             shrinkWrap: true,
             backgroundColor: AppColors.buttonColorDark,
             child: CustomText(
@@ -66,7 +66,6 @@ class HomeScreen extends StatelessWidget {
           CustomButton(
             onPressed: () {},
 
-            margin: EdgeInsets.only(right: 8),
             shrinkWrap: true,
             backgroundColor: AppColors.buttonColorDark,
             child: CustomText(
@@ -78,7 +77,6 @@ class HomeScreen extends StatelessWidget {
           CustomButton(
             onPressed: () {},
 
-            margin: EdgeInsets.only(right: 8),
             shrinkWrap: true,
             backgroundColor: AppColors.buttonColorDark,
             child: CustomText(

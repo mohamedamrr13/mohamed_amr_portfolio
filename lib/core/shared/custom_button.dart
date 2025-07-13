@@ -5,11 +5,11 @@ class CustomButton extends StatefulWidget {
     super.key,
     this.child,
     this.onPressed,
-    this.margin,
+    this.buttonPadding,
     required this.backgroundColor,
     this.disabledButtonColor,
     this.borderRadius = 12,
-    this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    this.textPadding = const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     this.shrinkWrap = false,
     this.width,
     this.height,
@@ -19,11 +19,11 @@ class CustomButton extends StatefulWidget {
 
   final Widget? child;
   final VoidCallback? onPressed;
-  final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? buttonPadding;
   final Color backgroundColor;
   final Color? disabledButtonColor;
   final double borderRadius;
-  final EdgeInsets padding;
+  final EdgeInsets textPadding;
   final bool shrinkWrap;
   final double? width;
   final double? height;
@@ -39,8 +39,11 @@ class _CustomButtonState extends State<CustomButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: widget.margin,
+    return AnimatedPadding(
+      duration: Duration(milliseconds: 200),
+      padding:
+          widget.buttonPadding ??
+          EdgeInsets.symmetric(horizontal: _isHovered ? 6 : 4),
       child: MouseRegion(
         onEnter: (_) => setState(() => _isHovered = true),
         onExit: (_) => setState(() => _isHovered = false),
@@ -51,7 +54,7 @@ class _CustomButtonState extends State<CustomButton> {
           child: ElevatedButton(
             onPressed: widget.onPressed,
             style: ElevatedButton.styleFrom(
-              overlayColor: Colors.blueGrey,
+              overlayColor: Colors.black,
               backgroundColor: widget.backgroundColor,
               disabledBackgroundColor:
                   widget.disabledButtonColor ??
@@ -59,7 +62,7 @@ class _CustomButtonState extends State<CustomButton> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(widget.borderRadius),
               ),
-              padding: widget.padding,
+              padding: widget.textPadding,
               minimumSize:
                   widget.shrinkWrap
                       ? null
