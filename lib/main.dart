@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_portfolio/features/home/presentation/home_screen.dart';
 
 void main() {
-  runApp(MyPortfolio());
+  runApp(const MyPortfolio());
 }
 
 class MyPortfolio extends StatelessWidget {
@@ -11,9 +11,14 @@ class MyPortfolio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeScreen(),
-      theme: ThemeData(fontFamily: 'SpaceGrotesk'),
+      title: 'Mohamed Amr - Flutter Developer',
+      home: const HomeScreen(),
+      theme: ThemeData(
+        fontFamily: 'SpaceGrotesk',
+        useMaterial3: true,
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
 }
+

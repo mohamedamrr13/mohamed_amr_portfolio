@@ -40,7 +40,7 @@ class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return AnimatedPadding(
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       padding:
           widget.buttonPadding ??
           EdgeInsets.symmetric(horizontal: _isHovered ? 6 : 4),
