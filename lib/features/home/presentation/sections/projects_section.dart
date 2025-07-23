@@ -382,7 +382,7 @@ class _ProjectImage extends StatelessWidget {
     return Container(
       height:
           Responsive.isMobile(context)
-              ? 300
+              ? 250
               : Responsive.getWidth(context) * 0.2,
       width: double.infinity,
       decoration: const BoxDecoration(

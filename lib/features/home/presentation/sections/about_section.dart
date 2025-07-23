@@ -26,7 +26,7 @@ class AboutSection extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(height: 20),
+           SizedBox(height: Responsive.isMobile(context)? 10 : 20),
 
           _buildProfileImage(),
           const SizedBox(height: 30),

@@ -29,8 +29,8 @@ class ContactSection extends StatelessWidget {
 
           Center(
             child: DefaultTextStyle(
-              style: const TextStyle(
-                fontSize: 18,
+              style: TextStyle(
+                fontSize: Responsive.isMobile(context) ? 12 : 18,
                 color: AppColors.grey,
                 fontFamily: 'SpaceGrotesk',
               ),
@@ -97,9 +97,10 @@ class ContactSection extends StatelessWidget {
               children: [
                 Lottie.asset('assets/jsons/online_animation.json', height: 35),
                 const SizedBox(width: 5),
-                const CustomText(
+                CustomText(
+                  maxLines: 2,
                   "Currently available for new opportunities.",
-                  fontSize: 14,
+                  fontSize: Responsive.isMobile(context) ? 10 : 14,
                   fontWeight: FontWeight.w500,
                   color: Colors.green,
                 ),

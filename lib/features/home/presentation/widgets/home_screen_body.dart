@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_portfolio/core/utils/responsive.dart';
 import 'package:my_portfolio/core/utils/scroll_controller.dart';
 import 'package:my_portfolio/features/home/presentation/sections/about_section.dart';
 import 'package:my_portfolio/features/home/presentation/sections/contact_section.dart';
@@ -13,21 +14,21 @@ class HomeScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       controller: PortfolioScrollController.scrollController,
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(height: 40),
+          SizedBox(height: Responsive.isMobile(context) ? 20 : 60),
 
-          AboutSection(),
-          SizedBox(height: 60),
-          ExperienceSection(),
-          SizedBox(height: 60),
-          ProjectsSection(),
-          SizedBox(height: 60),
-          SkillsSection(),
-          SizedBox(height: 60),
-          ContactSection(),
-          SizedBox(height: 40),
+          const AboutSection(),
+          SizedBox(height: Responsive.isMobile(context) ? 30 : 60),
+          const ExperienceSection(),
+          SizedBox(height: Responsive.isMobile(context) ? 30 : 60),
+          const ProjectsSection(),
+          SizedBox(height: Responsive.isMobile(context) ? 30 : 60),
+          const SkillsSection(),
+          SizedBox(height: Responsive.isMobile(context) ? 30 : 60),
+          const ContactSection(),
+          SizedBox(height: Responsive.isMobile(context) ? 30 : 60),
         ],
       ),
     );
