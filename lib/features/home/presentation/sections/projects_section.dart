@@ -300,7 +300,8 @@ class _ProjectCardState extends State<ProjectCard>
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-
+                          if (Responsive.isMobile(context))
+                            const SizedBox(height: 20),
                           _TechnologiesWidget(
                             technologies: List<String>.from(
                               widget.project['technologies'],
