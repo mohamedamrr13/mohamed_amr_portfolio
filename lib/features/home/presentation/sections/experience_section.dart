@@ -40,7 +40,7 @@ class ExperienceSection extends StatelessWidget {
       {
         'title': 'Flutter Developer Freelancer',
         'company': 'Freelance',
-        'period': 'Mar 25 - Apr 25',
+        'period': 'Mar 2025 - Apr 2025',
         'description':
             'Updated and refactored a 5-year-old school management app to support modern Flutter dependencies. \nDebugged critical errors, resolved package conflicts, and improved app stability. \nAudited Firebase integration and suggested major fixes. \nMaintained client communication to align on major changes. ',
         'technologies': [
@@ -55,7 +55,7 @@ class ExperienceSection extends StatelessWidget {
       {
         'title': 'Mobile App Development Intern',
         'company': 'The Digital Egypt Pioneers Initiative (DEPI)',
-        'period': 'Oct 24 - May 25',
+        'period': 'Oct 2024 - May 2025',
         'description':
             'Assisted in developing mobile applications and learned modern development practices. Contributed to UI/UX improvements and bug fixes.',
         'technologies': ['Flutter', 'Dart', 'Kotlin', 'Java', 'GitHub'],
@@ -134,7 +134,7 @@ class ExperienceSection extends StatelessWidget {
               const SizedBox(height: 16),
               CustomText(
                 experience['description'],
-                fontSize: 10,
+                fontSize: Responsive.isMobile(context) ? 10 : 14,
                 fontWeight: FontWeight.w400,
                 color: AppColors.white.withOpacity(0.8),
               ),
