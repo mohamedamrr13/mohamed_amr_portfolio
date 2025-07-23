@@ -1,0 +1,10 @@
+^C:\USERS\PCCV\DESKTOP\MY_PORTFOLIO\BUILD\WINDOWS\X64\CMAKEFILES\F2C195AF856CF50B8F19C6687EB3DC0C\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/PCCV/Desktop/my_portfolio/windows -BC:/Users/PCCV/Desktop/my_portfolio/build/windows/x64 --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/PCCV/Desktop/my_portfolio/build/windows/x64/my_portfolio.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
