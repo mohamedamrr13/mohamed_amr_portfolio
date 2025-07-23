@@ -40,7 +40,7 @@ class ExperienceSection extends StatelessWidget {
       {
         'title': 'Flutter Developer Freelancer',
         'company': 'Freelance',
-        'period': 'Mar 2025 - Apr 2025',
+        'period': 'Mar 25 - Apr 25',
         'description':
             'Updated and refactored a 5-year-old school management app to support modern Flutter dependencies. \nDebugged critical errors, resolved package conflicts, and improved app stability. \nAudited Firebase integration and suggested major fixes. \nMaintained client communication to align on major changes. ',
         'technologies': [
@@ -55,7 +55,7 @@ class ExperienceSection extends StatelessWidget {
       {
         'title': 'Mobile App Development Intern',
         'company': 'The Digital Egypt Pioneers Initiative (DEPI)',
-        'period': 'Oct 2024 - May 2025',
+        'period': 'Oct 24 - May 25',
         'description':
             'Assisted in developing mobile applications and learned modern development practices. Contributed to UI/UX improvements and bug fixes.',
         'technologies': ['Flutter', 'Dart', 'Kotlin', 'Java', 'GitHub'],
@@ -100,13 +100,13 @@ class ExperienceSection extends StatelessWidget {
                       children: [
                         CustomText(
                           experience['title'],
-                          fontSize: Responsive.isMobile(context) ? 16 : 20,
+                          fontSize: Responsive.isMobile(context) ? 14 : 20,
                           fontWeight: FontWeight.bold,
                         ),
                         const SizedBox(height: 4),
                         CustomText(
                           experience['company'],
-                          fontSize: Responsive.isMobile(context) ? 12 : 16,
+                          fontSize: Responsive.isMobile(context) ? 10 : 16,
                           fontWeight: FontWeight.w500,
                           color: AppColors.primaryColor,
                         ),
@@ -124,7 +124,7 @@ class ExperienceSection extends StatelessWidget {
                     ),
                     child: CustomText(
                       experience['period'],
-                      fontSize: Responsive.isMobile(context) ? 10 : 12,
+                      fontSize: Responsive.isMobile(context) ? 8 : 12,
                       fontWeight: FontWeight.w500,
                       color: AppColors.primaryColor,
                     ),
@@ -134,7 +134,7 @@ class ExperienceSection extends StatelessWidget {
               const SizedBox(height: 16),
               CustomText(
                 experience['description'],
-                fontSize: 14,
+                fontSize: 10,
                 fontWeight: FontWeight.w400,
                 color: AppColors.white.withOpacity(0.8),
               ),

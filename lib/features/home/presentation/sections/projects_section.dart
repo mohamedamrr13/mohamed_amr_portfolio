@@ -291,7 +291,7 @@ class _ProjectCardState extends State<ProjectCard>
                               widget.project['description'],
                               fontSize:
                                   Responsive.isMobile(context)
-                                      ? 12
+                                      ? 10
                                       : 13, // Responsive font size
                               fontWeight: FontWeight.w400,
                               maxLines: 5,
