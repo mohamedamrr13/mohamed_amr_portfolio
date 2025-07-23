@@ -64,7 +64,7 @@ class ProjectsSection extends StatelessWidget {
       'title': 'Muslim 🕌',
       'description':
           'A modern prayer and spiritual assistant app that displays prayer times using location-based API, integrated Qiblah compass, daily Azkar screen, and native Android home screen widget for prayer times.',
-      'image': 'assets/images/muslim_mockup.png',
+      'image': 'assets/images/muslim_mockup.jpg',
       'technologies': [
         'Flutter',
         'Kotlin',
