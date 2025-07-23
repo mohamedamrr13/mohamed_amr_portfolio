@@ -124,7 +124,7 @@ class ExperienceSection extends StatelessWidget {
                     ),
                     child: CustomText(
                       experience['period'],
-                      fontSize: Responsive.isMobile(context) ? 8 : 12,
+                      fontSize: Responsive.isMobile(context) ? 7 : 12,
                       fontWeight: FontWeight.w500,
                       color: AppColors.primaryColor,
                     ),

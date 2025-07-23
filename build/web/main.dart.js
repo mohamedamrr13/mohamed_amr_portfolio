@@ -75274,17 +75274,17 @@ A.H8.prototype={
 O(a){var s="experience",r=$.uW().j(0,s)
 return A.Lf(A.eC(A.a([B.fu,A.aaf(A.nL(A.nd(B.Ei,null),null,null,A.bK(6e5,0,0)),-0.3),B.e0,this.Yq(a)],t.p),B.ag,B.Q),r,s)},
 Yq(a){var s=t.s,r=t.N,q=t.K
-return A.eC(new A.od(A.a([A.aw(["title","Flutter Developer Freelancer","company","Freelance","period","Mar 2025 - Apr 2025","description","Updated and refactored a 5-year-old school management app to support modern Flutter dependencies. \nDebugged critical errors, resolved package conflicts, and improved app stability. \nAudited Firebase integration and suggested major fixes. \nMaintained client communication to align on major changes. ","technologies",A.a(["Flutter","Dart","Firebase","Git","Debugging","Legacy Code"],s)],r,q),A.aw(["title","Mobile App Development Intern","company","The Digital Egypt Pioneers Initiative (DEPI)","period","Oct 2024 - May 2025","description","Assisted in developing mobile applications and learned modern development practices. Contributed to UI/UX improvements and bug fixes.","technologies",A.a(["Flutter","Dart","Kotlin","Java","GitHub"],s)],r,q)],t.Mq),t.aS).gfl().fV(0,new A.Zs(this,a),t.l7).cZ(0),B.ah,B.Q)},
+return A.eC(new A.od(A.a([A.aw(["title","Flutter Developer Freelancer","company","Freelance","period","Mar 25 - Apr 25","description","Updated and refactored a 5-year-old school management app to support modern Flutter dependencies. \nDebugged critical errors, resolved package conflicts, and improved app stability. \nAudited Firebase integration and suggested major fixes. \nMaintained client communication to align on major changes. ","technologies",A.a(["Flutter","Dart","Firebase","Git","Debugging","Legacy Code"],s)],r,q),A.aw(["title","Mobile App Development Intern","company","The Digital Egypt Pioneers Initiative (DEPI)","period","Oct 24 - May 25","description","Assisted in developing mobile applications and learned modern development practices. Contributed to UI/UX improvements and bug fixes.","technologies",A.a(["Flutter","Dart","Kotlin","Java","GitHub"],s)],r,q)],t.Mq),t.aS).gfl().fV(0,new A.Zs(this,a),t.l7).cZ(0),B.ah,B.Q)},
 Yp(a,b,c){var s,r,q,p,o=null,n=A.a1(B.c.K(76.5),B.X.p()>>>16&255,B.X.p()>>>8&255,B.X.p()&255),m=A.eX(12),l=A.q9(A.a1(51,B.E.p()>>>16&255,B.E.p()>>>8&255,B.E.p()&255),1),k=a.j(0,"title"),j=t.w
-k=A.cY(k,o,A.b_(c,o,j).w.a.a<768?16:20,B.an,o,o,o)
+k=A.cY(k,o,A.b_(c,o,j).w.a.a<768?14:20,B.an,o,o,o)
 s=a.j(0,"company")
 r=t.p
-s=A.nE(A.eC(A.a([k,B.Pj,A.cY(s,B.E,A.b_(c,o,j).w.a.a<768?12:16,B.y,o,o,o)],r),B.ag,B.Q),1,o)
+s=A.nE(A.eC(A.a([k,B.Pj,A.cY(s,B.E,A.b_(c,o,j).w.a.a<768?10:16,B.y,o,o,o)],r),B.ag,B.Q),1,o)
 k=A.a1(51,B.E.p()>>>16&255,B.E.p()>>>8&255,B.E.p()&255)
 q=A.eX(20)
 p=a.j(0,"period")
-k=A.me(A.a([s,A.cX(o,A.cY(p,B.E,A.b_(c,o,j).w.a.a<768?10:12,B.y,o,o,o),B.t,o,o,new A.cc(k,o,o,q,o,o,B.W),o,o,o,o,B.lE,o,o,o)],r),B.ag,B.Q,B.bA)
-s=A.cY(a.j(0,"description"),A.a1(204,B.j.p()>>>16&255,B.j.p()>>>8&255,B.j.p()&255),14,B.o,o,o,o)
+k=A.me(A.a([s,A.cX(o,A.cY(p,B.E,A.b_(c,o,j).w.a.a<768?7:12,B.y,o,o,o),B.t,o,o,new A.cc(k,o,o,q,o,o,B.W),o,o,o,o,B.lE,o,o,o)],r),B.ag,B.Q,B.bA)
+s=A.cY(a.j(0,"description"),A.a1(204,B.j.p()>>>16&255,B.j.p()>>>8&255,B.j.p()&255),10,B.o,o,o,o)
 q=J.lg(t.yp.a(a.j(0,"technologies")),new A.Zr(this),t.l7)
 return A.at7(A.nL(A.nd(A.cX(o,A.eC(A.a([k,B.e_,s,B.e_,A.anC(A.W(q,!0,q.$ti.h("ah.E")),8,8)],r),B.ag,B.Q),B.t,o,o,new A.cc(n,o,l,m,o,o,B.W),o,o,o,B.lD,B.Fc,o,o,o),A.bK(B.e.K(b*200*1000),0,0)),o,o,A.bK(6e5,0,0)),0.3)}}
 A.Zs.prototype={
@@ -75361,7 +75361,7 @@ m=A.b_(a,g,p).w.a.a<768?16:20
 l=f.a.c
 k=A.jt(g,A.b_(a,g,p).w.a.a<768?8:12,g)
 j=f.a.c.j(0,"description")
-i=A.b_(a,g,p).w.a.a<768?12:13
+i=A.b_(a,g,p).w.a.a<768?10:13
 h=t.p
 i=A.a([new A.QR(l,g),k,A.nE(A.cY(j,A.a1(204,B.j.p()>>>16&255,B.j.p()>>>8&255,B.j.p()&255),i,B.o,5,B.bp,g),1,g)],h)
 if(A.b_(a,g,p).w.a.a<768)i.push(B.fu)
