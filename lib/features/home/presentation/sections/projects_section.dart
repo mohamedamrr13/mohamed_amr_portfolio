@@ -46,7 +46,7 @@ class ProjectsSection extends StatelessWidget {
       'title': 'MugLife',
       'description':
           'An E-Commerce mobile app where you can order food, drinks and dessert built with Clean architecture and clean Firebase authentication. Includes order management, credit card integration, and user profile systems.',
-      'image': 'assets/images/tapnpay_mockup.png',
+      'image': 'assets/images/muglife_mockup.png',
       'technologies': [
         'Flutter',
         'Firebase Firestore',
@@ -64,7 +64,7 @@ class ProjectsSection extends StatelessWidget {
       'title': 'Muslim 🕌',
       'description':
           'A modern prayer and spiritual assistant app that displays prayer times using location-based API, integrated Qiblah compass, daily Azkar screen, and native Android home screen widget for prayer times.',
-      'image': 'assets/images/muslim_app_mockup.png',
+      'image': 'assets/images/muslim_mockup.png',
       'technologies': [
         'Flutter',
         'Kotlin',
