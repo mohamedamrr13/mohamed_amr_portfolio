@@ -26,18 +26,18 @@ class AboutSection extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-           SizedBox(height: Responsive.isMobile(context)? 10 : 20),
+          SizedBox(height: Responsive.isMobile(context) ? 10 : 20),
 
           _buildProfileImage(),
           const SizedBox(height: 30),
-          _buildTextContent(),
+          _buildTextContent(context),
         ],
       );
     } else {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(flex: 2, child: _buildTextContent()),
+          Expanded(flex: 2, child: _buildTextContent(context)),
           const SizedBox(width: 60),
           Expanded(flex: 1, child: Center(child: _buildProfileImage())),
         ],
@@ -52,13 +52,13 @@ class AboutSection extends StatelessWidget {
     );
   }
 
-  Widget _buildTextContent() {
+  Widget _buildTextContent(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const CustomText(
+        CustomText(
           "Mohamed Amr Ibrahim",
-          fontSize: 32,
+          fontSize: Responsive.isMobile(context) ? 26 : 32,
           fontWeight: FontWeight.bold,
         ),
         const SizedBox(height: 8),

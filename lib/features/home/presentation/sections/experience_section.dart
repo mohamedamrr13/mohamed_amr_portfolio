@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:my_portfolio/core/shared/custom_text.dart';
 import 'package:my_portfolio/core/shared/section_wrapper.dart';
 import 'package:my_portfolio/core/theming/app_colors.dart';
+import 'package:my_portfolio/core/utils/responsive.dart';
 import 'package:my_portfolio/core/utils/scroll_controller.dart';
 
 class ExperienceSection extends StatelessWidget {
@@ -16,7 +17,7 @@ class ExperienceSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-                    const SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           _buildSectionTitle(),
           const SizedBox(height: 40),
@@ -66,15 +67,19 @@ class ExperienceSection extends StatelessWidget {
           experiences.asMap().entries.map((entry) {
             final index = entry.key;
             final experience = entry.value;
-            return _buildExperienceCard(experience, index);
+            return _buildExperienceCard(experience, index, context);
           }).toList(),
     );
   }
 
-  Widget _buildExperienceCard(Map<String, dynamic> experience, int index) {
+  Widget _buildExperienceCard(
+    Map<String, dynamic> experience,
+    int index,
+    BuildContext context,
+  ) {
     return Container(
-          margin: EdgeInsets.only(bottom: 24),
-          padding: EdgeInsets.all(24),
+          margin: const EdgeInsets.only(bottom: 24),
+          padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             color: AppColors.buttonColorDark.withOpacity(0.3),
             borderRadius: BorderRadius.circular(12),
@@ -95,13 +100,13 @@ class ExperienceSection extends StatelessWidget {
                       children: [
                         CustomText(
                           experience['title'],
-                          fontSize: 20,
+                          fontSize: Responsive.isMobile(context) ? 16 : 20,
                           fontWeight: FontWeight.bold,
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         CustomText(
                           experience['company'],
-                          fontSize: 16,
+                          fontSize: Responsive.isMobile(context) ? 12 : 16,
                           fontWeight: FontWeight.w500,
                           color: AppColors.primaryColor,
                         ),
@@ -109,28 +114,31 @@ class ExperienceSection extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.primaryColor.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: CustomText(
                       experience['period'],
-                      fontSize: 12,
+                      fontSize: Responsive.isMobile(context) ? 10 : 12,
                       fontWeight: FontWeight.w500,
                       color: AppColors.primaryColor,
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               CustomText(
                 experience['description'],
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
                 color: AppColors.white.withOpacity(0.8),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -149,7 +157,7 @@ class ExperienceSection extends StatelessWidget {
 
   Widget _buildTechChip(String technology) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: AppColors.buttonColorDark,
         borderRadius: BorderRadius.circular(16),

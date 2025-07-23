@@ -60,7 +60,7 @@ class ContactSection extends StatelessWidget {
 
   Widget _buildContactContent(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: EdgeInsets.all(Responsive.isMobile(context) ? 16 : 32),
       decoration: BoxDecoration(
         color: AppColors.buttonColorDark.withOpacity(0.3),
         borderRadius: BorderRadius.circular(16),
