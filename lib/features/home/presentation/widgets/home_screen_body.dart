@@ -16,6 +16,8 @@ class HomeScreenBody extends StatelessWidget {
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          SizedBox(height: 40),
+
           AboutSection(),
           SizedBox(height: 60),
           ExperienceSection(),
@@ -26,7 +28,6 @@ class HomeScreenBody extends StatelessWidget {
           SizedBox(height: 60),
           ContactSection(),
           SizedBox(height: 40),
-     
         ],
       ),
     );
