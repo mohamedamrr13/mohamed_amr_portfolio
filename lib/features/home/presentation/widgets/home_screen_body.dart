@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_portfolio/core/shared/custom_text.dart';
-import 'package:my_portfolio/core/theming/app_colors.dart';
 import 'package:my_portfolio/core/utils/scroll_controller.dart';
 import 'package:my_portfolio/features/home/presentation/sections/about_section.dart';
 import 'package:my_portfolio/features/home/presentation/sections/contact_section.dart';
@@ -18,15 +16,14 @@ class HomeScreenBody extends StatelessWidget {
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(height: 20),
           AboutSection(),
-          SizedBox(height: 80),
+          SizedBox(height: 60),
           ExperienceSection(),
-          SizedBox(height: 80),
+          SizedBox(height: 60),
           ProjectsSection(),
-          SizedBox(height: 80),
+          SizedBox(height: 60),
           SkillsSection(),
-          SizedBox(height: 80),
+          SizedBox(height: 60),
           ContactSection(),
           SizedBox(height: 40),
      

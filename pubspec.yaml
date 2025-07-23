@@ -13,6 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_animate: ^4.5.0
+  flutter_screenutil: ^5.9.3
   flutter_staggered_animations: ^1.1.1
   flutter_svg: ^2.0.10+1
   lottie: ^3.3.1

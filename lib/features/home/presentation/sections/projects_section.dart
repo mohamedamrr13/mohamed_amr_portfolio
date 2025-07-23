@@ -115,6 +115,7 @@ class ProjectsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 20),
           _buildSectionTitle(),
           const SizedBox(height: 40),
           _buildProjectsGrid(context),
@@ -142,7 +143,10 @@ class ProjectsSection extends StatelessWidget {
           crossAxisCount: crossAxisCount,
           crossAxisSpacing: 20,
           mainAxisSpacing: 20,
-          childAspectRatio: Responsive.isMobile(context) ? 0.8 : 0.75,
+          childAspectRatio:
+              Responsive.isMobile(context) || Responsive.isTablet(context)
+                  ? 0.85
+                  : 0.8,
         ),
         itemCount: _projects.length,
         itemBuilder: (context, index) {
@@ -272,23 +276,31 @@ class _ProjectCardState extends State<ProjectCard>
                   _ProjectImage(imagePath: widget.project['image']),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(
+                        Responsive.isMobile(context) ? 16.0 : 20.0,
+                      ), // Responsive padding
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _ProjectHeader(project: widget.project),
-                          const SizedBox(height: 8),
+                          SizedBox(
+                            height: Responsive.isMobile(context) ? 8 : 12,
+                          ), // Responsive spacing
                           Expanded(
                             child: CustomText(
                               widget.project['description'],
-                              fontSize: 12,
+                              fontSize:
+                                  Responsive.isMobile(context)
+                                      ? 12
+                                      : 13, // Responsive font size
                               fontWeight: FontWeight.w400,
+                              maxLines: 5,
                               color: AppColors.white.withOpacity(0.8),
-                              maxLines: 4,
+
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          const SizedBox(height: 12),
+
                           _TechnologiesWidget(
                             technologies: List<String>.from(
                               widget.project['technologies'],
@@ -321,43 +333,13 @@ class _ProjectHeader extends StatelessWidget {
         Expanded(
           child: CustomText(
             project['title'],
-            fontSize: 16,
+            fontSize: 18, // Increased from 16
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(width: 8),
-        _StatusBadge(status: project['status']),
-        const SizedBox(width: 4),
+        const SizedBox(width: 8), // Increased from 4
         _TypeBadge(type: project['type']),
       ],
-    );
-  }
-}
-
-// Separate widget for status badge
-class _StatusBadge extends StatelessWidget {
-  final String status;
-
-  const _StatusBadge({required this.status});
-
-  @override
-  Widget build(BuildContext context) {
-    final isCompleted = status == 'Completed';
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color:
-            isCompleted
-                ? Colors.green.withOpacity(0.2)
-                : Colors.orange.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: CustomText(
-        status,
-        fontSize: 8,
-        fontWeight: FontWeight.w500,
-        color: isCompleted ? Colors.green : Colors.orange,
-      ),
     );
   }
 }
@@ -371,14 +353,17 @@ class _TypeBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 4,
+      ), // Increased padding
       decoration: BoxDecoration(
         color: AppColors.primaryColor.withOpacity(0.2),
         borderRadius: BorderRadius.circular(8),
       ),
       child: CustomText(
         type,
-        fontSize: 8,
+        fontSize: 10, // Increased from 8
         fontWeight: FontWeight.w500,
         color: AppColors.primaryColor,
       ),
@@ -395,7 +380,10 @@ class _ProjectImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 380,
+      height:
+          Responsive.isMobile(context)
+              ? 300
+              : Responsive.getWidth(context) * 0.2,
       width: double.infinity,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -427,13 +415,13 @@ class _ProjectImage extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.code,
-                      size: 32,
+                      size: 36, // Increased icon size
                       color: AppColors.white.withOpacity(0.8),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 8), // Increased from 4
                     CustomText(
                       'Project Image',
-                      fontSize: 10,
+                      fontSize: 12, // Increased from 10
                       color: AppColors.white.withOpacity(0.6),
                     ),
                   ],
@@ -455,12 +443,15 @@ class _TechnologiesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 4,
-      runSpacing: 4,
+      spacing: 6, // Increased from 4
+      runSpacing: 6, // Increased from 4
       children:
           technologies.take(5).map((tech) {
             return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 4,
+              ), // Increased padding
               decoration: BoxDecoration(
                 color: AppColors.buttonColorDark.withOpacity(0.8),
                 borderRadius: BorderRadius.circular(8),
@@ -471,7 +462,7 @@ class _TechnologiesWidget extends StatelessWidget {
               ),
               child: CustomText(
                 tech,
-                fontSize: 8,
+                fontSize: 10, // Increased from 8
                 fontWeight: FontWeight.w500,
                 color: AppColors.white.withOpacity(0.9),
               ),

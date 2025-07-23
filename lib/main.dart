@@ -13,12 +13,8 @@ class MyPortfolio extends StatelessWidget {
     return MaterialApp(
       title: 'Mohamed Amr - Flutter Developer',
       home: const HomeScreen(),
-      theme: ThemeData(
-        fontFamily: 'SpaceGrotesk',
-        useMaterial3: true,
-      ),
+      theme: ThemeData(fontFamily: 'SpaceGrotesk', useMaterial3: true),
       debugShowCheckedModeBanner: false,
     );
   }
 }
-

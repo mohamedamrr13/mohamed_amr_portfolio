@@ -21,6 +21,7 @@ class ContactSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 40),
           _buildSectionTitle(),
           const SizedBox(height: 40),
           _buildContactContent(context),
