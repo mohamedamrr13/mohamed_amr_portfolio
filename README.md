@@ -1,6 +1,6 @@
-# Mohamed Amr
+# Mohamed Amr Ibrahim
 
-A Young Flutter Developer with a lot of amibission to develop projects, make products and gain experience in the programming field
+### A young Flutter Developer with a lot of amibission to develop projects, make products and gain experience in the programming field
 
 ## Getting Started
 
