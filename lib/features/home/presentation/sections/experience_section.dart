@@ -60,6 +60,14 @@ class ExperienceSection extends StatelessWidget {
             'Assisted in developing mobile applications and learned modern development practices. Contributed to UI/UX improvements and bug fixes.',
         'technologies': ['Flutter', 'Dart', 'Kotlin', 'Java', 'GitHub'],
       },
+      {
+        'title': 'Flutter Development Intern',
+        'company': 'ACM',
+        'period': 'Aug 2024 - Oct 2024',
+        'description':
+            'Assisted in developing Flutter applications and learned modern development practices.',
+        'technologies': ['Flutter', 'Dart', 'Firebase'],
+      },
     ];
 
     return Column(
