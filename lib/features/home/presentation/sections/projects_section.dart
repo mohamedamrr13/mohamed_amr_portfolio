@@ -277,7 +277,7 @@ class _ProjectCardState extends State<ProjectCard>
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.all(
-                        Responsive.isMobile(context) ? 16.0 : 20.0,
+                        Responsive.isMobile(context) ? 8.0 : 20.0,
                       ), // Responsive padding
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,17 +287,20 @@ class _ProjectCardState extends State<ProjectCard>
                             height: Responsive.isMobile(context) ? 8 : 12,
                           ), // Responsive spacing
                           Expanded(
-                            child: CustomText(
-                              widget.project['description'],
-                              fontSize:
-                                  Responsive.isMobile(context)
-                                      ? 10
-                                      : 13, // Responsive font size
-                              fontWeight: FontWeight.w400,
-                              maxLines: 5,
-                              color: AppColors.white.withOpacity(0.8),
-
-                              overflow: TextOverflow.ellipsis,
+                            child: Padding(
+                              padding:  EdgeInsets.symmetric(vertical: Responsive.isMobile(context) ? 10.0 :0),
+                              child: CustomText(
+                                widget.project['description'],
+                                fontSize:
+                                    Responsive.isMobile(context)
+                                        ? 10
+                                        : 13, // Responsive font size
+                                fontWeight: FontWeight.w400,
+                                maxLines: 5,
+                                color: AppColors.white.withOpacity(0.8),
+                              
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ),
                           if (Responsive.isMobile(context))
