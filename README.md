@@ -1,6 +1,6 @@
-# my_portfolio
+# Mohamed Amr
 
-A new Flutter project.
+A Young Flutter Developer with a lot of amibission to develop projects, make products and gain experience in the programming field
 
 ## Getting Started
 
