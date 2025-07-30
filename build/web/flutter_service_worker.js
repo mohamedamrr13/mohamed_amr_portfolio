@@ -3,9 +3,9 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"assets/AssetManifest.bin": "69cb3aa82ed00cf6e43d5b23c48481f7",
-"assets/AssetManifest.bin.json": "92c5e6df9a553b1e2e55f81ccbe2a838",
-"assets/AssetManifest.json": "1abdb5d9504d3998940efc67f98ca77d",
+const RESOURCES = {"assets/AssetManifest.bin": "72d374bb53c9c4a906f1579ccc14986c",
+"assets/AssetManifest.bin.json": "2b2b0b2203a9c971561b9f856e5b2d81",
+"assets/AssetManifest.json": "08081181cf753122139f742f9e29a92d",
 "assets/assets/fonts/SpaceGrotesk-Bold.ttf": "52e5e29a7805a81bac01a170e45d103d",
 "assets/assets/fonts/SpaceGrotesk-Light.ttf": "9ef30f36fbe394633b7235332346f5b1",
 "assets/assets/fonts/SpaceGrotesk-Medium.ttf": "518133df6fcaf4237f97187e2ea1019e",
@@ -25,6 +25,7 @@ const RESOURCES = {"assets/AssetManifest.bin": "69cb3aa82ed00cf6e43d5b23c48481f7
 "assets/assets/images/sphinx_go_mockup.png": "575c80228e79eb7794b02b0673b1bedc",
 "assets/assets/images/upwork.png": "81cdc92fb94eb8d891c3ca042ed84927",
 "assets/assets/images/upwork.svg": "af82b7a588da6bfb955d78488d9539ff",
+"assets/assets/images/weather_mockup.png": "d8934c626f47263b602d23c6288e1ab6",
 "assets/assets/jsons/online_animation.json": "a346a4482314fe87640b0ccdab006222",
 "assets/FontManifest.json": "dd6b22731cca62104d5c6103c733a8cd",
 "assets/fonts/MaterialIcons-Regular.otf": "8063afadfca73932d6d738ed8ffcc866",
@@ -45,14 +46,14 @@ const RESOURCES = {"assets/AssetManifest.bin": "69cb3aa82ed00cf6e43d5b23c48481f7
 "canvaskit/skwasm_st.wasm": "56c3973560dfcbf28ce47cebe40f3206",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "flutter.js": "83d881c1dbb6d6bcd6b42e274605b69c",
-"flutter_bootstrap.js": "9db97695b75433dc586df9f3bdea3949",
+"flutter_bootstrap.js": "335ed31ca014797fb6427afb2c834551",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
 "index.html": "bf1e45747974a42ebcf850f57cc46223",
 "/": "bf1e45747974a42ebcf850f57cc46223",
-"main.dart.js": "979e6cf49f25110e42479b1f60f0adc6",
+"main.dart.js": "4baede1012139f780122456ccc752d67",
 "manifest.json": "d8fe34f7ae4c072a77b924e01dac8a50",
 "version.json": "9b818ca9511483c901bed1545384376c"};
 // The application shell files that are downloaded before a service worker can

@@ -91,6 +91,21 @@ class ProjectsSection extends StatelessWidget {
       'status': 'Completed',
     },
     {
+      'title': 'Modern Weather App',
+      'description':
+          '✅ Smooth UI with dynamic themes\n✅ Detailed weather insights: wind, humidity, pressure & visibility\n✅ City search with recent history\n✅ International support\n✅ Optimized for performance with clean UI',
+      'image': 'assets/images/weather_mockup.png',
+      'technologies': [
+        'Flutter',
+        'Clean Architecture',
+        'OpenWeatherAPI',
+        'BloC Pattern',
+        'Search',
+      ],
+      'type': 'Mobile App',
+      'status': 'Completed',
+    },
+    {
       'title': 'Bookly 📚',
       'description':
           'An online book browsing app built with Clean Architecture, integrated with Google Books API to fetch and display book data, and uses Hive for efficient local storage and state persistence.',
@@ -288,7 +303,10 @@ class _ProjectCardState extends State<ProjectCard>
                           ), // Responsive spacing
                           Expanded(
                             child: Padding(
-                              padding:  EdgeInsets.symmetric(vertical: Responsive.isMobile(context) ? 10.0 :0),
+                              padding: EdgeInsets.symmetric(
+                                vertical:
+                                    Responsive.isMobile(context) ? 10.0 : 0,
+                              ),
                               child: CustomText(
                                 widget.project['description'],
                                 fontSize:
@@ -298,7 +316,6 @@ class _ProjectCardState extends State<ProjectCard>
                                 fontWeight: FontWeight.w400,
                                 maxLines: 5,
                                 color: AppColors.white.withOpacity(0.8),
-                              
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -387,7 +404,7 @@ class _ProjectImage extends StatelessWidget {
       height:
           Responsive.isMobile(context)
               ? 200
-              : Responsive.getWidth(context) * 0.2,
+              : Responsive.getWidth(context) * 0.19,
       width: double.infinity,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),

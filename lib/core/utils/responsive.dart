@@ -30,7 +30,7 @@ class Responsive {
   static int getCrossAxisCount(BuildContext context) {
     if (getWidth(context) < 800) {
       return 1;
-    } else if (getWidth(context) < 900 || isTablet(context)) {
+    } else if (getWidth(context) < 1400 || isTablet(context)) {
       return 2;
     } else {
       return 3;
