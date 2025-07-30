@@ -16964,7 +16964,7 @@ r.toString
 A.jJ(r)
 q=a.j(0,"swipeEdge")
 q.toString
-return new A.JL(s,r,B.Ik[A.hf(q)])},
+return new A.JL(s,r,B.Ij[A.hf(q)])},
 Av:function Av(a,b){this.a=a
 this.b=b},
 JL:function JL(a,b,c){this.a=a
@@ -40058,7 +40058,7 @@ return!0}}return!0},
 a4Q(a){var s,r,q,p
 for(s=!0,r=!0,q=0;q<6;++q){p=a.ct(8)
 if(p!==B.Jm[q])r=!1
-if(p!==B.If[q])s=!1
+if(p!==B.Ie[q])s=!1
 if(!s&&!r)return-1}return r?0:2},
 a4R(d4,d5){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,c0,c1,c2,c3,c4,c5,c6,c7,c8,c9,d0=this,d1=4294967295,d2=d4.ct(1),d3=((d4.ct(8)<<8|d4.ct(8))<<8|d4.ct(8))>>>0
 d0.c=new Uint8Array(16)
@@ -54582,7 +54582,7 @@ q=a.ae(0,s.gfR())
 r=r.a
 r===$&&A.b()
 p=r.a.getGlyphPositionAtCoordinate(q.a,q.b)
-o=B.Il[J.X(p.affinity.value)]
+o=B.Ik[J.X(p.affinity.value)]
 return new A.aC(J.X(p.pos),o)},
 kb(a){this.kw(t.k.a(A.B.prototype.ga2.call(this)))
 return this.v.b.a.c.kb(a)},
@@ -76165,7 +76165,7 @@ Yd(a){var s=null,r=A.aFL(a),q=A.aQ(a,s,t.w).w.a.a<768||A.a8i(a)?0.85:0.8
 return new A.qb(new A.HD(new A.aaJ(r,20,20,q),new A.aaE(new A.a6I(r),6,!0,!0,!0,s),s,B.aW,!1,s,s,B.LO,!0,s,6,B.b6,s,s,B.ax,B.ar,s),s)}}
 A.a6I.prototype={
 $2(a,b){var s=null
-return new A.hZ(b,B.cy,s,this.a,A.atq(A.ard(new A.yV(B.Id[b],s)),s,50),s)},
+return new A.hZ(b,B.cy,s,this.a,A.atq(A.ard(new A.yV(B.Im[b],s)),s,50),s)},
 $S:455}
 A.yV.prototype={
 ak(){return new A.QV(null,null)}}
@@ -78056,7 +78056,7 @@ q=a.xv(0)
 p=c?this.Zq(a.F0(q)):a.t8(q)
 $.Z()
 o=A.bM()
-o.svD(B.Ig[e])
+o.svD(B.If[e])
 b.y.push(o)
 b.ch=o
 $label0$1:for(n=0,m=0;n<s;++n)switch(r[n]){case 0:l=p[m]
@@ -82909,8 +82909,8 @@ B.yS=new A.cQ(1,1)
 B.aI=new A.pr(0,"clamp")
 B.Y=new A.A(1,0.11764705882352941,0.15294117647058825,0.28627450980392155,B.h)
 B.A=new A.A(1,0.39215686274509803,1,0.8549019607843137,B.h)
-B.Ij=A.a(s([B.Y,B.A]),t.c)
-B.mA=new A.jb(B.yW,B.yS,B.aI,B.Ij,null,null)
+B.Ii=A.a(s([B.Y,B.A]),t.c)
+B.mA=new A.jb(B.yW,B.yS,B.aI,B.Ii,null,null)
 B.V=new A.Fq(0,"rectangle")
 B.zA=new A.c7(null,null,null,null,null,B.mA,B.V)
 B.B=new A.A(0,0,0,0,B.h)
@@ -82933,8 +82933,8 @@ B.zD=new A.c7(null,null,null,null,null,B.H8,B.V)
 B.Ek=new A.A(0.0392156862745098,0,0.8313725490196079,1,B.h)
 B.DR=new A.A(0.0392156862745098,0.48627450980392156,0.30196078431372547,1,B.h)
 B.Jf=A.a(s([B.Ek,B.B,B.DR]),t.c)
-B.Ih=A.a(s([0,0.5,1]),t.n)
-B.H9=new A.jb(B.ke,B.h_,B.aI,B.Jf,B.Ih,null)
+B.Ig=A.a(s([0,0.5,1]),t.n)
+B.H9=new A.jb(B.ke,B.h_,B.aI,B.Jf,B.Ig,null)
 B.zE=new A.c7(null,null,null,null,null,B.H9,B.V)
 B.zF=new A.vE(1,"contain")
 B.kF=new A.vE(2,"cover")
@@ -83511,9 +83511,9 @@ B.FK=new A.H4(null)
 B.ld=new A.Ga(0,"mode")
 B.FL=new A.wH(B.j,B.h4,null,B.ld)
 B.FM=new A.wH(B.k,B.h4,null,B.ld)
-B.Im=A.a(s([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.2126,0.7152,0.0722,0,0]),t.n)
+B.Il=A.a(s([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.2126,0.7152,0.0722,0,0]),t.n)
 B.B9=new A.Ga(1,"matrix")
-B.FN=new A.wH(null,null,B.Im,B.B9)
+B.FN=new A.wH(null,null,B.Il,B.B9)
 B.m0=new A.c0(0,"incrementable")
 B.hJ=new A.c0(1,"scrollable")
 B.hK=new A.c0(10,"link")
@@ -83744,37 +83744,37 @@ B.WF=new A.l4(6,0.11)
 B.WD=new A.l4(8,0.12)
 B.WC=new A.l4(12,0.14)
 B.mF=A.a(s([B.WB,B.WG,B.WE,B.WF,B.WD,B.WC]),A.a2("o<l4>"))
+B.dv=A.a(s([0,79764919,159529838,222504665,319059676,398814059,445009330,507990021,638119352,583659535,797628118,726387553,890018660,835552979,1015980042,944750013,1276238704,1221641927,1167319070,1095957929,1595256236,1540665371,1452775106,1381403509,1780037320,1859660671,1671105958,1733955601,2031960084,2111593891,1889500026,1952343757,2552477408,2632100695,2443283854,2506133561,2334638140,2414271883,2191915858,2254759653,3190512472,3135915759,3081330742,3009969537,2905550212,2850959411,2762807018,2691435357,3560074640,3505614887,3719321342,3648080713,3342211916,3287746299,3467911202,3396681109,4063920168,4143685023,4223187782,4286162673,3779000052,3858754371,3904687514,3967668269,881225847,809987520,1023691545,969234094,662832811,591600412,771767749,717299826,311336399,374308984,453813921,533576470,25881363,88864420,134795389,214552010,2023205639,2086057648,1897238633,1976864222,1804852699,1867694188,1645340341,1724971778,1587496639,1516133128,1461550545,1406951526,1302016099,1230646740,1142491917,1087903418,2896545431,2825181984,2770861561,2716262478,3215044683,3143675388,3055782693,3001194130,2326604591,2389456536,2200899649,2280525302,2578013683,2640855108,2418763421,2498394922,3769900519,3832873040,3912640137,3992402750,4088425275,4151408268,4197601365,4277358050,3334271071,3263032808,3476998961,3422541446,3585640067,3514407732,3694837229,3640369242,1762451694,1842216281,1619975040,1682949687,2047383090,2127137669,1938468188,2001449195,1325665622,1271206113,1183200824,1111960463,1543535498,1489069629,1434599652,1363369299,622672798,568075817,748617968,677256519,907627842,853037301,1067152940,995781531,51762726,131386257,177728840,240578815,269590778,349224269,429104020,491947555,4046411278,4126034873,4172115296,4234965207,3794477266,3874110821,3953728444,4016571915,3609705398,3555108353,3735388376,3664026991,3290680682,3236090077,3449943556,3378572211,3174993278,3120533705,3032266256,2961025959,2923101090,2868635157,2813903052,2742672763,2604032198,2683796849,2461293480,2524268063,2284983834,2364738477,2175806836,2238787779,1569362073,1498123566,1409854455,1355396672,1317987909,1246755826,1192025387,1137557660,2072149281,2135122070,1912620623,1992383480,1753615357,1816598090,1627664531,1707420964,295390185,358241886,404320391,483945776,43990325,106832002,186451547,266083308,932423249,861060070,1041341759,986742920,613929101,542559546,756411363,701822548,3316196985,3244833742,3425377559,3370778784,3601682597,3530312978,3744426955,3689838204,3819031489,3881883254,3928223919,4007849240,4037393693,4100235434,4180117107,4259748804,2310601993,2373574846,2151335527,2231098320,2596047829,2659030626,2470359227,2550115596,2947551409,2876312838,2788305887,2733848168,3165939309,3094707162,3040238851,2985771188]),t.t)
+B.Ie=A.a(s([23,114,69,56,80,144]),t.t)
+B.K=new A.yE(0,"nonZero")
+B.f9=new A.yE(1,"evenOdd")
+B.If=A.a(s([B.K,B.f9]),A.a2("o<yE>"))
+B.Ih=A.a(s([-1,0,0,1,0,0,-1,0,1,0,0,0,-1,1,0,1,1,1,1,0]),t.n)
+B.mG=A.a(s([B.mu,B.mv,B.mw]),A.a2("o<rl>"))
+B.Qj=new A.Av(0,"left")
+B.Qk=new A.Av(1,"right")
+B.Ij=A.a(s([B.Qj,B.Qk]),A.a2("o<Av>"))
+B.aT=new A.AC(0,"upstream")
+B.r=new A.AC(1,"downstream")
+B.Ik=A.a(s([B.aT,B.r]),A.a2("o<AC>"))
+B.b5=new A.AG(0,"rtl")
+B.ac=new A.AG(1,"ltr")
+B.ip=A.a(s([B.b5,B.ac]),A.a2("o<AG>"))
+B.aL=A.a(s([99,124,119,123,242,107,111,197,48,1,103,43,254,215,171,118,202,130,201,125,250,89,71,240,173,212,162,175,156,164,114,192,183,253,147,38,54,63,247,204,52,165,229,241,113,216,49,21,4,199,35,195,24,150,5,154,7,18,128,226,235,39,178,117,9,131,44,26,27,110,90,160,82,59,214,179,41,227,47,132,83,209,0,237,32,252,177,91,106,203,190,57,74,76,88,207,208,239,170,251,67,77,51,133,69,249,2,127,80,60,159,168,81,163,64,143,146,157,56,245,188,182,218,33,16,255,243,210,205,12,19,236,95,151,68,23,196,167,126,61,100,93,25,115,96,129,79,220,34,42,144,136,70,238,184,20,222,94,11,219,224,50,58,10,73,6,36,92,194,211,172,98,145,149,228,121,231,200,55,109,141,213,78,169,108,86,244,234,101,122,174,8,186,120,37,46,28,166,180,198,232,221,116,31,75,189,139,138,112,62,181,102,72,3,246,14,97,53,87,185,134,193,29,158,225,248,152,17,105,217,142,148,155,30,135,233,206,85,40,223,140,161,137,13,191,230,66,104,65,153,45,15,176,84,187,22]),t.t)
 B.cK={title:0,description:1,image:2,technologies:3,type:4,status:5,hasRepo:6,hasApk:7,repoUrl:8,apkUrl:9}
-B.Ie=A.a(s(["Flutter","Kotlin","Location API","Native Android","Widget Development"]),t.s)
-B.L1=new A.b5(B.cK,["Muslim \ud83d\udd4c","A modern prayer and spiritual assistant app that displays prayer times using location-based API, integrated Qiblah compass, daily Azkar screen, and native Android home screen widget for prayer times.","assets/images/muslim_mockup.jpg",B.Ie,"Mobile App","Completed",!0,!0,"https://github.com/Fady4Mohamed/muslim","https://drive.google.com/file/d/1YH6agh5G4NxOqxa4PGoUORLG5eEggfIP/view?usp=drive_link"],t.yf)
+B.Id=A.a(s(["Flutter","Kotlin","Location API","Native Android","Widget Development"]),t.s)
+B.L1=new A.b5(B.cK,["Muslim \ud83d\udd4c","A modern prayer and spiritual assistant app that displays prayer times using location-based API, integrated Qiblah compass, daily Azkar screen, and native Android home screen widget for prayer times.","assets/images/muslim_mockup.jpg",B.Id,"Mobile App","Completed",!0,!0,"https://github.com/Fady4Mohamed/muslim","https://drive.google.com/file/d/1YH6agh5G4NxOqxa4PGoUORLG5eEggfIP/view?usp=drive_link"],t.yf)
 B.Iw=A.a(s(["Flutter","Firebase Firestore","Firebase Auth","API Integration","Validation","State Management","Payment Service","User Settings"]),t.s)
 B.L_=new A.b5(B.cK,["MugLife","An E-Commerce mobile app where you can order food, drinks and dessert built with Clean architecture and clean Firebase authentication. Includes order management, credit card integration, and user profile systems.","assets/images/muglife_mockup.png",B.Iw,"Mobile App","In Progress",!0,!1,"https://github.com/mohamedamrr13/MugLife",""],t.yf)
 B.I6=A.a(s(["Flutter","BLoC","Chopper","Dialogflow","Google Sign-In","Facebook Sign-In","RESTful API","Chat Bot","Google Maps Integration","Vendor Dashboard"]),t.s)
 B.L0=new A.b5(B.cK,["Sphinx Go \ud83e\uddf3","A comprehensive travel booking application for flights, tours, and hotels with integrated user authentication, RESTful API integration using Chopper, and an AI-powered chatbot using Dialogflow for interactive support.","assets/images/sphinx_go_mockup.png",B.I6,"Mobile App","Completed",!1,!1,"",""],t.yf)
 B.Hh=A.a(s(["Flutter","Clean Architecture","OpenWeatherAPI","BloC Pattern","Search"]),t.s)
 B.L3=new A.b5(B.cK,["Modern Weather App","\u2705 Smooth UI with dynamic themes\n\u2705 Detailed weather insights: wind, humidity, pressure & visibility\n\u2705 City search with recent history\n\u2705 International support\n\u2705 Optimized for performance with clean UI","assets/images/weather_mockup.png",B.Hh,"Mobile App","Completed",!0,!0,"https://github.com/mohamedamrr13/weather","https://drive.google.com/file/d/10kBV4FFv1WWqWQ1nw0tUqwTg5DLwig6w/view?usp=drive_link"],t.yf)
-B.IZ=A.a(s(["Flutter","Clean Architecture","Google Books API","Hive","Data Caching"]),t.s)
-B.L2=new A.b5(B.cK,["Bookly \ud83d\udcda","An online book browsing app built with Clean Architecture, integrated with Google Books API to fetch and display book data, and uses Hive for efficient local storage and state persistence.","assets/images/bookly_app_mockup.png",B.IZ,"Mobile App","Completed",!0,!1,"https://github.com/mohamedamrr13/clean_arch_bookly",""],t.yf)
 B.ID=A.a(s(["FlutterFlow","Firebase","Firestore","Dart Formulas","Custom Functions"]),t.s)
 B.KZ=new A.b5(B.cK,["Balanced Meal \ud83e\udd57","A functional meal ordering app with calorie calculator based on user metrics, Firebase Firestore integration for meal ingredients, custom cart logic with dynamic pricing, and order validation system.","assets/images/balanced_meal_mockup.png",B.ID,"Mobile App","Completed",!1,!1,"https://github.com/yourusername/balanced-meal",""],t.yf)
-B.Id=A.a(s([B.L1,B.L_,B.L0,B.L3,B.L2,B.KZ]),t.H7)
-B.dv=A.a(s([0,79764919,159529838,222504665,319059676,398814059,445009330,507990021,638119352,583659535,797628118,726387553,890018660,835552979,1015980042,944750013,1276238704,1221641927,1167319070,1095957929,1595256236,1540665371,1452775106,1381403509,1780037320,1859660671,1671105958,1733955601,2031960084,2111593891,1889500026,1952343757,2552477408,2632100695,2443283854,2506133561,2334638140,2414271883,2191915858,2254759653,3190512472,3135915759,3081330742,3009969537,2905550212,2850959411,2762807018,2691435357,3560074640,3505614887,3719321342,3648080713,3342211916,3287746299,3467911202,3396681109,4063920168,4143685023,4223187782,4286162673,3779000052,3858754371,3904687514,3967668269,881225847,809987520,1023691545,969234094,662832811,591600412,771767749,717299826,311336399,374308984,453813921,533576470,25881363,88864420,134795389,214552010,2023205639,2086057648,1897238633,1976864222,1804852699,1867694188,1645340341,1724971778,1587496639,1516133128,1461550545,1406951526,1302016099,1230646740,1142491917,1087903418,2896545431,2825181984,2770861561,2716262478,3215044683,3143675388,3055782693,3001194130,2326604591,2389456536,2200899649,2280525302,2578013683,2640855108,2418763421,2498394922,3769900519,3832873040,3912640137,3992402750,4088425275,4151408268,4197601365,4277358050,3334271071,3263032808,3476998961,3422541446,3585640067,3514407732,3694837229,3640369242,1762451694,1842216281,1619975040,1682949687,2047383090,2127137669,1938468188,2001449195,1325665622,1271206113,1183200824,1111960463,1543535498,1489069629,1434599652,1363369299,622672798,568075817,748617968,677256519,907627842,853037301,1067152940,995781531,51762726,131386257,177728840,240578815,269590778,349224269,429104020,491947555,4046411278,4126034873,4172115296,4234965207,3794477266,3874110821,3953728444,4016571915,3609705398,3555108353,3735388376,3664026991,3290680682,3236090077,3449943556,3378572211,3174993278,3120533705,3032266256,2961025959,2923101090,2868635157,2813903052,2742672763,2604032198,2683796849,2461293480,2524268063,2284983834,2364738477,2175806836,2238787779,1569362073,1498123566,1409854455,1355396672,1317987909,1246755826,1192025387,1137557660,2072149281,2135122070,1912620623,1992383480,1753615357,1816598090,1627664531,1707420964,295390185,358241886,404320391,483945776,43990325,106832002,186451547,266083308,932423249,861060070,1041341759,986742920,613929101,542559546,756411363,701822548,3316196985,3244833742,3425377559,3370778784,3601682597,3530312978,3744426955,3689838204,3819031489,3881883254,3928223919,4007849240,4037393693,4100235434,4180117107,4259748804,2310601993,2373574846,2151335527,2231098320,2596047829,2659030626,2470359227,2550115596,2947551409,2876312838,2788305887,2733848168,3165939309,3094707162,3040238851,2985771188]),t.t)
-B.If=A.a(s([23,114,69,56,80,144]),t.t)
-B.K=new A.yE(0,"nonZero")
-B.f9=new A.yE(1,"evenOdd")
-B.Ig=A.a(s([B.K,B.f9]),A.a2("o<yE>"))
-B.Ii=A.a(s([-1,0,0,1,0,0,-1,0,1,0,0,0,-1,1,0,1,1,1,1,0]),t.n)
-B.mG=A.a(s([B.mu,B.mv,B.mw]),A.a2("o<rl>"))
-B.Qj=new A.Av(0,"left")
-B.Qk=new A.Av(1,"right")
-B.Ik=A.a(s([B.Qj,B.Qk]),A.a2("o<Av>"))
-B.aT=new A.AC(0,"upstream")
-B.r=new A.AC(1,"downstream")
-B.Il=A.a(s([B.aT,B.r]),A.a2("o<AC>"))
-B.b5=new A.AG(0,"rtl")
-B.ac=new A.AG(1,"ltr")
-B.ip=A.a(s([B.b5,B.ac]),A.a2("o<AG>"))
-B.aL=A.a(s([99,124,119,123,242,107,111,197,48,1,103,43,254,215,171,118,202,130,201,125,250,89,71,240,173,212,162,175,156,164,114,192,183,253,147,38,54,63,247,204,52,165,229,241,113,216,49,21,4,199,35,195,24,150,5,154,7,18,128,226,235,39,178,117,9,131,44,26,27,110,90,160,82,59,214,179,41,227,47,132,83,209,0,237,32,252,177,91,106,203,190,57,74,76,88,207,208,239,170,251,67,77,51,133,69,249,2,127,80,60,159,168,81,163,64,143,146,157,56,245,188,182,218,33,16,255,243,210,205,12,19,236,95,151,68,23,196,167,126,61,100,93,25,115,96,129,79,220,34,42,144,136,70,238,184,20,222,94,11,219,224,50,58,10,73,6,36,92,194,211,172,98,145,149,228,121,231,200,55,109,141,213,78,169,108,86,244,234,101,122,174,8,186,120,37,46,28,166,180,198,232,221,116,31,75,189,139,138,112,62,181,102,72,3,246,14,97,53,87,185,134,193,29,158,225,248,152,17,105,217,142,148,155,30,135,233,206,85,40,223,140,161,137,13,191,230,66,104,65,153,45,15,176,84,187,22]),t.t)
+B.IZ=A.a(s(["Flutter","Clean Architecture","Google Books API","Hive","Data Caching"]),t.s)
+B.L2=new A.b5(B.cK,["Bookly \ud83d\udcda","An online book browsing app built with Clean Architecture, integrated with Google Books API to fetch and display book data, and uses Hive for efficient local storage and state persistence.","assets/images/bookly_app_mockup.png",B.IZ,"Mobile App","Completed",!0,!1,"https://github.com/mohamedamrr13/clean_arch_bookly",""],t.yf)
+B.Im=A.a(s([B.L1,B.L_,B.L0,B.L3,B.KZ,B.L2]),t.H7)
 B.QB=new A.mw(0,"solid")
 B.xY=new A.mw(1,"double")
 B.QE=new A.mw(2,"dotted")
@@ -86104,7 +86104,7 @@ r($,"aJF","azl",()=>A.aJ5())
 r($,"aS3","azM",()=>A.ei().gP1()+"roboto/v32/KFOmCnqEu92Fr1Me4GZLCzYlKw.woff2")
 r($,"aRr","alZ",()=>A.aIU(A.uN(A.uN(A.jO(),"window"),"FinalizationRegistry"),A.jK(new A.akq())))
 r($,"aSN","am4",()=>new A.a5r())
-s($,"aRx","azn",()=>A.aEs(B.Ii))
+s($,"aRx","azn",()=>A.aEs(B.Ih))
 s($,"aRw","Ve",()=>A.a2a(A.aBm($.azn())))
 s($,"aRk","azg",()=>A.atm(A.x(A.ab(),"ParagraphBuilder")))
 s($,"aSV","aAh",()=>{var q=t.N,p=A.a2("+breaks,graphemes,words(tJ,tJ,tJ)"),o=A.ani(1e5,q,p),n=A.ani(1e4,q,p)

@@ -114,25 +114,6 @@ class ProjectsSection extends StatelessWidget {
           'https://drive.google.com/file/d/10kBV4FFv1WWqWQ1nw0tUqwTg5DLwig6w/view?usp=drive_link',
     },
     {
-      'title': 'Bookly 📚',
-      'description':
-          'An online book browsing app built with Clean Architecture, integrated with Google Books API to fetch and display book data, and uses Hive for efficient local storage and state persistence.',
-      'image': 'assets/images/bookly_app_mockup.png',
-      'technologies': [
-        'Flutter',
-        'Clean Architecture',
-        'Google Books API',
-        'Hive',
-        'Data Caching',
-      ],
-      'type': 'Mobile App',
-      'status': 'Completed',
-      'hasRepo': true,
-      'hasApk': false,
-      'repoUrl': 'https://github.com/mohamedamrr13/clean_arch_bookly',
-      'apkUrl': '',
-    },
-    {
       'title': 'Balanced Meal 🥗',
       'description':
           'A functional meal ordering app with calorie calculator based on user metrics, Firebase Firestore integration for meal ingredients, custom cart logic with dynamic pricing, and order validation system.',
@@ -149,6 +130,25 @@ class ProjectsSection extends StatelessWidget {
       'hasRepo': false,
       'hasApk': false,
       'repoUrl': 'https://github.com/yourusername/balanced-meal',
+      'apkUrl': '',
+    },
+    {
+      'title': 'Bookly 📚',
+      'description':
+          'An online book browsing app built with Clean Architecture, integrated with Google Books API to fetch and display book data, and uses Hive for efficient local storage and state persistence.',
+      'image': 'assets/images/bookly_app_mockup.png',
+      'technologies': [
+        'Flutter',
+        'Clean Architecture',
+        'Google Books API',
+        'Hive',
+        'Data Caching',
+      ],
+      'type': 'Mobile App',
+      'status': 'Completed',
+      'hasRepo': true,
+      'hasApk': false,
+      'repoUrl': 'https://github.com/mohamedamrr13/clean_arch_bookly',
       'apkUrl': '',
     },
   ];
