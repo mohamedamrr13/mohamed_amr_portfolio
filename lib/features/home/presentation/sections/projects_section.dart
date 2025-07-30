@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_portfolio/core/shared/custom_text.dart';
 import 'package:my_portfolio/core/shared/section_wrapper.dart';
 import 'package:my_portfolio/core/theming/app_colors.dart';
 import 'package:my_portfolio/core/utils/responsive.dart';
 import 'package:my_portfolio/core/utils/scroll_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // Constants for better performance
 class ProjectConstants {
   static const Duration hoverDuration = Duration(milliseconds: 300);
   static const Duration cardAnimationDuration = Duration(milliseconds: 200);
+  static const Duration overlayAnimationDuration = Duration(milliseconds: 250);
   static const Curve hoverCurve = Curves.easeOutCubic;
   static const double hoverScale = 1.05;
   static const double hoverElevation = 20.0;
@@ -22,6 +25,49 @@ class ProjectsSection extends StatelessWidget {
 
   // Static project data to avoid recreation on each build
   static const List<Map<String, dynamic>> _projects = [
+    {
+      'title': 'Muslim 🕌',
+      'description':
+          'A modern prayer and spiritual assistant app that displays prayer times using location-based API, integrated Qiblah compass, daily Azkar screen, and native Android home screen widget for prayer times.',
+      'image': 'assets/images/muslim_mockup.jpg',
+      'technologies': [
+        'Flutter',
+        'Kotlin',
+        'Location API',
+        'Native Android',
+        'Widget Development',
+      ],
+      'type': 'Mobile App',
+      'status': 'Completed',
+      'hasRepo': true,
+      'hasApk': true,
+      'repoUrl': 'https://github.com/Fady4Mohamed/muslim',
+      'apkUrl':
+          'https://drive.google.com/file/d/1YH6agh5G4NxOqxa4PGoUORLG5eEggfIP/view?usp=drive_link',
+    },
+    {
+      'title': 'MugLife',
+      'description':
+          'An E-Commerce mobile app where you can order food, drinks and dessert built with Clean architecture and clean Firebase authentication. Includes order management, credit card integration, and user profile systems.',
+      'image': 'assets/images/muglife_mockup.png',
+      'technologies': [
+        'Flutter',
+        'Firebase Firestore',
+        'Firebase Auth',
+        'API Integration',
+        'Validation',
+        'State Management',
+        'Payment Service',
+        'User Settings',
+      ],
+      'type': 'Mobile App',
+      'status': 'In Progress',
+      'hasRepo': true,
+      'hasApk': false,
+      'repoUrl': 'https://github.com/mohamedamrr13/MugLife',
+      'apkUrl': '',
+    },
+
     {
       'title': 'Sphinx Go 🧳',
       'description':
@@ -41,55 +87,12 @@ class ProjectsSection extends StatelessWidget {
       ],
       'type': 'Mobile App',
       'status': 'Completed',
+      'hasRepo': false,
+      'hasApk': false,
+      'repoUrl': '',
+      'apkUrl': '',
     },
-    {
-      'title': 'MugLife',
-      'description':
-          'An E-Commerce mobile app where you can order food, drinks and dessert built with Clean architecture and clean Firebase authentication. Includes order management, credit card integration, and user profile systems.',
-      'image': 'assets/images/muglife_mockup.png',
-      'technologies': [
-        'Flutter',
-        'Firebase Firestore',
-        'Firebase Auth',
-        'API Integration',
-        'Validation',
-        'State Management',
-        'Payment Service',
-        'User Settings',
-      ],
-      'type': 'Mobile App',
-      'status': 'In Progress',
-    },
-    {
-      'title': 'Muslim 🕌',
-      'description':
-          'A modern prayer and spiritual assistant app that displays prayer times using location-based API, integrated Qiblah compass, daily Azkar screen, and native Android home screen widget for prayer times.',
-      'image': 'assets/images/muslim_mockup.jpg',
-      'technologies': [
-        'Flutter',
-        'Kotlin',
-        'Location API',
-        'Native Android',
-        'Widget Development',
-      ],
-      'type': 'Mobile App',
-      'status': 'Completed',
-    },
-    {
-      'title': 'Balanced Meal 🥗',
-      'description':
-          'A functional meal ordering app with calorie calculator based on user metrics, Firebase Firestore integration for meal ingredients, custom cart logic with dynamic pricing, and order validation system.',
-      'image': 'assets/images/balanced_meal_mockup.png',
-      'technologies': [
-        'FlutterFlow',
-        'Firebase',
-        'Firestore',
-        'Dart Formulas',
-        'Custom Functions',
-      ],
-      'type': 'Mobile App',
-      'status': 'Completed',
-    },
+
     {
       'title': 'Modern Weather App',
       'description':
@@ -104,6 +107,11 @@ class ProjectsSection extends StatelessWidget {
       ],
       'type': 'Mobile App',
       'status': 'Completed',
+      'hasRepo': true,
+      'hasApk': true,
+      'repoUrl': 'https://github.com/mohamedamrr13/weather',
+      'apkUrl':
+          'https://drive.google.com/file/d/10kBV4FFv1WWqWQ1nw0tUqwTg5DLwig6w/view?usp=drive_link',
     },
     {
       'title': 'Bookly 📚',
@@ -119,6 +127,29 @@ class ProjectsSection extends StatelessWidget {
       ],
       'type': 'Mobile App',
       'status': 'Completed',
+      'hasRepo': true,
+      'hasApk': false,
+      'repoUrl': 'https://github.com/mohamedamrr13/clean_arch_bookly',
+      'apkUrl': '',
+    },
+    {
+      'title': 'Balanced Meal 🥗',
+      'description':
+          'A functional meal ordering app with calorie calculator based on user metrics, Firebase Firestore integration for meal ingredients, custom cart logic with dynamic pricing, and order validation system.',
+      'image': 'assets/images/balanced_meal_mockup.png',
+      'technologies': [
+        'FlutterFlow',
+        'Firebase',
+        'Firestore',
+        'Dart Formulas',
+        'Custom Functions',
+      ],
+      'type': 'Mobile App',
+      'status': 'Completed',
+      'hasRepo': false,
+      'hasApk': false,
+      'repoUrl': 'https://github.com/yourusername/balanced-meal',
+      'apkUrl': '',
     },
   ];
 
@@ -193,18 +224,26 @@ class ProjectCard extends StatefulWidget {
 }
 
 class _ProjectCardState extends State<ProjectCard>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   bool _isHovered = false;
   late AnimationController _animationController;
+  late AnimationController _overlayController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _elevationAnimation;
   late Animation<double> _borderAnimation;
+  late Animation<double> _overlayOpacityAnimation;
+  late Animation<double> _buttonScaleAnimation;
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
       duration: ProjectConstants.hoverDuration,
+      vsync: this,
+    );
+
+    _overlayController = AnimationController(
+      duration: ProjectConstants.overlayAnimationDuration,
       vsync: this,
     );
 
@@ -234,11 +273,20 @@ class _ProjectCardState extends State<ProjectCard>
         curve: ProjectConstants.hoverCurve,
       ),
     );
+
+    _overlayOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _overlayController, curve: Curves.easeInOut),
+    );
+
+    _buttonScaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _overlayController, curve: Curves.elasticOut),
+    );
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    _overlayController.dispose();
     super.dispose();
   }
 
@@ -250,19 +298,32 @@ class _ProjectCardState extends State<ProjectCard>
 
       if (hovering) {
         _animationController.forward();
+        _overlayController.forward();
       } else {
         _animationController.reverse();
+        _overlayController.reverse();
       }
+    }
+  }
+
+  void _launchUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final hasRepo = widget.project['hasRepo'] ?? false;
+    final hasApk = widget.project['hasApk'] ?? false;
+    final showButtons = hasRepo || hasApk;
+
     return MouseRegion(
       onEnter: (_) => _onHover(true),
       onExit: (_) => _onHover(false),
       child: AnimatedBuilder(
-        animation: _animationController,
+        animation: Listenable.merge([_animationController, _overlayController]),
         builder: (context, child) {
           return Transform.scale(
             scale: _scaleAnimation.value,
@@ -285,52 +346,100 @@ class _ProjectCardState extends State<ProjectCard>
                   ),
                 ],
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Stack(
                 children: [
-                  _ProjectImage(imagePath: widget.project['image']),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.all(
-                        Responsive.isMobile(context) ? 8.0 : 20.0,
-                      ), // Responsive padding
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _ProjectHeader(project: widget.project),
-                          SizedBox(
-                            height: Responsive.isMobile(context) ? 8 : 12,
-                          ), // Responsive spacing
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical:
-                                    Responsive.isMobile(context) ? 10.0 : 0,
-                              ),
-                              child: CustomText(
-                                widget.project['description'],
-                                fontSize:
-                                    Responsive.isMobile(context)
-                                        ? 10
-                                        : 13, // Responsive font size
-                                fontWeight: FontWeight.w400,
-                                maxLines: 5,
-                                color: AppColors.white.withOpacity(0.8),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _ProjectImage(imagePath: widget.project['image']),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.all(
+                            Responsive.isMobile(context) ? 8.0 : 20.0,
                           ),
-                          if (Responsive.isMobile(context))
-                            const SizedBox(height: 20),
-                          _TechnologiesWidget(
-                            technologies: List<String>.from(
-                              widget.project['technologies'],
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _ProjectHeader(project: widget.project),
+                              SizedBox(
+                                height: Responsive.isMobile(context) ? 8 : 12,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical:
+                                        Responsive.isMobile(context) ? 10.0 : 0,
+                                  ),
+                                  child: CustomText(
+                                    widget.project['description'],
+                                    fontSize:
+                                        Responsive.isMobile(context) ? 10 : 13,
+                                    fontWeight: FontWeight.w400,
+                                    maxLines: 5,
+                                    color: AppColors.white.withOpacity(0.8),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                              if (Responsive.isMobile(context))
+                                const SizedBox(height: 20),
+                              _TechnologiesWidget(
+                                technologies: List<String>.from(
+                                  widget.project['technologies'],
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
+                  // Hover overlay with buttons
+                  if (showButtons)
+                    Positioned.fill(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: Colors.black.withOpacity(
+                            0.7 * _overlayOpacityAnimation.value,
+                          ),
+                        ),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (hasRepo) ...[
+                                Transform.scale(
+                                  scale: _buttonScaleAnimation.value,
+                                  child: _ActionButton(
+                                    onTap: () {
+                                      _launchUrl(widget.project['repoUrl']);
+                                    },
+                                    iconPath: 'assets/images/github.svg',
+                                    label: 'Source Code',
+                                    delay: 0,
+                                  ),
+                                ),
+                              ],
+                              if (hasRepo && hasApk) SizedBox(width: 20),
+                              if (hasApk) ...[
+                                Transform.scale(
+                                  scale: _buttonScaleAnimation.value,
+                                  child: _ActionButton(
+                                    onTap: () {
+                                      _launchUrl(widget.project['apkUrl']);
+                                    },
+                                    iconPath: 'assets/images/apkIcon.svg',
+                                    label: 'Download APK',
+                                    delay: hasRepo ? 100 : 0,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ),
+                    ).animate(target: _isHovered ? 1 : 0).fadeIn(),
                 ],
               ),
             ),
@@ -338,6 +447,87 @@ class _ProjectCardState extends State<ProjectCard>
         },
       ),
     );
+  }
+}
+
+// Action button widget for GitHub and APK
+class _ActionButton extends StatefulWidget {
+  final VoidCallback onTap;
+  final String iconPath;
+  final String label;
+  final int delay;
+
+  const _ActionButton({
+    required this.onTap,
+    required this.iconPath,
+    required this.label,
+    this.delay = 0,
+  });
+
+  @override
+  State<_ActionButton> createState() => _ActionButtonState();
+}
+
+class _ActionButtonState extends State<_ActionButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+          onTapDown: (_) => setState(() => _isPressed = true),
+          onTapUp: (_) => setState(() => _isPressed = false),
+          onTapCancel: () => setState(() => _isPressed = false),
+          onTap: widget.onTap,
+          child: AnimatedScale(
+            scale: _isPressed ? 0.95 : 1.0,
+            duration: const Duration(milliseconds: 100),
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: Responsive.isMobile(context) ? 12 : 16,
+                vertical: Responsive.isMobile(context) ? 8 : 12,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.primaryColor.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: AppColors.primaryColor.withOpacity(0.2),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primaryColor.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(
+                    widget.iconPath,
+                    width: Responsive.isMobile(context) ? 16 : 20,
+                    height: Responsive.isMobile(context) ? 16 : 20,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.black,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  SizedBox(width: Responsive.isMobile(context) ? 6 : 8),
+                  CustomText(
+                    widget.label,
+                    fontSize: Responsive.isMobile(context) ? 10 : 12,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.black,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
+        .animate(delay: Duration(milliseconds: widget.delay))
+        .slideY(begin: 0.5, duration: 300.ms, curve: Curves.elasticOut)
+        .fadeIn();
   }
 }
 
@@ -354,11 +544,11 @@ class _ProjectHeader extends StatelessWidget {
         Expanded(
           child: CustomText(
             project['title'],
-            fontSize: 18, // Increased from 16
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(width: 8), // Increased from 4
+        const SizedBox(width: 8),
         _TypeBadge(type: project['type']),
       ],
     );
@@ -374,17 +564,14 @@ class _TypeBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 4,
-      ), // Increased padding
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: AppColors.primaryColor.withOpacity(0.2),
         borderRadius: BorderRadius.circular(8),
       ),
       child: CustomText(
         type,
-        fontSize: 10, // Increased from 8
+        fontSize: 10,
         fontWeight: FontWeight.w500,
         color: AppColors.primaryColor,
       ),
@@ -419,8 +606,7 @@ class _ProjectImage extends StatelessWidget {
         child: Image.asset(
           imagePath,
           fit: BoxFit.cover,
-          // Add cache settings for better performance
-          cacheHeight: 760, // 2x the display height for high DPI
+          cacheHeight: 760,
           errorBuilder: (context, error, stackTrace) {
             return Container(
               decoration: const BoxDecoration(
@@ -436,13 +622,13 @@ class _ProjectImage extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.code,
-                      size: 36, // Increased icon size
+                      size: 36,
                       color: AppColors.white.withOpacity(0.8),
                     ),
-                    const SizedBox(height: 8), // Increased from 4
+                    const SizedBox(height: 8),
                     CustomText(
                       'Project Image',
-                      fontSize: 12, // Increased from 10
+                      fontSize: 12,
                       color: AppColors.white.withOpacity(0.6),
                     ),
                   ],
@@ -464,15 +650,12 @@ class _TechnologiesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 6, // Increased from 4
-      runSpacing: 6, // Increased from 4
+      spacing: 6,
+      runSpacing: 6,
       children:
           technologies.take(5).map((tech) {
             return Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8,
-                vertical: 4,
-              ), // Increased padding
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 color: AppColors.buttonColorDark.withOpacity(0.8),
                 borderRadius: BorderRadius.circular(8),
@@ -483,7 +666,7 @@ class _TechnologiesWidget extends StatelessWidget {
               ),
               child: CustomText(
                 tech,
-                fontSize: 10, // Increased from 8
+                fontSize: 10,
                 fontWeight: FontWeight.w500,
                 color: AppColors.white.withOpacity(0.9),
               ),
