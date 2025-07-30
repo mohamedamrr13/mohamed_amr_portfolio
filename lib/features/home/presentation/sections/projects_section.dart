@@ -67,7 +67,6 @@ class ProjectsSection extends StatelessWidget {
       'repoUrl': 'https://github.com/mohamedamrr13/MugLife',
       'apkUrl': '',
     },
-
     {
       'title': 'Sphinx Go 🧳',
       'description':
@@ -92,7 +91,6 @@ class ProjectsSection extends StatelessWidget {
       'repoUrl': '',
       'apkUrl': '',
     },
-
     {
       'title': 'Modern Weather App',
       'description':
@@ -226,6 +224,7 @@ class ProjectCard extends StatefulWidget {
 class _ProjectCardState extends State<ProjectCard>
     with TickerProviderStateMixin {
   bool _isHovered = false;
+  bool _isExpanded = false; // For mobile tap to expand
   late AnimationController _animationController;
   late AnimationController _overlayController;
   late Animation<double> _scaleAnimation;
@@ -306,6 +305,22 @@ class _ProjectCardState extends State<ProjectCard>
     }
   }
 
+  void _onMobileTap() {
+    if (Responsive.isMobile(context)) {
+      setState(() {
+        _isExpanded = !_isExpanded;
+      });
+
+      if (_isExpanded) {
+        _animationController.forward();
+        _overlayController.forward();
+      } else {
+        _animationController.reverse();
+        _overlayController.reverse();
+      }
+    }
+  }
+
   void _launchUrl(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
@@ -318,133 +333,162 @@ class _ProjectCardState extends State<ProjectCard>
     final hasRepo = widget.project['hasRepo'] ?? false;
     final hasApk = widget.project['hasApk'] ?? false;
     final showButtons = hasRepo || hasApk;
+    final isMobile = Responsive.isMobile(context);
+    final shouldShowOverlay = isMobile ? _isExpanded : _isHovered;
 
-    return MouseRegion(
-      onEnter: (_) => _onHover(true),
-      onExit: (_) => _onHover(false),
-      child: AnimatedBuilder(
-        animation: Listenable.merge([_animationController, _overlayController]),
-        builder: (context, child) {
-          return Transform.scale(
-            scale: _scaleAnimation.value,
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.buttonColorDark.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: AppColors.primaryColor.withOpacity(
-                    _borderAnimation.value,
+    return GestureDetector(
+      onTap: isMobile ? _onMobileTap : null,
+      child: MouseRegion(
+        onEnter: isMobile ? null : (_) => _onHover(true),
+        onExit: isMobile ? null : (_) => _onHover(false),
+        child: AnimatedBuilder(
+          animation: Listenable.merge([
+            _animationController,
+            _overlayController,
+          ]),
+          builder: (context, child) {
+            return Transform.scale(
+              scale: _scaleAnimation.value,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.buttonColorDark.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: AppColors.primaryColor.withOpacity(
+                      _borderAnimation.value,
+                    ),
+                    width: (isMobile && _isExpanded) || _isHovered ? 2 : 1,
                   ),
-                  width: _isHovered ? 2 : 1,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primaryColor.withOpacity(0.1),
+                      blurRadius: _elevationAnimation.value,
+                      offset: Offset(0, _elevationAnimation.value * 0.3),
+                      spreadRadius:
+                          (isMobile && _isExpanded) || _isHovered ? 2 : 0,
+                    ),
+                  ],
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.primaryColor.withOpacity(0.1),
-                    blurRadius: _elevationAnimation.value,
-                    offset: Offset(0, _elevationAnimation.value * 0.3),
-                    spreadRadius: _isHovered ? 2 : 0,
-                  ),
-                ],
-              ),
-              child: Stack(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _ProjectImage(imagePath: widget.project['image']),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                            Responsive.isMobile(context) ? 8.0 : 20.0,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _ProjectHeader(project: widget.project),
-                              SizedBox(
-                                height: Responsive.isMobile(context) ? 8 : 12,
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical:
-                                        Responsive.isMobile(context) ? 10.0 : 0,
-                                  ),
-                                  child: CustomText(
-                                    widget.project['description'],
-                                    fontSize:
-                                        Responsive.isMobile(context) ? 10 : 13,
-                                    fontWeight: FontWeight.w400,
-                                    maxLines: 5,
-                                    color: AppColors.white.withOpacity(0.8),
-                                    overflow: TextOverflow.ellipsis,
+                child: Stack(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _ProjectImage(imagePath: widget.project['image']),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.all(
+                              Responsive.isMobile(context) ? 8.0 : 20.0,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _ProjectHeader(project: widget.project),
+                                SizedBox(
+                                  height: Responsive.isMobile(context) ? 8 : 12,
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical:
+                                          Responsive.isMobile(context)
+                                              ? 10.0
+                                              : 0,
+                                    ),
+                                    child: CustomText(
+                                      widget.project['description'],
+                                      fontSize:
+                                          Responsive.isMobile(context)
+                                              ? 10
+                                              : 13,
+                                      fontWeight: FontWeight.w400,
+                                      maxLines: 5,
+                                      color: AppColors.white.withOpacity(0.8),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              if (Responsive.isMobile(context))
-                                const SizedBox(height: 20),
-                              _TechnologiesWidget(
-                                technologies: List<String>.from(
-                                  widget.project['technologies'],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  // Hover overlay with buttons
-                  if (showButtons)
-                    Positioned.fill(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: Colors.black.withOpacity(
-                            0.7 * _overlayOpacityAnimation.value,
-                          ),
-                        ),
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (hasRepo) ...[
-                                Transform.scale(
-                                  scale: _buttonScaleAnimation.value,
-                                  child: _ActionButton(
-                                    onTap: () {
-                                      _launchUrl(widget.project['repoUrl']);
-                                    },
-                                    iconPath: 'assets/images/github.svg',
-                                    label: 'Source Code',
-                                    delay: 0,
+                                if (Responsive.isMobile(context))
+                                  const SizedBox(height: 20),
+                                _TechnologiesWidget(
+                                  technologies: List<String>.from(
+                                    widget.project['technologies'],
                                   ),
                                 ),
+                                // Add tap indicator for mobile
+                                if (isMobile && showButtons)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: Center(
+                                      child: Icon(
+                                        _isExpanded
+                                            ? Icons.keyboard_arrow_up
+                                            : Icons.keyboard_arrow_down,
+                                        color: AppColors.primaryColor
+                                            .withOpacity(0.7),
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
                               ],
-                              if (hasRepo && hasApk) SizedBox(width: 20),
-                              if (hasApk) ...[
-                                Transform.scale(
-                                  scale: _buttonScaleAnimation.value,
-                                  child: _ActionButton(
-                                    onTap: () {
-                                      _launchUrl(widget.project['apkUrl']);
-                                    },
-                                    iconPath: 'assets/images/apkIcon.svg',
-                                    label: 'Download APK',
-                                    delay: hasRepo ? 100 : 0,
-                                  ),
-                                ),
-                              ],
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ).animate(target: _isHovered ? 1 : 0).fadeIn(),
-                ],
+                      ],
+                    ),
+                    // Hover/Tap overlay with buttons
+                    if (showButtons)
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: Colors.black.withOpacity(
+                              0.7 * _overlayOpacityAnimation.value,
+                            ),
+                          ),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (hasRepo) ...[
+                                  Transform.scale(
+                                    scale: _buttonScaleAnimation.value,
+                                    child: _ActionButton(
+                                      onTap: () {
+                                        _launchUrl(widget.project['repoUrl']);
+                                      },
+                                      iconPath: 'assets/images/github.svg',
+                                      label: 'Source Code',
+                                      delay: 0,
+                                    ),
+                                  ),
+                                ],
+                                if (hasRepo && hasApk)
+                                  const SizedBox(width: 20),
+                                if (hasApk) ...[
+                                  Transform.scale(
+                                    scale: _buttonScaleAnimation.value,
+                                    child: _ActionButton(
+                                      onTap: () {
+                                        _launchUrl(widget.project['apkUrl']);
+                                      },
+                                      iconPath: 'assets/images/apkIcon.svg',
+                                      label: 'Download APK',
+                                      delay: hasRepo ? 100 : 0,
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                      ).animate(target: shouldShowOverlay ? 1 : 0).fadeIn(),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
