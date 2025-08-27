@@ -115,21 +115,21 @@ class ContactSection extends StatelessWidget {
 
   Widget _buildSocialLinks(BuildContext context) {
     final socialLinks = [
-      {
-        'name': 'LinkedIn',
-        'icon': 'assets/images/linkedin.svg',
-        'url': 'https://www.linkedin.com/in/mohamed-amr-667749222/',
-      },
+      // {
+      //   'name': 'LinkedIn',
+      //   'icon': 'assets/images/linkedin.svg',
+      //   'url': 'https://www.linkedin.com/in/mohamed-amr-667749222/',
+      // },
       {
         'name': 'GitHub',
         'icon': 'assets/images/github.svg',
         'url': 'https://github.com/mohamedamrr13',
       },
-      {
-        'name': 'Email',
-        'icon': 'assets/images/mail.svg',
-        'url': 'mailto:mohamed.egypt140@gmail.com',
-      },
+      // {
+      //   'name': 'Email',
+      //   'icon': 'assets/images/mail.svg',
+      //   'url': 'mailto:mohamed.egypt140@gmail.com',
+      // },
       {
         'name': 'Upwork',
         'icon': 'assets/images/upwork.svg',

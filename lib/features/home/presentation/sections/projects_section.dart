@@ -127,7 +127,7 @@ class ProjectsSection extends StatelessWidget {
       'status': 'Completed',
       'hasRepo': false,
       'hasApk': false,
-      'repoUrl': 'https://github.com/yourusername/balanced-meal',
+      'repoUrl': 'https://app.flutterflow.io/project/balanced-meal-k26szy',
       'apkUrl': '',
     },
     {
