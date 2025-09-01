@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_portfolio/features/home/presentation/home_screen.dart';
+import 'package:mohamed_amr_portfolio/features/home/presentation/home_screen.dart';
 
 void main() {
   runApp(const MyPortfolio());

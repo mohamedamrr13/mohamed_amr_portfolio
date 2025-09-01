@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_portfolio/core/shared/background_widget.dart';
-import 'package:my_portfolio/core/shared/custom_button.dart';
-import 'package:my_portfolio/core/shared/custom_text.dart';
-import 'package:my_portfolio/core/theming/app_colors.dart';
-import 'package:my_portfolio/core/utils/responsive.dart';
-import 'package:my_portfolio/core/utils/scroll_controller.dart';
-import 'package:my_portfolio/features/home/presentation/widgets/home_screen_body.dart';
+import 'package:mohamed_amr_portfolio/core/shared/background_widget.dart';
+import 'package:mohamed_amr_portfolio/core/shared/custom_button.dart';
+import 'package:mohamed_amr_portfolio/core/shared/custom_text.dart';
+import 'package:mohamed_amr_portfolio/core/theming/app_colors.dart';
+import 'package:mohamed_amr_portfolio/core/utils/responsive.dart';
+import 'package:mohamed_amr_portfolio/core/utils/scroll_controller.dart';
+import 'package:mohamed_amr_portfolio/features/home/presentation/widgets/home_screen_body.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

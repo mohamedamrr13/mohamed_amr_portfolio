@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_portfolio/core/theming/app_colors.dart';
+import 'package:mohamed_amr_portfolio/core/theming/app_colors.dart';
 import 'dart:math' as math;
 
 class BackgroundWidget extends StatefulWidget {

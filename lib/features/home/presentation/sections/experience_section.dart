@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:my_portfolio/core/shared/custom_text.dart';
-import 'package:my_portfolio/core/shared/section_wrapper.dart';
-import 'package:my_portfolio/core/theming/app_colors.dart';
-import 'package:my_portfolio/core/utils/responsive.dart';
-import 'package:my_portfolio/core/utils/scroll_controller.dart';
+import 'package:mohamed_amr_portfolio/core/shared/custom_text.dart';
+import 'package:mohamed_amr_portfolio/core/shared/section_wrapper.dart';
+import 'package:mohamed_amr_portfolio/core/theming/app_colors.dart';
+import 'package:mohamed_amr_portfolio/core/utils/responsive.dart';
+import 'package:mohamed_amr_portfolio/core/utils/scroll_controller.dart';
 
 class ExperienceSection extends StatelessWidget {
   const ExperienceSection({super.key});
