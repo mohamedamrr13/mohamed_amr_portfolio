@@ -1,7 +1,7 @@
 {
     "buildCommand": "flutter build web",
     "outputDirectory": "build",
-    "installCommand": "flutter pub get",
+    "installCommand": "git clone https://github.com/flutter/flutter.git --depth 1 && ./flutter/bin/flutter doctor --web && ./flutter/bin/flutter pub get",
     "routes": [
         {
             "handle": "filesystem"
