@@ -195,15 +195,15 @@ class _HomeScreenState extends State<HomeScreen>
                                 style: TextStyle(
                                   fontSize:
                                       Responsive.isTablet(context) || isMobile
-                                          ? (_isScrolled ? 16 : 18)
-                                          : (_isScrolled ? 20 : 22),
+                                          ? (_isScrolled ? 16 : 20)
+                                          : (_isScrolled ? 18 : 22),
                                   fontWeight: FontWeight.bold,
                                   color:
                                       themeProvider.isDarkMode
                                           ? AppColors.white
                                           : const Color(0xFF1A202C),
                                 ),
-                                child: const Text("Mohamed Amr's Portfolio"),
+                                child: const Text("Mohamed's Portfolio"),
                               ),
                             ],
                           ),
