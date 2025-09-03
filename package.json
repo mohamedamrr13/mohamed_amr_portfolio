@@ -1,0 +1,9 @@
+{
+    "name": "flutter-web-app",
+    "version": "1.0.0",
+    "scripts": {
+        "build": "flutter build web --release --web-renderer html --dart-define=FLUTTER_WEB_USE_SKIA=false"
+    },
+    "devDependencies": {},
+    "dependencies": {}
+}

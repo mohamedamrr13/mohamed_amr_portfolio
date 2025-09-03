@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:mohamed_amr_portfolio/core/theming/app_colors.dart';
 import 'package:mohamed_amr_portfolio/core/theming/theme_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:newton_particles/newton_particles.dart' hide Velocity;
 
 class BackgroundWidget extends StatefulWidget {
   final Widget child;
@@ -70,93 +69,6 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
         : 15;
   }
 
-  List<RelativisticEffectConfiguration> _createParticleEffects(
-    bool isDarkMode,
-  ) {
-    final particleCount = widget.particleCount ?? _getResponsiveParticleCount();
-    final baseColor =
-        isDarkMode ? AppColors.primaryColor : const Color(0xFF6B7FD7);
-
-    // Create multiple effect configurations for variety
-    return [
-      // Main floating particles
-      RelativisticEffectConfiguration(
-        gravity: Gravity.zero,
-        maxAngle: 360,
-        minAngle: 0,
-        maxEndScale: 1.2,
-        minEndScale: 0.8,
-        maxFadeOutThreshold: 0.9,
-        minFadeOutThreshold: 0.7,
-        maxOriginOffset: Offset(MediaQuery.of(context).size.width, 0),
-        minOriginOffset: const Offset(0, 0),
-        maxParticleLifespan: Duration(
-          seconds: (15 / widget.animationSpeed).round(),
-        ),
-        minParticleLifespan: Duration(
-          seconds: (10 / widget.animationSpeed).round(),
-        ),
-        origin: const Offset(-50, -50),
-        particleConfiguration: const ParticleConfiguration(
-          shape: CircleShape(),
-          size: Size(2, 2),
-        ),
-      ),
-
-      // Slower drifting particles
-      RelativisticEffectConfiguration(
-        particleCount: (particleCount * 0.3).round(),
-        trail: const StraightTrail(trailProgress: 2, trailWidth: 3),
-        gravity: Gravity.zero,
-        maxAngle: 360,
-        minAngle: 0,
-        maxEndScale: 1.5,
-        minEndScale: 0.5,
-        maxFadeOutThreshold: 0.8,
-        minFadeOutThreshold: 0.6,
-        maxOriginOffset: Offset(MediaQuery.of(context).size.width, 0),
-        minOriginOffset: const Offset(0, 0),
-        maxParticleLifespan: Duration(
-          seconds: (25 / widget.animationSpeed).round(),
-        ),
-        minParticleLifespan: Duration(
-          seconds: (20 / widget.animationSpeed).round(),
-        ),
-
-        origin: const Offset(-50, -50),
-        particleConfiguration: const ParticleConfiguration(
-          shape: CircleShape(),
-          size: Size(3, 3),
-        ),
-      ),
-
-      // Subtle accent particles
-      RelativisticEffectConfiguration(
-        gravity: Gravity.zero,
-        maxAngle: 360,
-        minAngle: 0,
-        maxEndScale: 2.0,
-        minEndScale: 1.0,
-        maxFadeOutThreshold: 0.7,
-        minFadeOutThreshold: 0.5,
-        maxOriginOffset: Offset(MediaQuery.of(context).size.width, 0),
-        minOriginOffset: const Offset(0, 0),
-        maxParticleLifespan: Duration(
-          seconds: (30 / widget.animationSpeed).round(),
-        ),
-        minParticleLifespan: Duration(
-          seconds: (25 / widget.animationSpeed).round(),
-        ),
-
-        origin: const Offset(-50, -50),
-        particleConfiguration: ParticleConfiguration(
-          shape: const CircleShape(),
-          size: const Size(1, 1),
-        ),
-      ),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
@@ -166,14 +78,6 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
       decoration: BoxDecoration(gradient: _getBackgroundGradient(context)),
       child: Stack(
         children: [
-          if (widget.enableParticles)
-            RepaintBoundary(
-              child: Newton(
-                effectConfigurations: _createParticleEffects(isDarkMode),
-              ),
-            ),
-
-          // Keep all the existing gradient layers
           Container(
             decoration: BoxDecoration(
               gradient:
