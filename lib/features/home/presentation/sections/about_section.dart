@@ -1,9 +1,11 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:mohamed_amr_portfolio/core/shared/custom_text.dart';
 import 'package:mohamed_amr_portfolio/core/shared/floating_image.dart';
 import 'package:mohamed_amr_portfolio/core/shared/section_wrapper.dart';
 import 'package:mohamed_amr_portfolio/core/theming/app_colors.dart';
+import 'package:mohamed_amr_portfolio/core/theming/theme_provider.dart';
 import 'package:mohamed_amr_portfolio/core/utils/responsive.dart';
 import 'package:mohamed_amr_portfolio/core/utils/scroll_controller.dart';
 
@@ -26,7 +28,7 @@ class AboutSection extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: Responsive.isMobile(context) ? 10 : 20),
+          SizedBox(height: Responsive.isMobile(context) ? 90 : 140),
 
           _buildProfileImage(),
           const SizedBox(height: 30),
@@ -53,40 +55,50 @@ class AboutSection extends StatelessWidget {
   }
 
   Widget _buildTextContent(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomText(
-          "Mohamed Amr Ibrahim",
-          fontSize: Responsive.isMobile(context) ? 26 : 32,
-          fontWeight: FontWeight.bold,
-        ),
-        const SizedBox(height: 8),
-        _buildAnimatedText(),
-        const SizedBox(height: 16),
-        const CustomText(
-          'Based in Alexandria, Egypt',
-          fontSize: 16.0,
-          color: Color(0xff9CABBA),
-          fontWeight: FontWeight.w500,
-        ),
-        const SizedBox(height: 24),
-        CustomText(
-          "Flutter Developer specializing in Dart, Flutter, and Firebase, with experience in building scalable, \nhigh-performance mobile and web applications. \nStrong foundation in modern development practices and cross-platform solutions.",
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          textAlign: TextAlign.left,
-          color: AppColors.white.withOpacity(0.8),
-        ),
-      ],
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomText(
+              "Mohamed Amr Ibrahim",
+              fontSize: Responsive.isMobile(context) ? 26 : 32,
+              fontWeight: FontWeight.bold,
+            ),
+            const SizedBox(height: 8),
+            _buildAnimatedText(themeProvider),
+            const SizedBox(height: 16),
+            CustomText(
+              'Based in Alexandria, Egypt',
+              fontSize: 16.0,
+              color:
+                  themeProvider.isDarkMode
+                      ? const Color(0xff9CABBA)
+                      : AppColors.lightText,
+              fontWeight: FontWeight.w500,
+            ),
+            const SizedBox(height: 24),
+            CustomText(
+              "Flutter Developer specializing in Dart, Flutter, and Firebase, with experience in building scalable, high-performance mobile and web applications. Strong foundation in modern development practices and cross-platform solutions.",
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              textAlign: TextAlign.left,
+              color: (themeProvider.isDarkMode
+                      ? AppColors.white
+                      : AppColors.darkText)
+                  .withOpacity(0.8),
+            ),
+          ],
+        );
+      },
     );
   }
 
-  Widget _buildAnimatedText() {
+  Widget _buildAnimatedText(ThemeProvider themeProvider) {
     return DefaultTextStyle(
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 18.0,
-        color: AppColors.white,
+        color: themeProvider.isDarkMode ? AppColors.white : AppColors.darkText,
         fontFamily: 'SpaceGrotesk',
         fontWeight: FontWeight.w500,
       ),

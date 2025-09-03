@@ -1,6 +1,9 @@
+// lib/core/shared/background_widget.dart
 import 'package:flutter/material.dart';
 import 'package:mohamed_amr_portfolio/core/theming/app_colors.dart';
-import 'dart:math' as math;
+import 'package:mohamed_amr_portfolio/core/theming/theme_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:newton_particles/newton_particles.dart' hide Velocity;
 
 class BackgroundWidget extends StatefulWidget {
   final Widget child;
@@ -20,36 +23,38 @@ class BackgroundWidget extends StatefulWidget {
   State<BackgroundWidget> createState() => _BackgroundWidgetState();
 }
 
-class _BackgroundWidgetState extends State<BackgroundWidget>
-    with TickerProviderStateMixin {
-  late AnimationController _controller;
-  late List<ParticleData> _particles;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: Duration(seconds: (20 / widget.animationSpeed).round()),
-      vsync: this,
-    )..repeat();
-
-    _initializeParticles();
-  }
-
-  void _initializeParticles() {
-    final particleCount = widget.particleCount ?? _getResponsiveParticleCount();
-    _particles = List.generate(
-      particleCount,
-      (index) => ParticleData(
-        initialX: math.Random().nextDouble() * 500,
-        initialY: math.Random().nextDouble() * 500,
-        speedX: 20 + math.Random().nextDouble() * 40,
-        speedY: 10 + math.Random().nextDouble() * 30,
-        size: 1.0 + math.Random().nextDouble() * 2.0,
-        opacity: 0.2 + math.Random().nextDouble() * 0.3,
-        phaseOffset: math.Random().nextDouble() * 2 * math.pi,
-      ),
-    );
+class _BackgroundWidgetState extends State<BackgroundWidget> {
+  LinearGradient _getBackgroundGradient(BuildContext context) {
+    try {
+      final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+      return themeProvider.isDarkMode
+          ? const LinearGradient(
+            begin: Alignment(-0.8, -1.0),
+            end: Alignment(1.2, 1.0),
+            colors: [
+              Color(0xFF0A0A0F),
+              Color(0xFF1A1A2E),
+              Color(0xFF16213E),
+              Color(0xFF0F3460),
+              Color(0xFF1A1A2E),
+            ],
+            stops: [0.0, 0.25, 0.5, 0.75, 1.0],
+          )
+          : const LinearGradient(
+            begin: Alignment(-0.8, -1.0),
+            end: Alignment(1.2, 1.0),
+            colors: [
+              Color(0xFFFDFDFE),
+              Color(0xFFF8FAFF),
+              Color(0xFFF0F4FC),
+              Color(0xFFE8F0FF),
+              Color(0xFFF5F7FA),
+            ],
+            stops: [0.0, 0.25, 0.5, 0.75, 1.0],
+          );
+    } catch (e) {
+      return _modernBackgroundGradient;
+    }
   }
 
   int _getResponsiveParticleCount() {
@@ -65,392 +70,201 @@ class _BackgroundWidgetState extends State<BackgroundWidget>
         : 15;
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  List<RelativisticEffectConfiguration> _createParticleEffects(
+    bool isDarkMode,
+  ) {
+    final particleCount = widget.particleCount ?? _getResponsiveParticleCount();
+    final baseColor =
+        isDarkMode ? AppColors.primaryColor : const Color(0xFF6B7FD7);
+
+    // Create multiple effect configurations for variety
+    return [
+      // Main floating particles
+      RelativisticEffectConfiguration(
+        gravity: Gravity.zero,
+        maxAngle: 360,
+        minAngle: 0,
+        maxEndScale: 1.2,
+        minEndScale: 0.8,
+        maxFadeOutThreshold: 0.9,
+        minFadeOutThreshold: 0.7,
+        maxOriginOffset: Offset(MediaQuery.of(context).size.width, 0),
+        minOriginOffset: const Offset(0, 0),
+        maxParticleLifespan: Duration(
+          seconds: (15 / widget.animationSpeed).round(),
+        ),
+        minParticleLifespan: Duration(
+          seconds: (10 / widget.animationSpeed).round(),
+        ),
+        origin: const Offset(-50, -50),
+        particleConfiguration: const ParticleConfiguration(
+          shape: CircleShape(),
+          size: Size(2, 2),
+        ),
+      ),
+
+      // Slower drifting particles
+      RelativisticEffectConfiguration(
+        particleCount: (particleCount * 0.3).round(),
+        trail: const StraightTrail(trailProgress: 2, trailWidth: 3),
+        gravity: Gravity.zero,
+        maxAngle: 360,
+        minAngle: 0,
+        maxEndScale: 1.5,
+        minEndScale: 0.5,
+        maxFadeOutThreshold: 0.8,
+        minFadeOutThreshold: 0.6,
+        maxOriginOffset: Offset(MediaQuery.of(context).size.width, 0),
+        minOriginOffset: const Offset(0, 0),
+        maxParticleLifespan: Duration(
+          seconds: (25 / widget.animationSpeed).round(),
+        ),
+        minParticleLifespan: Duration(
+          seconds: (20 / widget.animationSpeed).round(),
+        ),
+
+        origin: const Offset(-50, -50),
+        particleConfiguration: const ParticleConfiguration(
+          shape: CircleShape(),
+          size: Size(3, 3),
+        ),
+      ),
+
+      // Subtle accent particles
+      RelativisticEffectConfiguration(
+        gravity: Gravity.zero,
+        maxAngle: 360,
+        minAngle: 0,
+        maxEndScale: 2.0,
+        minEndScale: 1.0,
+        maxFadeOutThreshold: 0.7,
+        minFadeOutThreshold: 0.5,
+        maxOriginOffset: Offset(MediaQuery.of(context).size.width, 0),
+        minOriginOffset: const Offset(0, 0),
+        maxParticleLifespan: Duration(
+          seconds: (30 / widget.animationSpeed).round(),
+        ),
+        minParticleLifespan: Duration(
+          seconds: (25 / widget.animationSpeed).round(),
+        ),
+
+        origin: const Offset(-50, -50),
+        particleConfiguration: ParticleConfiguration(
+          shape: const CircleShape(),
+          size: const Size(1, 1),
+        ),
+      ),
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final isDarkMode = themeProvider.isDarkMode;
+
     return Container(
-      decoration: const BoxDecoration(gradient: _modernBackgroundGradient),
+      decoration: BoxDecoration(gradient: _getBackgroundGradient(context)),
       child: Stack(
         children: [
-          // Enhanced animated background particles
           if (widget.enableParticles)
             RepaintBoundary(
-              child: CustomPaint(
-                painter: ParticlesPainter(
-                  animation: _controller,
-                  particles: _particles,
-                  primaryColor: AppColors.primaryColor,
-                ),
-                size: Size.infinite,
+              child: Newton(
+                effectConfigurations: _createParticleEffects(isDarkMode),
               ),
             ),
 
-          // Multi-layered depth gradients
+          // Keep all the existing gradient layers
           Container(
-            decoration: const BoxDecoration(gradient: _depthGradientLayer1),
+            decoration: BoxDecoration(
+              gradient:
+                  isDarkMode
+                      ? _depthGradientLayer1Dark
+                      : _depthGradientLayer1Light,
+            ),
           ),
-
           Container(
-            decoration: const BoxDecoration(gradient: _depthGradientLayer2),
+            decoration: BoxDecoration(
+              gradient:
+                  isDarkMode
+                      ? _depthGradientLayer2Dark
+                      : _depthGradientLayer2Light,
+            ),
           ),
-
-          // Subtle radial highlight
           Container(
             decoration: BoxDecoration(
               gradient: RadialGradient(
                 center: const Alignment(0.3, -0.7),
                 radius: 1.2,
                 colors: [
-                  AppColors.primaryColor.withOpacity(0.08),
+                  isDarkMode
+                      ? AppColors.primaryColor.withOpacity(0.08)
+                      : const Color(0xFF4A69BD).withOpacity(0.05),
                   Colors.transparent,
                 ],
                 stops: const [0.0, 0.7],
               ),
             ),
           ),
-
-          // Main content
+          if (!isDarkMode)
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    const Color(0xFFFDFDFE).withOpacity(0.5),
+                    Colors.transparent,
+                    const Color(0xFFF8FAFF).withOpacity(0.3),
+                  ],
+                  stops: const [0.0, 0.5, 1.0],
+                ),
+              ),
+            ),
           widget.child,
         ],
       ),
     );
   }
 
-  // Enhanced gradient definitions
+  // Keep all the existing gradient definitions
   static const LinearGradient _modernBackgroundGradient = LinearGradient(
     begin: Alignment(-0.8, -1.0),
     end: Alignment(1.2, 1.0),
     colors: [
-      Color(0xFF0A0A0F), // Deep space blue
-      Color(0xFF1A1A2E), // Rich dark blue
-      Color(0xFF16213E), // Midnight blue
-      Color(0xFF0F3460), // Ocean depth
-      Color(0xFF1A1A2E), // Rich dark blue
+      Color(0xFF0A0A0F),
+      Color(0xFF1A1A2E),
+      Color(0xFF16213E),
+      Color(0xFF0F3460),
+      Color(0xFF1A1A2E),
     ],
     stops: [0.0, 0.25, 0.5, 0.75, 1.0],
   );
 
-  static const LinearGradient _depthGradientLayer1 = LinearGradient(
+  static const LinearGradient _depthGradientLayer1Dark = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [
-      Colors.transparent,
-      Color(0x0D533483), // Subtle purple tint
-      Colors.transparent,
-    ],
+    colors: [Colors.transparent, Color(0x0D533483), Colors.transparent],
     stops: [0.0, 0.6, 1.0],
   );
 
-  static const LinearGradient _depthGradientLayer2 = LinearGradient(
+  static const LinearGradient _depthGradientLayer2Dark = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
-    colors: [
-      Color(0x0A00D4FF), // Subtle cyan glow
-      Colors.transparent,
-      Color(0x0A7C4DFF), // Subtle purple glow
-    ],
+    colors: [Color(0x0A00D4FF), Colors.transparent, Color(0x0A7C4DFF)],
     stops: [0.0, 0.5, 1.0],
   );
-}
 
-class ParticleData {
-  final double initialX;
-  final double initialY;
-  final double speedX;
-  final double speedY;
-  final double size;
-  final double opacity;
-  final double phaseOffset;
-
-  ParticleData({
-    required this.initialX,
-    required this.initialY,
-    required this.speedX,
-    required this.speedY,
-    required this.size,
-    required this.opacity,
-    required this.phaseOffset,
-  });
-}
-
-class ParticlesPainter extends CustomPainter {
-  final Animation<double> animation;
-  final List<ParticleData> particles;
-  final Color primaryColor;
-
-  ParticlesPainter({
-    required this.animation,
-    required this.particles,
-    required this.primaryColor,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (size.width <= 0 || size.height <= 0) return;
-
-    final paint =
-        Paint()
-          ..style = PaintingStyle.fill
-          ..blendMode = BlendMode.srcOver;
-
-    for (int i = 0; i < particles.length; i++) {
-      final particle = particles[i];
-
-      // Calculate position with smooth floating motion
-      final progress = animation.value;
-      final floatingY =
-          math.sin(progress * 2 * math.pi + particle.phaseOffset) * 20;
-
-      final x =
-          (particle.initialX + particle.speedX * progress) % (size.width + 50) -
-          25;
-      final y =
-          (particle.initialY + particle.speedY * progress + floatingY) %
-              (size.height + 50) -
-          25;
-
-      // Dynamic opacity based on position
-      final edgeFade = _calculateEdgeFade(x, y, size);
-      final finalOpacity = particle.opacity * edgeFade;
-
-      // Set paint color with calculated opacity
-      paint.color = primaryColor.withOpacity(finalOpacity);
-
-      // Draw particle with subtle glow effect
-      canvas.drawCircle(Offset(x, y), particle.size, paint);
-
-      // Add subtle glow for larger particles
-      if (particle.size > 2.0) {
-        paint.color = primaryColor.withOpacity(finalOpacity * 0.3);
-        canvas.drawCircle(Offset(x, y), particle.size * 2, paint);
-      }
-    }
-  }
-
-  double _calculateEdgeFade(double x, double y, Size size) {
-    const fadeDistance = 100.0;
-
-    final leftFade = x < fadeDistance ? x / fadeDistance : 1.0;
-    final rightFade =
-        x > size.width - fadeDistance ? (size.width - x) / fadeDistance : 1.0;
-    final topFade = y < fadeDistance ? y / fadeDistance : 1.0;
-    final bottomFade =
-        y > size.height - fadeDistance ? (size.height - y) / fadeDistance : 1.0;
-
-    return (leftFade * rightFade * topFade * bottomFade).clamp(0.0, 1.0);
-  }
-
-  @override
-  bool shouldRepaint(covariant ParticlesPainter oldDelegate) {
-    return animation != oldDelegate.animation ||
-        particles != oldDelegate.particles ||
-        primaryColor != oldDelegate.primaryColor;
-  }
-}
-
-// Optional: Enhanced version with interactive particles
-class InteractiveBackgroundWidget extends StatefulWidget {
-  final Widget child;
-  final bool enableMouseInteraction;
-
-  const InteractiveBackgroundWidget({
-    super.key,
-    required this.child,
-    this.enableMouseInteraction = true,
-  });
-
-  @override
-  State<InteractiveBackgroundWidget> createState() =>
-      _InteractiveBackgroundWidgetState();
-}
-
-class _InteractiveBackgroundWidgetState
-    extends State<InteractiveBackgroundWidget>
-    with TickerProviderStateMixin {
-  late AnimationController _controller;
-  late List<InteractiveParticle> _particles;
-  Offset? _mousePosition;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 15),
-      vsync: this,
-    )..repeat();
-
-    _initializeInteractiveParticles();
-  }
-
-  void _initializeInteractiveParticles() {
-    _particles = List.generate(
-      20,
-      (index) => InteractiveParticle(
-        position: Offset(
-          math.Random().nextDouble() * 500,
-          math.Random().nextDouble() * 500,
-        ),
-        velocity: Offset(
-          (math.Random().nextDouble() - 0.5) * 2,
-          (math.Random().nextDouble() - 0.5) * 2,
-        ),
-        size: 1.5 + math.Random().nextDouble() * 2.0,
-        opacity: 0.3 + math.Random().nextDouble() * 0.4,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(gradient: _modernBackgroundGradient),
-      child: MouseRegion(
-        onHover:
-            widget.enableMouseInteraction
-                ? (event) {
-                  setState(() {
-                    _mousePosition = event.localPosition;
-                  });
-                }
-                : null,
-        onExit:
-            widget.enableMouseInteraction
-                ? (event) {
-                  setState(() {
-                    _mousePosition = null;
-                  });
-                }
-                : null,
-        child: Stack(
-          children: [
-            RepaintBoundary(
-              child: CustomPaint(
-                painter: InteractiveParticlesPainter(
-                  animation: _controller,
-                  particles: _particles,
-                  primaryColor: const Color(0xFF00D4FF), // Modern cyan
-                  mousePosition: _mousePosition,
-                ),
-                size: Size.infinite,
-              ),
-            ),
-
-            // Modern depth layers
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                    Color(0x0F7C4DFF), // Purple accent
-                    Colors.transparent,
-                    Color(0x0F00D4FF), // Cyan accent
-                  ],
-                  stops: [0.0, 0.5, 1.0],
-                ),
-              ),
-            ),
-
-            widget.child,
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Modern gradient for interactive version
-  static const LinearGradient _modernBackgroundGradient = LinearGradient(
-    begin: Alignment(-0.8, -1.0),
-    end: Alignment(1.2, 1.0),
-    colors: [
-      Color(0xFF0A0A0F), // Deep space blue
-      Color(0xFF1A1A2E), // Rich dark blue
-      Color(0xFF16213E), // Midnight blue
-      Color(0xFF0F3460), // Ocean depth
-      Color(0xFF1A1A2E), // Rich dark blue
-    ],
-    stops: [0.0, 0.25, 0.5, 0.75, 1.0],
+  static const LinearGradient _depthGradientLayer1Light = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Colors.transparent, Color(0x08DFF9FB), Colors.transparent],
+    stops: [0.0, 0.6, 1.0],
   );
-}
 
-class InteractiveParticle {
-  Offset position;
-  Offset velocity;
-  final double size;
-  final double opacity;
-
-  InteractiveParticle({
-    required this.position,
-    required this.velocity,
-    required this.size,
-    required this.opacity,
-  });
-}
-
-class InteractiveParticlesPainter extends CustomPainter {
-  final Animation<double> animation;
-  final List<InteractiveParticle> particles;
-  final Color primaryColor;
-  final Offset? mousePosition;
-
-  InteractiveParticlesPainter({
-    required this.animation,
-    required this.particles,
-    required this.primaryColor,
-    this.mousePosition,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (size.width <= 0 || size.height <= 0) return;
-
-    final paint = Paint()..style = PaintingStyle.fill;
-
-    // Update particle positions
-    for (final particle in particles) {
-      // Mouse interaction
-      if (mousePosition != null) {
-        final distance = (particle.position - mousePosition!).distance;
-        if (distance < 100) {
-          final repulsion =
-              (particle.position - mousePosition!) / distance * 0.5;
-          particle.velocity += repulsion;
-        }
-      }
-
-      // Update position
-      particle.position += particle.velocity;
-
-      // Wrap around screen
-      if (particle.position.dx < 0)
-        particle.position = Offset(size.width, particle.position.dy);
-      if (particle.position.dx > size.width)
-        particle.position = Offset(0, particle.position.dy);
-      if (particle.position.dy < 0)
-        particle.position = Offset(particle.position.dx, size.height);
-      if (particle.position.dy > size.height)
-        particle.position = Offset(particle.position.dx, 0);
-
-      // Apply friction
-      particle.velocity *= 0.995;
-
-      // Draw particle
-      paint.color = primaryColor.withOpacity(particle.opacity);
-      canvas.drawCircle(particle.position, particle.size, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  static const LinearGradient _depthGradientLayer2Light = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [Color(0x0574B1F7), Colors.transparent, Color(0x059575E3)],
+    stops: [0.0, 0.5, 1.0],
+  );
 }

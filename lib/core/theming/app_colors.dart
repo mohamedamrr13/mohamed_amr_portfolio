@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  // Dark theme colors (your existing ones - unchanged)
   static const Color primaryColor = Color(0xff64FFDA);
   static const Color primaryColorDark = Color(0xff0A0E27);
   static const Color buttonColorDark = Color(0xff1E2749);
@@ -10,7 +11,15 @@ class AppColors {
   static const Color darkGrey = Color(0xff2D3748);
   static const Color lightGrey = Color(0xffE2E8F0);
 
-  // Gradient colors
+  // Light theme colors (NEW)
+  static const Color primaryColorLight = Color(0xff00BFA5);
+  static const Color lightBackground = Color(0xffF8FAFC);
+  static const Color buttonColorLight = Color(0xffE2E8F0);
+  static const Color darkText = Color(0xff1A202C);
+  static const Color lightText = Color(0xff4A5568);
+  static const Color cardLight = Color(0xffFFFFFF);
+
+  // Gradients (your existing ones - unchanged)
   static const LinearGradient primaryGradient = LinearGradient(
     colors: [primaryColor, Color(0xff4FD1C7)],
     begin: Alignment.topLeft,
@@ -19,6 +28,13 @@ class AppColors {
 
   static const LinearGradient backgroundGradient = LinearGradient(
     colors: [primaryColorDark, Color(0xff1A1A2E)],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  // Light theme gradients (NEW)
+  static const LinearGradient lightBackgroundGradient = LinearGradient(
+    colors: [lightBackground, Color(0xffEDF2F7)],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
   );

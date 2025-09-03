@@ -5,8 +5,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mohamed_amr_portfolio/core/shared/custom_text.dart';
 import 'package:mohamed_amr_portfolio/core/shared/section_wrapper.dart';
 import 'package:mohamed_amr_portfolio/core/theming/app_colors.dart';
+import 'package:mohamed_amr_portfolio/core/theming/theme_provider.dart';
 import 'package:mohamed_amr_portfolio/core/utils/responsive.dart';
 import 'package:mohamed_amr_portfolio/core/utils/scroll_controller.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Constants for better performance
@@ -156,23 +158,30 @@ class ProjectsSection extends StatelessWidget {
     return SectionWrapper(
       sectionKey: 'projects',
       globalKey: PortfolioScrollController.sectionKeys['projects'],
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          _buildSectionTitle(),
-          const SizedBox(height: 40),
-          _buildProjectsGrid(context),
-        ],
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          final textColor =
+              themeProvider.isDarkMode ? AppColors.white : AppColors.black;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              _buildSectionTitle(textColor),
+              const SizedBox(height: 40),
+              _buildProjectsGrid(context),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildSectionTitle() {
-    return const CustomText(
+  Widget _buildSectionTitle(Color textColor) {
+    return CustomText(
       "Projects",
       fontSize: 28,
       fontWeight: FontWeight.bold,
+      color: textColor,
     ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.3);
   }
 
@@ -321,175 +330,213 @@ class _ProjectCardState extends State<ProjectCard>
     }
   }
 
-  void _launchUrl(String url) async {
+  Future<void> _launchUrl(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final hasRepo = widget.project['hasRepo'] ?? false;
-    final hasApk = widget.project['hasApk'] ?? false;
-    final showButtons = hasRepo || hasApk;
-    final isMobile = Responsive.isMobile(context);
-    final shouldShowOverlay = isMobile ? _isExpanded : _isHovered;
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        final hasRepo = widget.project['hasRepo'] ?? false;
+        final hasApk = widget.project['hasApk'] ?? false;
+        final showButtons = hasRepo || hasApk;
+        final isMobile = Responsive.isMobile(context);
+        final shouldShowOverlay = isMobile ? _isExpanded : _isHovered;
+        final textColor =
+            themeProvider.isDarkMode ? AppColors.white : AppColors.black;
+        final subTextColor =
+            themeProvider.isDarkMode
+                ? AppColors.white.withOpacity(0.8)
+                : AppColors.black.withOpacity(0.8);
+        final overlayColor =
+            themeProvider.isDarkMode
+                ? Colors.black.withOpacity(0.7)
+                : Colors.white.withOpacity(0.7);
 
-    return GestureDetector(
-      onTap: isMobile ? _onMobileTap : null,
-      child: MouseRegion(
-        onEnter: isMobile ? null : (_) => _onHover(true),
-        onExit: isMobile ? null : (_) => _onHover(false),
-        child: AnimatedBuilder(
-          animation: Listenable.merge([
-            _animationController,
-            _overlayController,
-          ]),
-          builder: (context, child) {
-            return Transform.scale(
-              scale: _scaleAnimation.value,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.buttonColorDark.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: AppColors.primaryColor.withOpacity(
-                      _borderAnimation.value,
-                    ),
-                    width: (isMobile && _isExpanded) || _isHovered ? 2 : 1,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primaryColor.withOpacity(0.1),
-                      blurRadius: _elevationAnimation.value,
-                      offset: Offset(0, _elevationAnimation.value * 0.3),
-                      spreadRadius:
-                          (isMobile && _isExpanded) || _isHovered ? 2 : 0,
-                    ),
-                  ],
-                ),
-                child: Stack(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _ProjectImage(imagePath: widget.project['image']),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.all(
-                              Responsive.isMobile(context) ? 8.0 : 20.0,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _ProjectHeader(project: widget.project),
-                                SizedBox(
-                                  height: Responsive.isMobile(context) ? 8 : 12,
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical:
-                                          Responsive.isMobile(context)
-                                              ? 10.0
-                                              : 0,
-                                    ),
-                                    child: CustomText(
-                                      widget.project['description'],
-                                      fontSize:
-                                          Responsive.isMobile(context)
-                                              ? 10
-                                              : 13,
-                                      fontWeight: FontWeight.w400,
-                                      maxLines: 5,
-                                      color: AppColors.white.withOpacity(0.8),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ),
-                                if (Responsive.isMobile(context))
-                                  const SizedBox(height: 20),
-                                _TechnologiesWidget(
-                                  technologies: List<String>.from(
-                                    widget.project['technologies'],
-                                  ),
-                                ),
-                                // Add tap indicator for mobile
-                                if (isMobile && showButtons)
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Center(
-                                      child: Icon(
-                                        _isExpanded
-                                            ? Icons.keyboard_arrow_up
-                                            : Icons.keyboard_arrow_down,
-                                        color: AppColors.primaryColor
-                                            .withOpacity(0.7),
-                                        size: 20,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
+        return GestureDetector(
+          onTap: isMobile ? _onMobileTap : null,
+          child: MouseRegion(
+            onEnter: isMobile ? null : (_) => _onHover(true),
+            onExit: isMobile ? null : (_) => _onHover(false),
+            child: AnimatedBuilder(
+              animation: Listenable.merge([
+                _animationController,
+                _overlayController,
+              ]),
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: _scaleAnimation.value,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: (themeProvider.isDarkMode
+                              ? AppColors.buttonColorDark
+                              : AppColors.cardLight)
+                          .withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: (themeProvider.isDarkMode
+                                ? AppColors.primaryColor
+                                : AppColors.primaryColorLight)
+                            .withOpacity(_borderAnimation.value),
+                        width: (isMobile && _isExpanded) || _isHovered ? 2 : 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: (themeProvider.isDarkMode
+                                  ? AppColors.primaryColor
+                                  : AppColors.primaryColorLight)
+                              .withOpacity(0.1),
+                          blurRadius: _elevationAnimation.value,
+                          offset: Offset(0, _elevationAnimation.value * 0.3),
+                          spreadRadius:
+                              (isMobile && _isExpanded) || _isHovered ? 2 : 0,
                         ),
                       ],
                     ),
-                    // Hover/Tap overlay with buttons
-                    if (showButtons)
-                      Positioned.fill(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Colors.black.withOpacity(
-                              0.7 * _overlayOpacityAnimation.value,
+                    child: Stack(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _ProjectImage(
+                              imagePath: widget.project['image'],
+                              textColor: subTextColor,
                             ),
-                          ),
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (hasRepo) ...[
-                                  Transform.scale(
-                                    scale: _buttonScaleAnimation.value,
-                                    child: _ActionButton(
-                                      onTap: () {
-                                        _launchUrl(widget.project['repoUrl']);
-                                      },
-                                      iconPath: 'assets/images/github.svg',
-                                      label: 'Source Code',
-                                      delay: 0,
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                  Responsive.isMobile(context) ? 8.0 : 20.0,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _ProjectHeader(
+                                      project: widget.project,
+                                      textColor: textColor,
                                     ),
-                                  ),
-                                ],
-                                if (hasRepo && hasApk)
-                                  const SizedBox(width: 20),
-                                if (hasApk) ...[
-                                  Transform.scale(
-                                    scale: _buttonScaleAnimation.value,
-                                    child: _ActionButton(
-                                      onTap: () {
-                                        _launchUrl(widget.project['apkUrl']);
-                                      },
-                                      iconPath: 'assets/images/apkIcon.svg',
-                                      label: 'Download APK',
-                                      delay: hasRepo ? 100 : 0,
+                                    SizedBox(
+                                      height:
+                                          Responsive.isMobile(context) ? 8 : 12,
                                     ),
-                                  ),
-                                ],
-                              ],
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical:
+                                              Responsive.isMobile(context)
+                                                  ? 10.0
+                                                  : 0,
+                                        ),
+                                        child: CustomText(
+                                          widget.project['description'],
+                                          fontSize:
+                                              Responsive.isMobile(context)
+                                                  ? 10
+                                                  : 13,
+                                          fontWeight: FontWeight.w400,
+                                          maxLines: 5,
+                                          color: subTextColor,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                    if (Responsive.isMobile(context))
+                                      const SizedBox(height: 20),
+                                    _TechnologiesWidget(
+                                      technologies: List<String>.from(
+                                        widget.project['technologies'],
+                                      ),
+                                      textColor: textColor.withOpacity(0.9),
+                                      themeProvider: themeProvider,
+                                    ),
+                                    // Add tap indicator for mobile
+                                    if (isMobile && showButtons)
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 8.0,
+                                        ),
+                                        child: Center(
+                                          child: Icon(
+                                            _isExpanded
+                                                ? Icons.keyboard_arrow_up
+                                                : Icons.keyboard_arrow_down,
+                                            color: AppColors.primaryColor
+                                                .withOpacity(0.7),
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ).animate(target: shouldShowOverlay ? 1 : 0).fadeIn(),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      ),
+                        // Hover/Tap overlay with buttons
+                        if (showButtons)
+                          AnimatedOpacity(
+                            opacity: shouldShowOverlay ? 1.0 : 0.0,
+                            duration: ProjectConstants.overlayAnimationDuration,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: overlayColor,
+                              ),
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    if (hasRepo) ...[
+                                      Transform.scale(
+                                        scale: _buttonScaleAnimation.value,
+                                        child: _ActionButton(
+                                          onTap: () {
+                                            _launchUrl(
+                                              widget.project['repoUrl'],
+                                            );
+                                          },
+                                          iconPath: 'assets/images/github.svg',
+                                          label: 'Source Code',
+                                          delay: 0,
+                                          themeProvider: themeProvider,
+                                        ),
+                                      ),
+                                    ],
+                                    if (hasRepo && hasApk)
+                                      const SizedBox(width: 20),
+                                    if (hasApk) ...[
+                                      Transform.scale(
+                                        scale: _buttonScaleAnimation.value,
+                                        child: _ActionButton(
+                                          onTap: () {
+                                            _launchUrl(
+                                              widget.project['apkUrl'],
+                                            );
+                                          },
+                                          iconPath: 'assets/images/apkIcon.svg',
+                                          label: 'Download APK',
+                                          delay: hasRepo ? 100 : 0,
+                                          themeProvider: themeProvider,
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -500,11 +547,13 @@ class _ActionButton extends StatefulWidget {
   final String iconPath;
   final String label;
   final int delay;
+  final ThemeProvider themeProvider;
 
   const _ActionButton({
     required this.onTap,
     required this.iconPath,
     required this.label,
+    required this.themeProvider,
     this.delay = 0,
   });
 
@@ -517,6 +566,9 @@ class _ActionButtonState extends State<_ActionButton> {
 
   @override
   Widget build(BuildContext context) {
+    final buttonTextColor = AppColors.black;
+    final iconColor = ColorFilter.mode(buttonTextColor, BlendMode.srcIn);
+
     return InkWell(
           onTapDown: (_) => setState(() => _isPressed = true),
           onTapUp: (_) => setState(() => _isPressed = false),
@@ -552,17 +604,14 @@ class _ActionButtonState extends State<_ActionButton> {
                     widget.iconPath,
                     width: Responsive.isMobile(context) ? 16 : 20,
                     height: Responsive.isMobile(context) ? 16 : 20,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.black,
-                      BlendMode.srcIn,
-                    ),
+                    colorFilter: iconColor,
                   ),
                   SizedBox(width: Responsive.isMobile(context) ? 6 : 8),
                   CustomText(
                     widget.label,
                     fontSize: Responsive.isMobile(context) ? 10 : 12,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.black,
+                    color: buttonTextColor,
                   ),
                 ],
               ),
@@ -578,8 +627,9 @@ class _ActionButtonState extends State<_ActionButton> {
 // Separate widget for project header to optimize rebuilds
 class _ProjectHeader extends StatelessWidget {
   final Map<String, dynamic> project;
+  final Color textColor;
 
-  const _ProjectHeader({required this.project});
+  const _ProjectHeader({required this.project, required this.textColor});
 
   @override
   Widget build(BuildContext context) {
@@ -590,44 +640,52 @@ class _ProjectHeader extends StatelessWidget {
             project['title'],
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            color: textColor,
           ),
         ),
-        const SizedBox(width: 8),
-        _TypeBadge(type: project['type']),
       ],
     );
   }
 }
 
 // Separate widget for type badge
-class _TypeBadge extends StatelessWidget {
-  final String type;
+// class _TypeBadge extends StatelessWidget {
+//   final String type;
 
-  const _TypeBadge({required this.type});
+//   const _TypeBadge({required this.type});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.primaryColor.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: CustomText(
-        type,
-        fontSize: 10,
-        fontWeight: FontWeight.w500,
-        color: AppColors.primaryColor,
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Consumer<ThemeProvider>(
+//       builder: (context, themeProvider, child) {
+//         final textColor =
+//             themeProvider.isDarkMode
+//                 ? AppColors.primaryColor
+//                 : AppColors.primaryColorLight;
+//         return Container(
+//           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+//           decoration: BoxDecoration(
+//             color: AppColors.primaryColor.withOpacity(0.2),
+//             borderRadius: BorderRadius.circular(8),
+//           ),
+//           child: CustomText(
+//             type,
+//             fontSize: 10,
+//             fontWeight: FontWeight.w500,
+//             color: textColor,
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
 
 // Separate widget for project image
 class _ProjectImage extends StatelessWidget {
   final String imagePath;
+  final Color textColor;
 
-  const _ProjectImage({required this.imagePath});
+  const _ProjectImage({required this.imagePath, required this.textColor});
 
   @override
   Widget build(BuildContext context) {
@@ -664,17 +722,9 @@ class _ProjectImage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.code,
-                      size: 36,
-                      color: AppColors.white.withOpacity(0.8),
-                    ),
+                    Icon(Icons.code, size: 36, color: textColor),
                     const SizedBox(height: 8),
-                    CustomText(
-                      'Project Image',
-                      fontSize: 12,
-                      color: AppColors.white.withOpacity(0.6),
-                    ),
+                    CustomText('Project Image', fontSize: 12, color: textColor),
                   ],
                 ),
               ),
@@ -688,8 +738,14 @@ class _ProjectImage extends StatelessWidget {
 
 class _TechnologiesWidget extends StatelessWidget {
   final List<String> technologies;
+  final Color textColor;
+  final ThemeProvider themeProvider;
 
-  const _TechnologiesWidget({required this.technologies});
+  const _TechnologiesWidget({
+    required this.technologies,
+    required this.textColor,
+    required this.themeProvider,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -701,7 +757,10 @@ class _TechnologiesWidget extends StatelessWidget {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: AppColors.buttonColorDark.withOpacity(0.8),
+                color:
+                    themeProvider.isDarkMode
+                        ? AppColors.buttonColorDark.withOpacity(0.8)
+                        : AppColors.primaryColorLight.withAlpha(60),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                   color: AppColors.primaryColor.withOpacity(0.3),
@@ -712,7 +771,7 @@ class _TechnologiesWidget extends StatelessWidget {
                 tech,
                 fontSize: 10,
                 fontWeight: FontWeight.w500,
-                color: AppColors.white.withOpacity(0.9),
+                color: textColor,
               ),
             );
           }).toList(),

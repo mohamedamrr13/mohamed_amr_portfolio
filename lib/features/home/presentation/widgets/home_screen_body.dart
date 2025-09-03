@@ -17,7 +17,7 @@ class HomeScreenBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(height: Responsive.isMobile(context) ? 20 : 60),
+          SizedBox(height: Responsive.isMobile(context) ? 0 : 120),
 
           const AboutSection(),
           SizedBox(height: Responsive.isMobile(context) ? 30 : 60),
