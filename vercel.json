@@ -1,17 +1,5 @@
 {
-    "plugins": [
-        "@nitedo/vercel-flutter"
-    ],
     "buildCommand": "flutter build web",
     "outputDirectory": "build",
-    "installCommand": "flutter pub get",
-    "routes": [
-        {
-            "handle": "filesystem"
-        },
-        {
-            "src": "/.*",
-            "dest": "/index.html"
-        }
-    ]
+    "installCommand": "git clone https://github.com/flutter/flutter.git --depth 1 && export PATH=\"$PATH:$(pwd)/flutter/bin\" && flutter pub get"
 }
