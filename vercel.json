@@ -1,7 +1,10 @@
 {
+    "plugins": [
+        "@nitedo/vercel-flutter"
+    ],
     "buildCommand": "flutter build web",
     "outputDirectory": "build",
-    "installCommand": "git clone https://github.com/flutter/flutter.git --depth 1 && ./flutter/bin/flutter doctor --web && ./flutter/bin/flutter pub get",
+    "installCommand": "flutter pub get",
     "routes": [
         {
             "handle": "filesystem"
