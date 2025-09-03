@@ -2,9 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mohamed_amr_portfolio/core/shared/background_widget.dart';
-import 'package:mohamed_amr_portfolio/core/shared/custom_button.dart';
-import 'package:mohamed_amr_portfolio/core/shared/custom_text.dart';
-import 'package:mohamed_amr_portfolio/core/shared/theme_toggle_button.dart';
 import 'package:mohamed_amr_portfolio/core/theming/app_colors.dart';
 import 'package:mohamed_amr_portfolio/core/theming/theme_provider.dart';
 import 'package:mohamed_amr_portfolio/core/utils/responsive.dart';
