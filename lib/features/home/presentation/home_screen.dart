@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen>
     return AnimatedBuilder(
       animation: _appBarAnimationController,
       builder: (context, child) {
-        return Container(
+        return SizedBox(
           height: kToolbarHeight + MediaQuery.of(context).padding.top,
           child: ClipRRect(
             child: BackdropFilter(

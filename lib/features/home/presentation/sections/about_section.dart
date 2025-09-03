@@ -28,7 +28,7 @@ class AboutSection extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: Responsive.isMobile(context) ? 90 : 140),
+          const SizedBox(height: 90),
 
           _buildProfileImage(),
           const SizedBox(height: 30),
@@ -36,12 +36,18 @@ class AboutSection extends StatelessWidget {
         ],
       );
     } else {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      return Column(
         children: [
-          Expanded(flex: 2, child: _buildTextContent(context)),
-          const SizedBox(width: 60),
-          Expanded(flex: 1, child: Center(child: _buildProfileImage())),
+          const SizedBox(height: 120),
+
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(flex: 2, child: _buildTextContent(context)),
+              const SizedBox(width: 60),
+              Expanded(flex: 1, child: Center(child: _buildProfileImage())),
+            ],
+          ),
         ],
       );
     }
