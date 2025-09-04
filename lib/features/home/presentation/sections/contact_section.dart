@@ -64,9 +64,14 @@ class ContactSection extends StatelessWidget {
     final socialLinks = [
       {
         'name': 'CV',
-        'icon': 'assets/images/cv.png',
+        'icon': 'assets/images/cv.svg',
         'url':
             'https://drive.google.com/file/d/1tuucD62OP1-L5m7p9fIbJcIoj0uCBNha/view?usp=drivesdk',
+      },
+      {
+        'name': 'Email',
+        'icon': 'assets/images/mail.svg',
+        'url': 'mailto:mohamed.egypt140@gmail.com',
       },
       {
         'name': 'LinkedIn',
@@ -78,15 +83,16 @@ class ContactSection extends StatelessWidget {
         'icon': 'assets/images/github.svg',
         'url': 'https://github.com/mohamedamrr13',
       },
-      {
-        'name': 'Email',
-        'icon': 'assets/images/mail.svg',
-        'url': 'mailto:mohamed.egypt140@gmail.com',
-      },
+
       {
         'name': 'Upwork',
         'icon': 'assets/images/upwork.svg',
         'url': 'https://www.upwork.com/freelancers/~012448ab74e4f83791',
+      },
+      {
+        'name': 'LinkedIn',
+        'icon': 'assets/images/linkedin.svg',
+        'url': 'https://www.linkedin.com/in/mohamed-amr-667749222/',
       },
     ];
 
