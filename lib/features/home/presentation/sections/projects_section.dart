@@ -16,14 +16,22 @@ class ProjectConstants {
   static const Duration hoverDuration = Duration(milliseconds: 300);
   static const Duration cardAnimationDuration = Duration(milliseconds: 200);
   static const Duration overlayAnimationDuration = Duration(milliseconds: 250);
+  static const Duration imageEffectDuration = Duration(milliseconds: 400);
   static const Curve hoverCurve = Curves.easeOutCubic;
   static const double hoverScale = 1.05;
   static const double hoverElevation = 20.0;
   static const double normalElevation = 5.0;
 }
 
-class ProjectsSection extends StatelessWidget {
+class ProjectsSection extends StatefulWidget {
   const ProjectsSection({super.key});
+
+  @override
+  State<ProjectsSection> createState() => _ProjectsSectionState();
+}
+
+class _ProjectsSectionState extends State<ProjectsSection> {
+  int? _expandedCardIndex; // Track which card is expanded on mobile
 
   // Static project data to avoid recreation on each build
   static const List<Map<String, dynamic>> _projects = [
@@ -153,6 +161,24 @@ class ProjectsSection extends StatelessWidget {
     },
   ];
 
+  // Helper method to get responsive font sizes
+  double _getResponsiveFontSize(BuildContext context, double baseSize) {
+    if (Responsive.isMobile(context)) {
+      return baseSize * 0.8; // 80% on mobile
+    } else if (Responsive.isTablet(context)) {
+      return baseSize * 0.9; // 90% on tablet
+    }
+    return baseSize; // Full size on desktop
+  }
+
+  void _handleCardExpansion(int cardIndex) {
+    if (Responsive.isMobile(context)) {
+      setState(() {
+        _expandedCardIndex = _expandedCardIndex == cardIndex ? null : cardIndex;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SectionWrapper(
@@ -166,7 +192,7 @@ class ProjectsSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              _buildSectionTitle(textColor),
+              _buildSectionTitle(context, textColor),
               const SizedBox(height: 40),
               _buildProjectsGrid(context),
             ],
@@ -176,10 +202,10 @@ class ProjectsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(Color textColor) {
+  Widget _buildSectionTitle(BuildContext context, Color textColor) {
     return CustomText(
       "Projects",
-      fontSize: 28,
+      fontSize: _getResponsiveFontSize(context, 28),
       fontWeight: FontWeight.bold,
       color: textColor,
     ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.3);
@@ -194,10 +220,12 @@ class ProjectsSection extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: crossAxisCount,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
+          crossAxisSpacing: Responsive.isMobile(context) ? 15 : 20,
+          mainAxisSpacing: Responsive.isMobile(context) ? 15 : 20,
           childAspectRatio:
-              Responsive.isMobile(context) || Responsive.isTablet(context)
+              Responsive.isMobile(context)
+                  ? 0.9
+                  : Responsive.isTablet(context)
                   ? 0.85
                   : 0.8,
         ),
@@ -210,7 +238,12 @@ class ProjectsSection extends StatelessWidget {
             child: SlideAnimation(
               verticalOffset: 50.0,
               child: FadeInAnimation(
-                child: ProjectCard(project: _projects[index]),
+                child: ProjectCard(
+                  project: _projects[index],
+                  index: index,
+                  isExpanded: _expandedCardIndex == index,
+                  onExpansionChanged: () => _handleCardExpansion(index),
+                ),
               ),
             ),
           );
@@ -223,8 +256,17 @@ class ProjectsSection extends StatelessWidget {
 // Separate StatefulWidget for individual project cards to optimize performance
 class ProjectCard extends StatefulWidget {
   final Map<String, dynamic> project;
+  final int index;
+  final bool isExpanded;
+  final VoidCallback onExpansionChanged;
 
-  const ProjectCard({super.key, required this.project});
+  const ProjectCard({
+    super.key,
+    required this.project,
+    required this.index,
+    required this.isExpanded,
+    required this.onExpansionChanged,
+  });
 
   @override
   State<ProjectCard> createState() => _ProjectCardState();
@@ -233,14 +275,16 @@ class ProjectCard extends StatefulWidget {
 class _ProjectCardState extends State<ProjectCard>
     with TickerProviderStateMixin {
   bool _isHovered = false;
-  bool _isExpanded = false; // For mobile tap to expand
   late AnimationController _animationController;
   late AnimationController _overlayController;
+  late AnimationController _imageEffectController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _elevationAnimation;
   late Animation<double> _borderAnimation;
   late Animation<double> _overlayOpacityAnimation;
   late Animation<double> _buttonScaleAnimation;
+  late Animation<double> _imageGrayscaleAnimation;
+  late Animation<double> _imageScaleAnimation;
 
   @override
   void initState() {
@@ -252,6 +296,11 @@ class _ProjectCardState extends State<ProjectCard>
 
     _overlayController = AnimationController(
       duration: ProjectConstants.overlayAnimationDuration,
+      vsync: this,
+    );
+
+    _imageEffectController = AnimationController(
+      duration: ProjectConstants.imageEffectDuration,
       vsync: this,
     );
 
@@ -289,12 +338,25 @@ class _ProjectCardState extends State<ProjectCard>
     _buttonScaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _overlayController, curve: Curves.elasticOut),
     );
+
+    // Image effect animations
+    _imageGrayscaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _imageEffectController, curve: Curves.easeInOut),
+    );
+
+    _imageScaleAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(
+      CurvedAnimation(
+        parent: _imageEffectController,
+        curve: Curves.easeOutQuart,
+      ),
+    );
   }
 
   @override
   void dispose() {
     _animationController.dispose();
     _overlayController.dispose();
+    _imageEffectController.dispose();
     super.dispose();
   }
 
@@ -307,25 +369,27 @@ class _ProjectCardState extends State<ProjectCard>
       if (hovering) {
         _animationController.forward();
         _overlayController.forward();
+        _imageEffectController.forward();
       } else {
         _animationController.reverse();
         _overlayController.reverse();
+        _imageEffectController.reverse();
       }
     }
   }
 
   void _onMobileTap() {
     if (Responsive.isMobile(context)) {
-      setState(() {
-        _isExpanded = !_isExpanded;
-      });
+      widget.onExpansionChanged();
 
-      if (_isExpanded) {
+      if (widget.isExpanded) {
         _animationController.forward();
         _overlayController.forward();
+        _imageEffectController.forward();
       } else {
         _animationController.reverse();
         _overlayController.reverse();
+        _imageEffectController.reverse();
       }
     }
   }
@@ -337,6 +401,24 @@ class _ProjectCardState extends State<ProjectCard>
     }
   }
 
+  double _getResponsiveFontSize(BuildContext context, double baseSize) {
+    if (Responsive.isMobile(context)) {
+      return baseSize * 0.85; // 85% on mobile
+    } else if (Responsive.isTablet(context)) {
+      return baseSize * 0.9; // 90% on tablet
+    }
+    return baseSize; // Full size on desktop
+  }
+
+  double _getResponsivePadding(BuildContext context, double basePadding) {
+    if (Responsive.isMobile(context)) {
+      return basePadding * 0.7; // 70% on mobile
+    } else if (Responsive.isTablet(context)) {
+      return basePadding * 0.85; // 85% on tablet
+    }
+    return basePadding; // Full padding on desktop
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(
@@ -345,7 +427,7 @@ class _ProjectCardState extends State<ProjectCard>
         final hasApk = widget.project['hasApk'] ?? false;
         final showButtons = hasRepo || hasApk;
         final isMobile = Responsive.isMobile(context);
-        final shouldShowOverlay = isMobile ? _isExpanded : _isHovered;
+        final shouldShowOverlay = isMobile ? widget.isExpanded : _isHovered;
         final textColor =
             themeProvider.isDarkMode ? AppColors.white : AppColors.black;
         final subTextColor =
@@ -366,6 +448,7 @@ class _ProjectCardState extends State<ProjectCard>
               animation: Listenable.merge([
                 _animationController,
                 _overlayController,
+                _imageEffectController,
               ]),
               builder: (context, child) {
                 return Transform.scale(
@@ -382,7 +465,10 @@ class _ProjectCardState extends State<ProjectCard>
                                 ? AppColors.primaryColor
                                 : AppColors.primaryColorLight)
                             .withOpacity(_borderAnimation.value),
-                        width: (isMobile && _isExpanded) || _isHovered ? 2 : 1,
+                        width:
+                            (isMobile && widget.isExpanded) || _isHovered
+                                ? 2
+                                : 1,
                       ),
                       boxShadow: [
                         BoxShadow(
@@ -393,7 +479,9 @@ class _ProjectCardState extends State<ProjectCard>
                           blurRadius: _elevationAnimation.value,
                           offset: Offset(0, _elevationAnimation.value * 0.3),
                           spreadRadius:
-                              (isMobile && _isExpanded) || _isHovered ? 2 : 0,
+                              (isMobile && widget.isExpanded) || _isHovered
+                                  ? 2
+                                  : 0,
                         ),
                       ],
                     ),
@@ -409,7 +497,7 @@ class _ProjectCardState extends State<ProjectCard>
                             Expanded(
                               child: Padding(
                                 padding: EdgeInsets.all(
-                                  Responsive.isMobile(context) ? 8.0 : 20.0,
+                                  _getResponsivePadding(context, 20.0),
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -417,55 +505,62 @@ class _ProjectCardState extends State<ProjectCard>
                                     _ProjectHeader(
                                       project: widget.project,
                                       textColor: textColor,
+                                      context: context,
                                     ),
                                     SizedBox(
-                                      height:
-                                          Responsive.isMobile(context) ? 8 : 12,
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical:
-                                              Responsive.isMobile(context)
-                                                  ? 10.0
-                                                  : 0,
-                                        ),
-                                        child: CustomText(
-                                          widget.project['description'],
-                                          fontSize:
-                                              Responsive.isMobile(context)
-                                                  ? 10
-                                                  : 13,
-                                          fontWeight: FontWeight.w400,
-                                          maxLines: 5,
-                                          color: subTextColor,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
+                                      height: _getResponsivePadding(
+                                        context,
+                                        12,
                                       ),
                                     ),
-                                    if (Responsive.isMobile(context))
-                                      const SizedBox(height: 20),
+                                    Expanded(
+                                      child: CustomText(
+                                        widget.project['description'],
+                                        fontSize: _getResponsiveFontSize(
+                                          context,
+                                          13,
+                                        ),
+                                        fontWeight: FontWeight.w400,
+                                        maxLines: isMobile ? 4 : 5,
+                                        color: subTextColor,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    if (isMobile)
+                                      SizedBox(
+                                        height: _getResponsivePadding(
+                                          context,
+                                          12,
+                                        ),
+                                      ),
                                     _TechnologiesWidget(
                                       technologies: List<String>.from(
                                         widget.project['technologies'],
                                       ),
                                       textColor: textColor.withOpacity(0.9),
                                       themeProvider: themeProvider,
+                                      context: context,
                                     ),
                                     // Add tap indicator for mobile
                                     if (isMobile && showButtons)
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 8.0,
+                                        padding: EdgeInsets.only(
+                                          top: _getResponsivePadding(
+                                            context,
+                                            8.0,
+                                          ),
                                         ),
                                         child: Center(
                                           child: Icon(
-                                            _isExpanded
+                                            widget.isExpanded
                                                 ? Icons.keyboard_arrow_up
                                                 : Icons.keyboard_arrow_down,
                                             color: AppColors.primaryColor
                                                 .withOpacity(0.7),
-                                            size: 20,
+                                            size: _getResponsiveFontSize(
+                                              context,
+                                              20,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -475,57 +570,69 @@ class _ProjectCardState extends State<ProjectCard>
                             ),
                           ],
                         ),
-                        // Hover/Tap overlay with buttons
+                        // Debug info for mobile
+
+                        // Hover/Tap overlay with buttons - Simplified approach
                         if (showButtons)
-                          AnimatedOpacity(
-                            opacity: shouldShowOverlay ? 1.0 : 0.0,
-                            duration: ProjectConstants.overlayAnimationDuration,
-                            child: Container(
+                          Positioned.fill(
+                            child: AnimatedContainer(
+                              duration:
+                                  ProjectConstants.overlayAnimationDuration,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),
-                                color: overlayColor,
+                                color:
+                                    shouldShowOverlay
+                                        ? overlayColor
+                                        : Colors.transparent,
                               ),
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    if (hasRepo) ...[
-                                      Transform.scale(
-                                        scale: _buttonScaleAnimation.value,
-                                        child: _ActionButton(
-                                          onTap: () {
-                                            _launchUrl(
-                                              widget.project['repoUrl'],
-                                            );
-                                          },
-                                          iconPath: 'assets/images/github.svg',
-                                          label: 'Source Code',
-                                          delay: 0,
-                                          themeProvider: themeProvider,
+                              child:
+                                  shouldShowOverlay
+                                      ? Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            if (hasRepo) ...[
+                                              _ActionButton(
+                                                onTap: () {
+                                                  _launchUrl(
+                                                    widget.project['repoUrl'],
+                                                  );
+                                                },
+                                                iconPath:
+                                                    'assets/images/github.svg',
+                                                label: 'Source Code',
+                                                delay: 0,
+                                                themeProvider: themeProvider,
+                                                context: context,
+                                              ),
+                                            ],
+                                            if (hasRepo && hasApk)
+                                              SizedBox(
+                                                height: _getResponsivePadding(
+                                                  context,
+                                                  15,
+                                                ),
+                                              ),
+                                            if (hasApk) ...[
+                                              _ActionButton(
+                                                onTap: () {
+                                                  _launchUrl(
+                                                    widget.project['apkUrl'],
+                                                  );
+                                                },
+                                                iconPath:
+                                                    'assets/images/apkIcon.svg',
+                                                label: 'Download APK',
+                                                delay: hasRepo ? 100 : 0,
+                                                themeProvider: themeProvider,
+                                                context: context,
+                                              ),
+                                            ],
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                    if (hasRepo && hasApk)
-                                      const SizedBox(width: 20),
-                                    if (hasApk) ...[
-                                      Transform.scale(
-                                        scale: _buttonScaleAnimation.value,
-                                        child: _ActionButton(
-                                          onTap: () {
-                                            _launchUrl(
-                                              widget.project['apkUrl'],
-                                            );
-                                          },
-                                          iconPath: 'assets/images/apkIcon.svg',
-                                          label: 'Download APK',
-                                          delay: hasRepo ? 100 : 0,
-                                          themeProvider: themeProvider,
-                                        ),
-                                      ),
-                                    ],
-                                  ],
-                                ),
-                              ),
+                                      )
+                                      : null,
                             ),
                           ),
                       ],
@@ -548,12 +655,14 @@ class _ActionButton extends StatefulWidget {
   final String label;
   final int delay;
   final ThemeProvider themeProvider;
+  final BuildContext context;
 
   const _ActionButton({
     required this.onTap,
     required this.iconPath,
     required this.label,
     required this.themeProvider,
+    required this.context,
     this.delay = 0,
   });
 
@@ -563,6 +672,24 @@ class _ActionButton extends StatefulWidget {
 
 class _ActionButtonState extends State<_ActionButton> {
   bool _isPressed = false;
+
+  double _getResponsiveFontSize(double baseSize) {
+    if (Responsive.isMobile(widget.context)) {
+      return baseSize * 0.85;
+    } else if (Responsive.isTablet(widget.context)) {
+      return baseSize * 0.9;
+    }
+    return baseSize;
+  }
+
+  double _getResponsivePadding(double basePadding) {
+    if (Responsive.isMobile(widget.context)) {
+      return basePadding * 0.8;
+    } else if (Responsive.isTablet(widget.context)) {
+      return basePadding * 0.9;
+    }
+    return basePadding;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -579,8 +706,8 @@ class _ActionButtonState extends State<_ActionButton> {
             duration: const Duration(milliseconds: 100),
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: Responsive.isMobile(context) ? 12 : 16,
-                vertical: Responsive.isMobile(context) ? 8 : 12,
+                horizontal: _getResponsivePadding(16),
+                vertical: _getResponsivePadding(12),
               ),
               decoration: BoxDecoration(
                 color: AppColors.primaryColor.withOpacity(0.9),
@@ -602,14 +729,14 @@ class _ActionButtonState extends State<_ActionButton> {
                 children: [
                   SvgPicture.asset(
                     widget.iconPath,
-                    width: Responsive.isMobile(context) ? 16 : 20,
-                    height: Responsive.isMobile(context) ? 16 : 20,
+                    width: _getResponsiveFontSize(20),
+                    height: _getResponsiveFontSize(20),
                     colorFilter: iconColor,
                   ),
-                  SizedBox(width: Responsive.isMobile(context) ? 6 : 8),
+                  SizedBox(width: _getResponsivePadding(8)),
                   CustomText(
                     widget.label,
-                    fontSize: Responsive.isMobile(context) ? 10 : 12,
+                    fontSize: _getResponsiveFontSize(12),
                     fontWeight: FontWeight.w600,
                     color: buttonTextColor,
                   ),
@@ -628,8 +755,22 @@ class _ActionButtonState extends State<_ActionButton> {
 class _ProjectHeader extends StatelessWidget {
   final Map<String, dynamic> project;
   final Color textColor;
+  final BuildContext context;
 
-  const _ProjectHeader({required this.project, required this.textColor});
+  const _ProjectHeader({
+    required this.project,
+    required this.textColor,
+    required this.context,
+  });
+
+  double _getResponsiveFontSize(double baseSize) {
+    if (Responsive.isMobile(context)) {
+      return baseSize * 0.85;
+    } else if (Responsive.isTablet(context)) {
+      return baseSize * 0.9;
+    }
+    return baseSize;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -638,7 +779,7 @@ class _ProjectHeader extends StatelessWidget {
         Expanded(
           child: CustomText(
             project['title'],
-            fontSize: 18,
+            fontSize: _getResponsiveFontSize(18),
             fontWeight: FontWeight.bold,
             color: textColor,
           ),
@@ -648,39 +789,7 @@ class _ProjectHeader extends StatelessWidget {
   }
 }
 
-// Separate widget for type badge
-// class _TypeBadge extends StatelessWidget {
-//   final String type;
-
-//   const _TypeBadge({required this.type});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Consumer<ThemeProvider>(
-//       builder: (context, themeProvider, child) {
-//         final textColor =
-//             themeProvider.isDarkMode
-//                 ? AppColors.primaryColor
-//                 : AppColors.primaryColorLight;
-//         return Container(
-//           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-//           decoration: BoxDecoration(
-//             color: AppColors.primaryColor.withOpacity(0.2),
-//             borderRadius: BorderRadius.circular(8),
-//           ),
-//           child: CustomText(
-//             type,
-//             fontSize: 10,
-//             fontWeight: FontWeight.w500,
-//             color: textColor,
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
-
-// Separate widget for project image
+// Simple project image without color effects
 class _ProjectImage extends StatelessWidget {
   final String imagePath;
   final Color textColor;
@@ -689,11 +798,15 @@ class _ProjectImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageHeight =
+        Responsive.isMobile(context)
+            ? 180
+            : Responsive.isTablet(context)
+            ? Responsive.getWidth(context) * 0.15
+            : Responsive.getWidth(context) * 0.19;
+
     return Container(
-      height:
-          Responsive.isMobile(context)
-              ? 200
-              : Responsive.getWidth(context) * 0.19,
+      height: imageHeight.toDouble(),
       width: double.infinity,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -740,22 +853,47 @@ class _TechnologiesWidget extends StatelessWidget {
   final List<String> technologies;
   final Color textColor;
   final ThemeProvider themeProvider;
+  final BuildContext context;
 
   const _TechnologiesWidget({
     required this.technologies,
     required this.textColor,
     required this.themeProvider,
+    required this.context,
   });
+
+  double _getResponsiveFontSize(double baseSize) {
+    if (Responsive.isMobile(context)) {
+      return baseSize * 0.9;
+    } else if (Responsive.isTablet(context)) {
+      return baseSize * 0.95;
+    }
+    return baseSize;
+  }
+
+  double _getResponsivePadding(double basePadding) {
+    if (Responsive.isMobile(context)) {
+      return basePadding * 0.8;
+    } else if (Responsive.isTablet(context)) {
+      return basePadding * 0.9;
+    }
+    return basePadding;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final maxTechsToShow = Responsive.isMobile(context) ? 4 : 5;
+
     return Wrap(
-      spacing: 6,
-      runSpacing: 6,
+      spacing: _getResponsivePadding(6),
+      runSpacing: _getResponsivePadding(6),
       children:
-          technologies.take(5).map((tech) {
+          technologies.take(maxTechsToShow).map((tech) {
             return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: EdgeInsets.symmetric(
+                horizontal: _getResponsivePadding(8),
+                vertical: _getResponsivePadding(4),
+              ),
               decoration: BoxDecoration(
                 color:
                     themeProvider.isDarkMode
@@ -769,7 +907,7 @@ class _TechnologiesWidget extends StatelessWidget {
               ),
               child: CustomText(
                 tech,
-                fontSize: 10,
+                fontSize: _getResponsiveFontSize(10),
                 fontWeight: FontWeight.w500,
                 color: textColor,
               ),

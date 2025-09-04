@@ -11,6 +11,25 @@ import 'package:provider/provider.dart';
 class ExperienceSection extends StatelessWidget {
   const ExperienceSection({super.key});
 
+  // Helper method to get responsive font sizes
+  double _getResponsiveFontSize(BuildContext context, double baseSize) {
+    if (Responsive.isMobile(context)) {
+      return baseSize * 0.75; // 75% on mobile
+    } else if (Responsive.isTablet(context)) {
+      return baseSize * 0.85; // 85% on tablet
+    }
+    return baseSize; // Full size on desktop
+  }
+
+  double _getResponsivePadding(BuildContext context, double basePadding) {
+    if (Responsive.isMobile(context)) {
+      return basePadding * 0.7; // 70% on mobile
+    } else if (Responsive.isTablet(context)) {
+      return basePadding * 0.8; // 80% on tablet
+    }
+    return basePadding; // Full padding on desktop
+  }
+
   // Helper method to calculate experience duration
   String _calculateDuration(String period) {
     try {
@@ -127,9 +146,9 @@ class ExperienceSection extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
-              _buildSectionTitle(textColor),
-              const SizedBox(height: 40),
+              SizedBox(height: _getResponsivePadding(context, 20)),
+              _buildSectionTitle(context, textColor),
+              SizedBox(height: _getResponsivePadding(context, 40)),
               _buildExperienceList(context, themeProvider),
             ],
           );
@@ -138,10 +157,10 @@ class ExperienceSection extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(Color textColor) {
+  Widget _buildSectionTitle(BuildContext context, Color textColor) {
     return CustomText(
       "Experience",
-      fontSize: 28,
+      fontSize: _getResponsiveFontSize(context, 28),
       fontWeight: FontWeight.bold,
       color: textColor,
     ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.3);
@@ -235,9 +254,12 @@ class ExperienceSection extends StatelessWidget {
             ? AppColors.white.withOpacity(0.7)
             : AppColors.black.withOpacity(0.7);
 
+    final isMobile = Responsive.isMobile(context);
+    final isTablet = Responsive.isTablet(context);
+
     return Container(
-          margin: const EdgeInsets.only(bottom: 24),
-          padding: const EdgeInsets.all(24),
+          margin: EdgeInsets.only(bottom: _getResponsivePadding(context, 24)),
+          padding: EdgeInsets.all(_getResponsivePadding(context, 24)),
           decoration: BoxDecoration(
             color: (themeProvider.isDarkMode
                     ? AppColors.buttonColorDark
@@ -262,156 +284,144 @@ class ExperienceSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header Row
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              // Header Row - Stack on mobile for better space usage
+              if (isMobile) ...[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Title and Company
+                    CustomText(
+                      experience['title'],
+                      fontSize: _getResponsiveFontSize(context, 18),
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
+                    ),
+                    SizedBox(height: 4),
+                    CustomText(
+                      experience['company'],
+                      fontSize: _getResponsiveFontSize(context, 14),
+                      fontWeight: FontWeight.w500,
+                      color:
+                          themeProvider.isDarkMode
+                              ? AppColors.primaryColor.withOpacity(0.8)
+                              : AppColors.buttonColorDark,
+                    ),
+                    SizedBox(height: 12),
+                    // Status and Period chips in row
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
                       children: [
-                        CustomText(
-                          experience['title'],
-                          fontSize: Responsive.isMobile(context) ? 16 : 20,
-                          fontWeight: FontWeight.bold,
-                          color: textColor,
+                        _buildStatusChip(status, statusColor, context),
+                        _buildPeriodChip(
+                          experience['period'],
+                          themeProvider,
+                          context,
                         ),
-                        const SizedBox(height: 4),
-                        CustomText(
-                          experience['company'],
-                          fontSize: Responsive.isMobile(context) ? 12 : 16,
-                          fontWeight: FontWeight.w500,
-                          color:
-                              themeProvider.isDarkMode
-                                  ? AppColors.primaryColor.withOpacity(0.3)
-                                  : AppColors.buttonColorDark,
+                        _buildDurationChip(
+                          duration,
+                          themeProvider,
+                          faintTextColor,
+                          context,
                         ),
                       ],
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      // Status Chip
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: statusColor.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: statusColor.withOpacity(0.4),
-                            width: 1,
+                  ],
+                ),
+              ] else ...[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            experience['title'],
+                            fontSize: _getResponsiveFontSize(context, 20),
+                            fontWeight: FontWeight.bold,
+                            color: textColor,
                           ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 6,
-                              height: 6,
-                              decoration: BoxDecoration(
-                                color: statusColor,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            CustomText(
-                              status,
-                              fontSize: Responsive.isMobile(context) ? 8 : 10,
-                              fontWeight: FontWeight.w600,
-                              color: statusColor,
-                            ),
-                          ],
-                        ),
+                          const SizedBox(height: 4),
+                          CustomText(
+                            experience['company'],
+                            fontSize: _getResponsiveFontSize(context, 16),
+                            fontWeight: FontWeight.w500,
+                            color:
+                                themeProvider.isDarkMode
+                                    ? AppColors.primaryColor.withOpacity(0.8)
+                                    : AppColors.buttonColorDark,
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 8),
-                      // Period Chip
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color:
-                              themeProvider.isDarkMode
-                                  ? AppColors.primaryColor.withOpacity(0.3)
-                                  : AppColors.buttonColorDark,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: CustomText(
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        _buildStatusChip(status, statusColor, context),
+                        const SizedBox(height: 8),
+                        _buildPeriodChip(
                           experience['period'],
-                          fontSize: Responsive.isMobile(context) ? 8 : 11,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.primaryColor,
+                          themeProvider,
+                          context,
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      // Duration Chip
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color:
-                              themeProvider.isDarkMode
-                                  ? AppColors.buttonColorDark.withOpacity(0.6)
-                                  : AppColors.cardLight.withOpacity(0.6),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: CustomText(
+                        const SizedBox(height: 4),
+                        _buildDurationChip(
                           duration,
-                          fontSize: Responsive.isMobile(context) ? 7 : 9,
-                          fontWeight: FontWeight.w400,
-                          color: faintTextColor,
+                          themeProvider,
+                          faintTextColor,
+                          context,
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+
+              SizedBox(height: _getResponsivePadding(context, 16)),
 
               // Description
               CustomText(
                 experience['description'],
-                fontSize: Responsive.isMobile(context) ? 11 : 14,
+                fontSize: _getResponsiveFontSize(context, 14),
                 fontWeight: FontWeight.w400,
                 color: subTextColor,
               ),
 
               // Achievements (if available)
               if (experience['achievements'] != null) ...[
-                const SizedBox(height: 16),
+                SizedBox(height: _getResponsivePadding(context, 16)),
                 CustomText(
                   'Key Achievements:',
-                  fontSize: Responsive.isMobile(context) ? 10 : 12,
+                  fontSize: _getResponsiveFontSize(context, 12),
                   fontWeight: FontWeight.w600,
                   color:
                       themeProvider.isDarkMode
-                          ? AppColors.primaryColor.withOpacity(0.3)
+                          ? AppColors.primaryColor.withOpacity(0.8)
                           : AppColors.buttonColorDark,
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: _getResponsivePadding(context, 8)),
                 ...((experience['achievements'] as List<String>).map((
                   achievement,
                 ) {
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
+                    padding: EdgeInsets.only(
+                      bottom: _getResponsivePadding(context, 4),
+                    ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           width: 4,
                           height: 4,
-                          margin: const EdgeInsets.only(top: 6, right: 8),
+                          margin: EdgeInsets.only(
+                            top: _getResponsiveFontSize(context, 6),
+                            right: 8,
+                          ),
                           decoration: BoxDecoration(
                             color:
                                 themeProvider.isDarkMode
-                                    ? AppColors.primaryColor.withOpacity(0.3)
+                                    ? AppColors.primaryColor.withOpacity(0.8)
                                     : AppColors.buttonColorDark,
                             shape: BoxShape.circle,
                           ),
@@ -419,7 +429,7 @@ class ExperienceSection extends StatelessWidget {
                         Expanded(
                           child: CustomText(
                             achievement,
-                            fontSize: Responsive.isMobile(context) ? 9 : 12,
+                            fontSize: _getResponsiveFontSize(context, 12),
                             fontWeight: FontWeight.w400,
                             color: faintTextColor,
                           ),
@@ -430,15 +440,18 @@ class ExperienceSection extends StatelessWidget {
                 }).toList()),
               ],
 
-              const SizedBox(height: 16),
+              SizedBox(height: _getResponsivePadding(context, 16)),
 
-              // Technologies
+              // Technologies - Better responsive wrapping
               Wrap(
-                spacing: 8,
-                runSpacing: 8,
+                spacing: isMobile ? 6 : 8,
+                runSpacing: isMobile ? 6 : 8,
                 children:
                     (experience['technologies'] as List<String>)
-                        .map((tech) => _buildTechChip(tech, themeProvider))
+                        .map(
+                          (tech) =>
+                              _buildTechChip(tech, themeProvider, context),
+                        )
                         .toList(),
               ),
             ],
@@ -449,7 +462,102 @@ class ExperienceSection extends StatelessWidget {
         .slideY(begin: 0.3);
   }
 
-  Widget _buildTechChip(String technology, ThemeProvider themeProvider) {
+  Widget _buildStatusChip(
+    String status,
+    Color statusColor,
+    BuildContext context,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: _getResponsivePadding(context, 8),
+        vertical: _getResponsivePadding(context, 4),
+      ),
+      decoration: BoxDecoration(
+        color: statusColor.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: statusColor.withOpacity(0.4), width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(
+              color: statusColor,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 4),
+          CustomText(
+            status,
+            fontSize: _getResponsiveFontSize(context, 10),
+            fontWeight: FontWeight.w600,
+            color: statusColor,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPeriodChip(
+    String period,
+    ThemeProvider themeProvider,
+    BuildContext context,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: _getResponsivePadding(context, 10),
+        vertical: _getResponsivePadding(context, 6),
+      ),
+      decoration: BoxDecoration(
+        color:
+            themeProvider.isDarkMode
+                ? AppColors.primaryColor.withOpacity(0.3)
+                : AppColors.buttonColorDark,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: CustomText(
+        period,
+        fontSize: _getResponsiveFontSize(context, 11),
+        fontWeight: FontWeight.w500,
+        color: AppColors.primaryColor,
+      ),
+    );
+  }
+
+  Widget _buildDurationChip(
+    String duration,
+    ThemeProvider themeProvider,
+    Color faintTextColor,
+    BuildContext context,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: _getResponsivePadding(context, 8),
+        vertical: _getResponsivePadding(context, 4),
+      ),
+      decoration: BoxDecoration(
+        color:
+            themeProvider.isDarkMode
+                ? AppColors.buttonColorDark.withOpacity(0.6)
+                : AppColors.cardLight.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: CustomText(
+        duration,
+        fontSize: _getResponsiveFontSize(context, 9),
+        fontWeight: FontWeight.w400,
+        color: faintTextColor,
+      ),
+    );
+  }
+
+  Widget _buildTechChip(
+    String technology,
+    ThemeProvider themeProvider,
+    BuildContext context,
+  ) {
     final textColor =
         themeProvider.isDarkMode
             ? AppColors.white.withOpacity(0.9)
@@ -460,7 +568,10 @@ class ExperienceSection extends StatelessWidget {
             : AppColors.buttonColorLight;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: EdgeInsets.symmetric(
+        horizontal: _getResponsivePadding(context, 12),
+        vertical: _getResponsivePadding(context, 6),
+      ),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(16),
@@ -474,7 +585,7 @@ class ExperienceSection extends StatelessWidget {
       ),
       child: CustomText(
         technology,
-        fontSize: 11,
+        fontSize: _getResponsiveFontSize(context, 11),
         fontWeight: FontWeight.w500,
         color: textColor,
       ),

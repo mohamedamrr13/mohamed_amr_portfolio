@@ -240,31 +240,47 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildMobileMenu(BuildContext context, ThemeProvider themeProvider) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      width: _isScrolled ? 36 : 40,
+      height: _isScrolled ? 36 : 40,
       decoration: BoxDecoration(
         color:
             _isScrolled
                 ? (themeProvider.isDarkMode
                     ? Colors.white.withOpacity(0.1)
-                    : Colors.grey.withOpacity(0.1))
+                    : const Color(0xFFF7FAFC))
                 : Colors.transparent,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: IconButton(
-        icon: Icon(
-          Icons.menu_rounded,
+        borderRadius: BorderRadius.circular(_isScrolled ? 10 : 12),
+        border: Border.all(
           color:
               themeProvider.isDarkMode
-                  ? AppColors.white
-                  : const Color(0xFF2D3748),
+                  ? Colors.white.withOpacity(0.2)
+                  : Colors.grey.withOpacity(0.3),
+          width: 1,
         ),
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.transparent,
-            builder: (context) => _buildMobileMenuSheet(context, themeProvider),
-          );
-        },
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(_isScrolled ? 10 : 12),
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.transparent,
+              builder:
+                  (context) => _buildMobileMenuSheet(context, themeProvider),
+            );
+          },
+          child: Icon(
+            Icons.menu_rounded,
+            size: _isScrolled ? 18 : 20,
+            color:
+                themeProvider.isDarkMode
+                    ? AppColors.white
+                    : const Color(0xFF4A5568),
+          ),
+        ),
       ),
     );
   }
@@ -380,7 +396,6 @@ class _HomeScreenState extends State<HomeScreen>
   }
 }
 
-// Enhanced Theme Toggle Button Widget
 class EnhancedThemeToggleButton extends StatefulWidget {
   final bool isScrolled;
 
@@ -419,9 +434,10 @@ class _EnhancedThemeToggleButtonState extends State<EnhancedThemeToggleButton>
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
-        return Container(
-          width: 40,
-          height: 40,
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          width: widget.isScrolled ? 36 : 40,
+          height: widget.isScrolled ? 36 : 40,
           decoration: BoxDecoration(
             color:
                 widget.isScrolled
@@ -429,7 +445,7 @@ class _EnhancedThemeToggleButtonState extends State<EnhancedThemeToggleButton>
                         ? Colors.white.withOpacity(0.1)
                         : const Color(0xFFF7FAFC))
                     : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(widget.isScrolled ? 10 : 12),
             border: Border.all(
               color:
                   themeProvider.isDarkMode
@@ -441,7 +457,7 @@ class _EnhancedThemeToggleButtonState extends State<EnhancedThemeToggleButton>
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(widget.isScrolled ? 10 : 12),
               onTap: () {
                 _controller.forward(from: 0);
                 themeProvider.toggleTheme();
@@ -455,7 +471,7 @@ class _EnhancedThemeToggleButtonState extends State<EnhancedThemeToggleButton>
                       themeProvider.isDarkMode
                           ? Icons.light_mode_rounded
                           : Icons.dark_mode_rounded,
-                      size: 20,
+                      size: widget.isScrolled ? 18 : 20,
                       color:
                           themeProvider.isDarkMode
                               ? const Color(0xFFFFD700)

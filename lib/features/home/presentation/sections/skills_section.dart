@@ -5,11 +5,40 @@ import 'package:mohamed_amr_portfolio/core/shared/custom_text.dart';
 import 'package:mohamed_amr_portfolio/core/shared/section_wrapper.dart';
 import 'package:mohamed_amr_portfolio/core/theming/app_colors.dart';
 import 'package:mohamed_amr_portfolio/core/theming/theme_provider.dart';
+import 'package:mohamed_amr_portfolio/core/utils/responsive.dart';
 import 'package:mohamed_amr_portfolio/core/utils/scroll_controller.dart';
 import 'package:provider/provider.dart';
 
 class SkillsSection extends StatelessWidget {
   const SkillsSection({super.key});
+
+  // Helper method to get responsive font sizes
+  double _getResponsiveFontSize(BuildContext context, double baseSize) {
+    if (Responsive.isMobile(context)) {
+      return baseSize * 0.8; // 80% on mobile
+    } else if (Responsive.isTablet(context)) {
+      return baseSize * 0.9; // 90% on tablet
+    }
+    return baseSize; // Full size on desktop
+  }
+
+  double _getResponsivePadding(BuildContext context, double basePadding) {
+    if (Responsive.isMobile(context)) {
+      return basePadding * 0.7; // 70% on mobile
+    } else if (Responsive.isTablet(context)) {
+      return basePadding * 0.85; // 85% on tablet
+    }
+    return basePadding; // Full padding on desktop
+  }
+
+  double _getResponsiveIconSize(BuildContext context, double baseSize) {
+    if (Responsive.isMobile(context)) {
+      return baseSize * 0.85; // 85% on mobile
+    } else if (Responsive.isTablet(context)) {
+      return baseSize * 0.9; // 90% on tablet
+    }
+    return baseSize; // Full size on desktop
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,21 +48,28 @@ class SkillsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
-          _buildSectionTitle(),
-          const SizedBox(height: 40),
+          SizedBox(height: _getResponsivePadding(context, 20)),
+          _buildSectionTitle(context),
+          SizedBox(height: _getResponsivePadding(context, 40)),
           _buildSkillsContent(context),
         ],
       ),
     );
   }
 
-  Widget _buildSectionTitle() {
-    return const CustomText(
-      "Skills & Technologies",
-      fontSize: 28,
-      fontWeight: FontWeight.bold,
-    ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.3);
+  Widget _buildSectionTitle(BuildContext context) {
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        final textColor =
+            themeProvider.isDarkMode ? AppColors.white : AppColors.black;
+        return CustomText(
+          "Skills & Technologies",
+          fontSize: _getResponsiveFontSize(context, 28),
+          fontWeight: FontWeight.bold,
+          color: textColor,
+        ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.3);
+      },
+    );
   }
 
   Widget _buildSkillsContent(BuildContext context) {
@@ -93,9 +129,14 @@ class SkillsSection extends StatelessWidget {
   ) {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
+        final textColor =
+            themeProvider.isDarkMode ? AppColors.white : AppColors.black;
+
         return Container(
-              margin: const EdgeInsets.only(bottom: 24),
-              padding: const EdgeInsets.all(20),
+              margin: EdgeInsets.only(
+                bottom: _getResponsivePadding(context, 24),
+              ),
+              padding: EdgeInsets.all(_getResponsivePadding(context, 20)),
               decoration: BoxDecoration(
                 color: (themeProvider.isDarkMode
                         ? AppColors.buttonColorDark
@@ -118,50 +159,116 @@ class SkillsSection extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: (category['color'] as Color).withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(8),
+                  // Header Row - Stack on mobile for better space usage
+                  if (Responsive.isMobile(context)) ...[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(
+                                _getResponsivePadding(context, 8),
+                              ),
+                              decoration: BoxDecoration(
+                                color: (category['color'] as Color).withOpacity(
+                                  0.2,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Icon(
+                                category['icon'] as IconData,
+                                color: category['color'] as Color,
+                                size: _getResponsiveIconSize(context, 18),
+                              ),
+                            ),
+                            SizedBox(width: _getResponsivePadding(context, 12)),
+                            Expanded(
+                              child: CustomText(
+                                category['category'] as String,
+                                fontSize: _getResponsiveFontSize(context, 16),
+                                fontWeight: FontWeight.bold,
+                                color: textColor,
+                              ),
+                            ),
+                          ],
                         ),
-                        child: Icon(
-                          category['icon'] as IconData,
-                          color: category['color'] as Color,
-                          size: 20,
+                        SizedBox(height: _getResponsivePadding(context, 8)),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: _getResponsivePadding(context, 8),
+                            vertical: _getResponsivePadding(context, 4),
+                          ),
+                          decoration: BoxDecoration(
+                            color: (category['color'] as Color).withOpacity(
+                              0.1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: CustomText(
+                            '${(category['skills'] as List).length} skills',
+                            fontSize: _getResponsiveFontSize(context, 9),
+                            fontWeight: FontWeight.w500,
+                            color: category['color'] as Color,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: CustomText(
-                          category['category'] as String,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      ],
+                    ),
+                  ] else ...[
+                    Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(
+                            _getResponsivePadding(context, 8),
+                          ),
+                          decoration: BoxDecoration(
+                            color: (category['color'] as Color).withOpacity(
+                              0.2,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            category['icon'] as IconData,
+                            color: category['color'] as Color,
+                            size: _getResponsiveIconSize(context, 20),
+                          ),
                         ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
+                        SizedBox(width: _getResponsivePadding(context, 12)),
+                        Expanded(
+                          child: CustomText(
+                            category['category'] as String,
+                            fontSize: _getResponsiveFontSize(context, 18),
+                            fontWeight: FontWeight.bold,
+                            color: textColor,
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          color: (category['color'] as Color).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: _getResponsivePadding(context, 8),
+                            vertical: _getResponsivePadding(context, 4),
+                          ),
+                          decoration: BoxDecoration(
+                            color: (category['color'] as Color).withOpacity(
+                              0.1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: CustomText(
+                            '${(category['skills'] as List).length} skills',
+                            fontSize: _getResponsiveFontSize(context, 10),
+                            fontWeight: FontWeight.w500,
+                            color: category['color'] as Color,
+                          ),
                         ),
-                        child: CustomText(
-                          '${(category['skills'] as List).length} skills',
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                          color: category['color'] as Color,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
+                      ],
+                    ),
+                  ],
+
+                  SizedBox(height: _getResponsivePadding(context, 16)),
                   _buildSkillChips(
                     category['skills'] as List<String>,
                     category['color'] as Color,
+                    context,
                   ),
                 ],
               ),
@@ -173,19 +280,23 @@ class SkillsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildSkillChips(List<String> skills, Color color) {
+  Widget _buildSkillChips(
+    List<String> skills,
+    Color color,
+    BuildContext context,
+  ) {
     return Wrap(
-      spacing: 8,
-      runSpacing: 8,
+      spacing: Responsive.isMobile(context) ? 6 : 8,
+      runSpacing: Responsive.isMobile(context) ? 6 : 8,
       children:
           skills.asMap().entries.map((entry) {
             final index = entry.key;
             final skill = entry.value;
 
             return Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: _getResponsivePadding(context, 12),
+                    vertical: _getResponsivePadding(context, 8),
                   ),
                   decoration: BoxDecoration(
                     color: color.withOpacity(0.1),
@@ -196,17 +307,17 @@ class SkillsSection extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        width: 6,
-                        height: 6,
+                        width: Responsive.isMobile(context) ? 5 : 6,
+                        height: Responsive.isMobile(context) ? 5 : 6,
                         decoration: BoxDecoration(
                           color: color,
                           shape: BoxShape.circle,
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: _getResponsivePadding(context, 6)),
                       CustomText(
                         skill,
-                        fontSize: 12,
+                        fontSize: _getResponsiveFontSize(context, 12),
                         fontWeight: FontWeight.w500,
                         color: color,
                       ),
@@ -220,58 +331,171 @@ class SkillsSection extends StatelessWidget {
     );
   }
 
-  // Alternative method for more interactive skill chips
-  Widget _buildInteractiveSkillChips(List<String> skills, Color color) {
+  // Enhanced interactive skill chips with hover effects
+  Widget _buildInteractiveSkillChips(
+    List<String> skills,
+    Color color,
+    BuildContext context,
+  ) {
     return Wrap(
-      spacing: 8,
-      runSpacing: 8,
+      spacing: Responsive.isMobile(context) ? 6 : 8,
+      runSpacing: Responsive.isMobile(context) ? 6 : 8,
       children:
           skills.asMap().entries.map((entry) {
             final index = entry.key;
             final skill = entry.value;
 
-            return MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: color.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: color.withOpacity(0.3),
-                        width: 1,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 6,
-                          height: 6,
-                          decoration: BoxDecoration(
-                            color: color,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        CustomText(
-                          skill,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: color,
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-                .animate(delay: Duration(milliseconds: index * 50))
-                .fadeIn(duration: 300.ms)
-                .scale(begin: const Offset(0.8, 0.8));
+            return _SkillChipHoverable(
+              skill: skill,
+              color: color,
+              index: index,
+              context: context,
+              getResponsiveFontSize: _getResponsiveFontSize,
+              getResponsivePadding: _getResponsivePadding,
+            );
           }).toList(),
     );
+  }
+}
+
+// Separate hoverable skill chip widget for better performance
+class _SkillChipHoverable extends StatefulWidget {
+  final String skill;
+  final Color color;
+  final int index;
+  final BuildContext context;
+  final Function getResponsiveFontSize;
+  final Function getResponsivePadding;
+
+  const _SkillChipHoverable({
+    required this.skill,
+    required this.color,
+    required this.index,
+    required this.context,
+    required this.getResponsiveFontSize,
+    required this.getResponsivePadding,
+  });
+
+  @override
+  State<_SkillChipHoverable> createState() => _SkillChipHoverableState();
+}
+
+class _SkillChipHoverableState extends State<_SkillChipHoverable>
+    with TickerProviderStateMixin {
+  bool _isHovered = false;
+  late AnimationController _hoverController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _elevationAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _hoverController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
+      CurvedAnimation(parent: _hoverController, curve: Curves.easeOutQuart),
+    );
+
+    _elevationAnimation = Tween<double>(begin: 0.0, end: 4.0).animate(
+      CurvedAnimation(parent: _hoverController, curve: Curves.easeOutQuart),
+    );
+  }
+
+  @override
+  void dispose() {
+    _hoverController.dispose();
+    super.dispose();
+  }
+
+  void _onHover(bool hovering) {
+    if (!Responsive.isMobile(widget.context)) {
+      setState(() {
+        _isHovered = hovering;
+      });
+
+      if (hovering) {
+        _hoverController.forward();
+      } else {
+        _hoverController.reverse();
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+          onEnter: (_) => _onHover(true),
+          onExit: (_) => _onHover(false),
+          cursor: SystemMouseCursors.click,
+          child: AnimatedBuilder(
+            animation: _hoverController,
+            builder: (context, child) {
+              return Transform.scale(
+                scale: _scaleAnimation.value,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: widget.getResponsivePadding(
+                      widget.context,
+                      12.0,
+                    ),
+                    vertical: widget.getResponsivePadding(widget.context, 8.0),
+                  ),
+                  decoration: BoxDecoration(
+                    color: widget.color.withOpacity(_isHovered ? 0.15 : 0.1),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: widget.color.withOpacity(_isHovered ? 0.5 : 0.3),
+                      width: _isHovered ? 1.5 : 1,
+                    ),
+                    boxShadow:
+                        _isHovered
+                            ? [
+                              BoxShadow(
+                                color: widget.color.withOpacity(0.2),
+                                blurRadius: _elevationAnimation.value,
+                                offset: Offset(
+                                  0,
+                                  _elevationAnimation.value * 0.5,
+                                ),
+                              ),
+                            ]
+                            : null,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: Responsive.isMobile(widget.context) ? 5 : 6,
+                        height: Responsive.isMobile(widget.context) ? 5 : 6,
+                        decoration: BoxDecoration(
+                          color: widget.color,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      SizedBox(
+                        width: widget.getResponsivePadding(widget.context, 6.0),
+                      ),
+                      CustomText(
+                        widget.skill,
+                        fontSize: widget.getResponsiveFontSize(
+                          widget.context,
+                          12.0,
+                        ),
+                        fontWeight: FontWeight.w500,
+                        color: widget.color,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        )
+        .animate(delay: Duration(milliseconds: widget.index * 50))
+        .fadeIn(duration: 300.ms)
+        .scale(begin: const Offset(0.8, 0.8));
   }
 }
