@@ -596,7 +596,7 @@ class _ProjectCardState extends State<_ProjectCard>
     ThemeProvider themeProvider,
   ) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final maxLines = screenWidth <= 600 ? 3 : (screenWidth <= 900 ? 4 : 5);
+    final maxLines = screenWidth <= 600 ? 5 : (screenWidth <= 900 ? 7 : 9);
 
     return CustomText(
       widget.project['description'],
