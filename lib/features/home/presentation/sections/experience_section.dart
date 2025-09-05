@@ -11,26 +11,542 @@ import 'package:provider/provider.dart';
 class ExperienceSection extends StatelessWidget {
   const ExperienceSection({super.key});
 
-  // Helper method to get responsive font sizes
-  double _getResponsiveFontSize(BuildContext context, double baseSize) {
-    if (Responsive.isMobile(context)) {
-      return baseSize * 0.75; // 75% on mobile
-    } else if (Responsive.isTablet(context)) {
-      return baseSize * 0.85; // 85% on tablet
-    }
-    return baseSize; // Full size on desktop
+  @override
+  Widget build(BuildContext context) {
+    return SectionWrapper(
+      sectionKey: 'experience',
+      globalKey: PortfolioScrollController.sectionKeys['experience'],
+      child: _buildContent(context),
+    );
   }
 
-  double _getResponsivePadding(BuildContext context, double basePadding) {
-    if (Responsive.isMobile(context)) {
-      return basePadding * 0.7; // 70% on mobile
-    } else if (Responsive.isTablet(context)) {
-      return basePadding * 0.8; // 80% on tablet
-    }
-    return basePadding; // Full padding on desktop
+  Widget _buildContent(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: Responsive.getMaxContentWidth(context),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: Responsive.getVerticalPadding(context)),
+          _buildSectionTitle(context),
+          SizedBox(height: Responsive.getSpacing(context, multiplier: 2.5)),
+          _buildExperienceList(context),
+        ],
+      ),
+    );
   }
 
-  // Helper method to calculate experience duration
+  Widget _buildSectionTitle(BuildContext context) {
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return CustomText(
+          "Experience",
+          fontSize: Responsive.getFontSize(context, mobile: 28, desktop: 36),
+          fontWeight: FontWeight.bold,
+          color: themeProvider.isDarkMode ? AppColors.white : AppColors.black,
+        ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.3);
+      },
+    );
+  }
+
+  Widget _buildExperienceList(BuildContext context) {
+    final experiences = [
+      {
+        'title': 'Flutter Developer Freelancer',
+        'company': 'Freelance',
+        'period': 'Mar 2025 - Present',
+        'description':
+            'Updated and refactored a 5-year-old school management app to support modern Flutter dependencies. Debugged critical errors, resolved package conflicts, and improved app stability. Audited Firebase integration and suggested major fixes. Maintained client communication to align on major changes.',
+        'technologies': [
+          'Flutter',
+          'Dart',
+          'Firebase',
+          'Git',
+          'Debugging',
+          'Legacy Code',
+        ],
+        'achievements': [
+          'Reduced app crash rate by 85%',
+          'Updated 15+ deprecated packages',
+          'Improved app loading time by 40%',
+        ],
+      },
+      {
+        'title': 'Mobile App Development Intern',
+        'company': 'The Digital Egypt Pioneers Initiative (DEPI)',
+        'period': 'Oct 2024 - May 2025',
+        'description':
+            'Assisted in developing mobile applications and learned modern development practices. Contributed to UI/UX improvements and bug fixes. Worked on cross-platform mobile solutions using Flutter framework.',
+        'technologies': ['Flutter', 'Dart', 'Kotlin', 'Java', 'GitHub'],
+        'achievements': [
+          'Contributed to 3 major projects',
+          'Fixed 25+ UI/UX issues',
+          'Implemented responsive design patterns',
+        ],
+      },
+      {
+        'title': 'Flutter Development Intern',
+        'company': 'ACM',
+        'period': 'Aug 2024 - Oct 2024',
+        'description':
+            'Assisted in developing Flutter applications and learned modern development practices. Gained hands-on experience with state management and API integration.',
+        'technologies': ['Flutter', 'Dart', 'Firebase'],
+        'achievements': [
+          'Built 2 complete mobile apps',
+          'Learned BLoC pattern implementation',
+          'Integrated REST APIs successfully',
+        ],
+      },
+    ];
+
+    return Column(
+      children:
+          experiences.asMap().entries.map((entry) {
+            final index = entry.key;
+            final experience = entry.value;
+            return _buildExperienceCard(experience, index, context);
+          }).toList(),
+    );
+  }
+
+  Widget _buildExperienceCard(
+    Map<String, dynamic> experience,
+    int index,
+    BuildContext context,
+  ) {
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        final duration = _calculateDuration(experience['period']);
+        final status = _getExperienceStatus(experience['period']);
+        final statusColor = _getStatusColor(status);
+
+        return Container(
+              margin: EdgeInsets.only(
+                bottom: Responsive.getSpacing(context, multiplier: 1.5),
+              ),
+              padding: EdgeInsets.all(
+                Responsive.getSpacing(context, multiplier: 1.5),
+              ),
+              decoration: BoxDecoration(
+                color: (themeProvider.isDarkMode
+                        ? AppColors.buttonColorDark
+                        : AppColors.cardLight)
+                    .withOpacity(0.4),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: (themeProvider.isDarkMode
+                          ? AppColors.primaryColor
+                          : AppColors.primaryColorLight)
+                      .withOpacity(0.2),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                    spreadRadius: 0,
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildExperienceHeader(
+                    experience,
+                    status,
+                    statusColor,
+                    duration,
+                    context,
+                    themeProvider,
+                  ),
+                  SizedBox(height: Responsive.getSpacing(context)),
+                  _buildExperienceDescription(
+                    experience,
+                    context,
+                    themeProvider,
+                  ),
+                  if (experience['achievements'] != null) ...[
+                    SizedBox(height: Responsive.getSpacing(context)),
+                    _buildAchievements(
+                      experience['achievements'],
+                      context,
+                      themeProvider,
+                    ),
+                  ],
+                  SizedBox(
+                    height: Responsive.getSpacing(context, multiplier: 1.2),
+                  ),
+                  _buildTechnologies(
+                    experience['technologies'],
+                    context,
+                    themeProvider,
+                  ),
+                ],
+              ),
+            )
+            .animate(delay: Duration(milliseconds: index * 200))
+            .fadeIn(duration: 600.ms)
+            .slideY(begin: 0.3);
+      },
+    );
+  }
+
+  Widget _buildExperienceHeader(
+    Map<String, dynamic> experience,
+    String status,
+    Color statusColor,
+    String duration,
+    BuildContext context,
+    ThemeProvider themeProvider,
+  ) {
+    return Responsive.responsive(
+      context,
+      mobile: _buildMobileHeader(
+        experience,
+        status,
+        statusColor,
+        duration,
+        context,
+        themeProvider,
+      ),
+      desktop: _buildDesktopHeader(
+        experience,
+        status,
+        statusColor,
+        duration,
+        context,
+        themeProvider,
+      ),
+    );
+  }
+
+  Widget _buildMobileHeader(
+    Map<String, dynamic> experience,
+    String status,
+    Color statusColor,
+    String duration,
+    BuildContext context,
+    ThemeProvider themeProvider,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomText(
+          experience['title'],
+          fontSize: Responsive.getFontSize(context, mobile: 18, desktop: 20),
+          fontWeight: FontWeight.bold,
+          color: themeProvider.isDarkMode ? AppColors.white : AppColors.black,
+        ),
+        SizedBox(height: Responsive.getSpacing(context, multiplier: 0.25)),
+        CustomText(
+          experience['company'],
+          fontSize: Responsive.getFontSize(context, mobile: 14, desktop: 16),
+          fontWeight: FontWeight.w600,
+          color:
+              themeProvider.isDarkMode
+                  ? AppColors.primaryColor
+                  : AppColors.primaryColorLight,
+        ),
+        SizedBox(height: Responsive.getSpacing(context, multiplier: 0.75)),
+        Wrap(
+          spacing: Responsive.getSpacing(context, multiplier: 0.5),
+          runSpacing: Responsive.getSpacing(context, multiplier: 0.5),
+          children: [
+            _buildPeriodChip(experience['period'], themeProvider, context),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopHeader(
+    Map<String, dynamic> experience,
+    String status,
+    Color statusColor,
+    String duration,
+    BuildContext context,
+    ThemeProvider themeProvider,
+  ) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomText(
+                experience['title'],
+                fontSize: Responsive.getFontSize(
+                  context,
+                  mobile: 18,
+                  desktop: 22,
+                ),
+                fontWeight: FontWeight.bold,
+                color:
+                    themeProvider.isDarkMode
+                        ? AppColors.white
+                        : AppColors.black,
+              ),
+              SizedBox(
+                height: Responsive.getSpacing(context, multiplier: 0.25),
+              ),
+              CustomText(
+                experience['company'],
+                fontSize: Responsive.getFontSize(
+                  context,
+                  mobile: 14,
+                  desktop: 16,
+                ),
+                fontWeight: FontWeight.w600,
+                color:
+                    themeProvider.isDarkMode
+                        ? AppColors.primaryColor
+                        : AppColors.primaryColorLight,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(width: Responsive.getSpacing(context)),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            _buildPeriodChip(experience['period'], themeProvider, context),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExperienceDescription(
+    Map<String, dynamic> experience,
+    BuildContext context,
+    ThemeProvider themeProvider,
+  ) {
+    return CustomText(
+      experience['description'],
+      fontSize: Responsive.getFontSize(context, mobile: 14, desktop: 16),
+      fontWeight: FontWeight.w400,
+      color: (themeProvider.isDarkMode ? AppColors.white : AppColors.darkText)
+          .withOpacity(0.85),
+    );
+  }
+
+  Widget _buildAchievements(
+    List<String> achievements,
+    BuildContext context,
+    ThemeProvider themeProvider,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomText(
+          'Key Achievements:',
+          fontSize: Responsive.getFontSize(context, mobile: 12, desktop: 14),
+          fontWeight: FontWeight.w600,
+          color:
+              themeProvider.isDarkMode
+                  ? AppColors.primaryColor
+                  : AppColors.primaryColorLight,
+        ),
+        SizedBox(height: Responsive.getSpacing(context, multiplier: 0.5)),
+        ...achievements.map((achievement) {
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: Responsive.getSpacing(context, multiplier: 0.25),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 4,
+                  height: 4,
+                  margin: EdgeInsets.only(
+                    top: Responsive.getFontSize(context, mobile: 6, desktop: 8),
+                    right: Responsive.getSpacing(context, multiplier: 0.5),
+                  ),
+                  decoration: BoxDecoration(
+                    color:
+                        themeProvider.isDarkMode
+                            ? AppColors.primaryColor
+                            : AppColors.primaryColorLight,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                Expanded(
+                  child: CustomText(
+                    achievement,
+                    fontSize: Responsive.getFontSize(
+                      context,
+                      mobile: 12,
+                      desktop: 14,
+                    ),
+                    fontWeight: FontWeight.w400,
+                    color: (themeProvider.isDarkMode
+                            ? AppColors.white
+                            : AppColors.darkText)
+                        .withOpacity(0.7),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ],
+    );
+  }
+
+  Widget _buildTechnologies(
+    List<String> technologies,
+    BuildContext context,
+    ThemeProvider themeProvider,
+  ) {
+    return Wrap(
+      spacing: Responsive.getSpacing(context, multiplier: 0.5),
+      runSpacing: Responsive.getSpacing(context, multiplier: 0.5),
+      children:
+          technologies.map((tech) {
+            return Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: Responsive.getSpacing(context, multiplier: 0.75),
+                vertical: Responsive.getSpacing(context, multiplier: 0.5),
+              ),
+              decoration: BoxDecoration(
+                color:
+                    themeProvider.isDarkMode
+                        ? AppColors.buttonColorDark
+                        : AppColors.buttonColorLight,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color:
+                      themeProvider.isDarkMode
+                          ? AppColors.primaryColor.withOpacity(0.3)
+                          : AppColors.primaryColorLight.withOpacity(0.3),
+                  width: 1,
+                ),
+              ),
+              child: CustomText(
+                tech,
+                fontSize: Responsive.getFontSize(
+                  context,
+                  mobile: 11,
+                  desktop: 12,
+                ),
+                fontWeight: FontWeight.w500,
+                color:
+                    themeProvider.isDarkMode
+                        ? AppColors.white.withOpacity(0.9)
+                        : AppColors.darkText.withOpacity(0.9),
+              ),
+            );
+          }).toList(),
+    );
+  }
+
+  Widget _buildStatusChip(
+    String status,
+    Color statusColor,
+    BuildContext context,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: Responsive.getSpacing(context, multiplier: 0.5),
+        vertical: Responsive.getSpacing(context, multiplier: 0.25),
+      ),
+      decoration: BoxDecoration(
+        color: statusColor.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: statusColor.withOpacity(0.4), width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(
+              color: statusColor,
+              shape: BoxShape.circle,
+            ),
+          ),
+          SizedBox(width: Responsive.getSpacing(context, multiplier: 0.25)),
+          CustomText(
+            status,
+            fontSize: Responsive.getFontSize(context, mobile: 10, desktop: 11),
+            fontWeight: FontWeight.w600,
+            color: statusColor,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPeriodChip(
+    String period,
+    ThemeProvider themeProvider,
+    BuildContext context,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: Responsive.getSpacing(context, multiplier: 0.75),
+        vertical: Responsive.getSpacing(context, multiplier: 0.5),
+      ),
+      decoration: BoxDecoration(
+        color:
+            themeProvider.isDarkMode
+                ? AppColors.primaryColor.withOpacity(0.2)
+                : AppColors.primaryColorLight.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color:
+              themeProvider.isDarkMode
+                  ? AppColors.primaryColor.withOpacity(0.4)
+                  : AppColors.primaryColorLight.withOpacity(0.4),
+          width: 1,
+        ),
+      ),
+      child: CustomText(
+        period,
+        fontSize: Responsive.getFontSize(context, mobile: 11, desktop: 12),
+        fontWeight: FontWeight.w500,
+        color:
+            themeProvider.isDarkMode
+                ? AppColors.primaryColor
+                : AppColors.primaryColorLight,
+      ),
+    );
+  }
+
+  Widget _buildDurationChip(
+    String duration,
+    ThemeProvider themeProvider,
+    BuildContext context,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: Responsive.getSpacing(context, multiplier: 0.5),
+        vertical: Responsive.getSpacing(context, multiplier: 0.25),
+      ),
+      decoration: BoxDecoration(
+        color:
+            themeProvider.isDarkMode
+                ? AppColors.buttonColorDark.withOpacity(0.6)
+                : AppColors.cardLight.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.withOpacity(0.2), width: 1),
+      ),
+      child: CustomText(
+        duration,
+        fontSize: Responsive.getFontSize(context, mobile: 9, desktop: 10),
+        fontWeight: FontWeight.w400,
+        color: (themeProvider.isDarkMode ? AppColors.white : AppColors.darkText)
+            .withOpacity(0.7),
+      ),
+    );
+  }
+
+  // Helper methods
   String _calculateDuration(String period) {
     try {
       final parts = period.split(' - ');
@@ -96,7 +612,6 @@ class ExperienceSection extends StatelessWidget {
     }
   }
 
-  // Get experience status based on end date
   String _getExperienceStatus(String period) {
     if (period.toLowerCase().contains('present')) {
       return 'Current';
@@ -132,463 +647,5 @@ class ExperienceSection extends StatelessWidget {
       default:
         return AppColors.primaryColor;
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SectionWrapper(
-      sectionKey: 'experience',
-      globalKey: PortfolioScrollController.sectionKeys['experience'],
-      child: Consumer<ThemeProvider>(
-        builder: (context, themeProvider, child) {
-          final textColor =
-              themeProvider.isDarkMode ? AppColors.white : AppColors.black;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: _getResponsivePadding(context, 20)),
-              _buildSectionTitle(context, textColor),
-              SizedBox(height: _getResponsivePadding(context, 40)),
-              _buildExperienceList(context, themeProvider),
-            ],
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildSectionTitle(BuildContext context, Color textColor) {
-    return CustomText(
-      "Experience",
-      fontSize: _getResponsiveFontSize(context, 28),
-      fontWeight: FontWeight.bold,
-      color: textColor,
-    ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.3);
-  }
-
-  Widget _buildExperienceList(
-    BuildContext context,
-    ThemeProvider themeProvider,
-  ) {
-    final experiences = [
-      {
-        'title': 'Flutter Developer Freelancer',
-        'company': 'Freelance',
-        'period': 'Mar 2025 - Present',
-        'description':
-            'Updated and refactored a 5-year-old school management app to support modern Flutter dependencies. \nDebugged critical errors, resolved package conflicts, and improved app stability. \nAudited Firebase integration and suggested major fixes. \nMaintained client communication to align on major changes.',
-        'technologies': [
-          'Flutter',
-          'Dart',
-          'Firebase',
-          'Git',
-          'Debugging',
-          'Legacy Code',
-        ],
-        'achievements': [
-          'Reduced app crash rate by 85%',
-          'Updated 15+ deprecated packages',
-          'Improved app loading time by 40%',
-        ],
-      },
-      {
-        'title': 'Mobile App Development Intern',
-        'company': 'The Digital Egypt Pioneers Initiative (DEPI)',
-        'period': 'Oct 2024 - May 2025',
-        'description':
-            'Assisted in developing mobile applications and learned modern development practices. Contributed to UI/UX improvements and bug fixes. Worked on cross-platform mobile solutions using Flutter framework.',
-        'technologies': ['Flutter', 'Dart', 'Kotlin', 'Java', 'GitHub'],
-        'achievements': [
-          'Contributed to 3 major projects',
-          'Fixed 25+ UI/UX issues',
-          'Implemented responsive design patterns',
-        ],
-      },
-      {
-        'title': 'Flutter Development Intern',
-        'company': 'ACM',
-        'period': 'Aug 2024 - Oct 2024',
-        'description':
-            'Assisted in developing Flutter applications and learned modern development practices. Gained hands-on experience with state management and API integration.',
-        'technologies': ['Flutter', 'Dart', 'Firebase'],
-        'achievements': [
-          'Built 2 complete mobile apps',
-          'Learned GoogleMap pattern implementation',
-          'Integrated REST APIs successfully',
-        ],
-      },
-    ];
-
-    return Column(
-      children:
-          experiences.asMap().entries.map((entry) {
-            final index = entry.key;
-            final experience = entry.value;
-            return _buildExperienceCard(
-              experience,
-              index,
-              context,
-              themeProvider,
-            );
-          }).toList(),
-    );
-  }
-
-  Widget _buildExperienceCard(
-    Map<String, dynamic> experience,
-    int index,
-    BuildContext context,
-    ThemeProvider themeProvider,
-  ) {
-    final duration = _calculateDuration(experience['period']);
-    final status = _getExperienceStatus(experience['period']);
-    final statusColor = _getStatusColor(status);
-    final textColor =
-        themeProvider.isDarkMode ? AppColors.white : AppColors.black;
-    final subTextColor =
-        themeProvider.isDarkMode
-            ? AppColors.white.withOpacity(0.8)
-            : AppColors.black.withOpacity(0.8);
-    final faintTextColor =
-        themeProvider.isDarkMode
-            ? AppColors.white.withOpacity(0.7)
-            : AppColors.black.withOpacity(0.7);
-
-    final isMobile = Responsive.isMobile(context);
-    final isTablet = Responsive.isTablet(context);
-
-    return Container(
-          margin: EdgeInsets.only(bottom: _getResponsivePadding(context, 24)),
-          padding: EdgeInsets.all(_getResponsivePadding(context, 24)),
-          decoration: BoxDecoration(
-            color: (themeProvider.isDarkMode
-                    ? AppColors.buttonColorDark
-                    : AppColors.cardLight)
-                .withOpacity(0.3),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: (themeProvider.isDarkMode
-                      ? AppColors.primaryColor
-                      : AppColors.primaryColorLight)
-                  .withOpacity(0.2),
-              width: 1,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: statusColor.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header Row - Stack on mobile for better space usage
-              if (isMobile) ...[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title and Company
-                    CustomText(
-                      experience['title'],
-                      fontSize: _getResponsiveFontSize(context, 18),
-                      fontWeight: FontWeight.bold,
-                      color: textColor,
-                    ),
-                    SizedBox(height: 4),
-                    CustomText(
-                      experience['company'],
-                      fontSize: _getResponsiveFontSize(context, 14),
-                      fontWeight: FontWeight.w500,
-                      color:
-                          themeProvider.isDarkMode
-                              ? AppColors.primaryColor.withOpacity(0.8)
-                              : AppColors.buttonColorDark,
-                    ),
-                    SizedBox(height: 12),
-                    // Status and Period chips in row
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _buildStatusChip(status, statusColor, context),
-                        _buildPeriodChip(
-                          experience['period'],
-                          themeProvider,
-                          context,
-                        ),
-                        _buildDurationChip(
-                          duration,
-                          themeProvider,
-                          faintTextColor,
-                          context,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ] else ...[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                            experience['title'],
-                            fontSize: _getResponsiveFontSize(context, 20),
-                            fontWeight: FontWeight.bold,
-                            color: textColor,
-                          ),
-                          const SizedBox(height: 4),
-                          CustomText(
-                            experience['company'],
-                            fontSize: _getResponsiveFontSize(context, 16),
-                            fontWeight: FontWeight.w500,
-                            color:
-                                themeProvider.isDarkMode
-                                    ? AppColors.primaryColor.withOpacity(0.8)
-                                    : AppColors.buttonColorDark,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        _buildStatusChip(status, statusColor, context),
-                        const SizedBox(height: 8),
-                        _buildPeriodChip(
-                          experience['period'],
-                          themeProvider,
-                          context,
-                        ),
-                        const SizedBox(height: 4),
-                        _buildDurationChip(
-                          duration,
-                          themeProvider,
-                          faintTextColor,
-                          context,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-
-              SizedBox(height: _getResponsivePadding(context, 16)),
-
-              // Description
-              CustomText(
-                experience['description'],
-                fontSize: _getResponsiveFontSize(context, 14),
-                fontWeight: FontWeight.w400,
-                color: subTextColor,
-              ),
-
-              // Achievements (if available)
-              if (experience['achievements'] != null) ...[
-                SizedBox(height: _getResponsivePadding(context, 16)),
-                CustomText(
-                  'Key Achievements:',
-                  fontSize: _getResponsiveFontSize(context, 12),
-                  fontWeight: FontWeight.w600,
-                  color:
-                      themeProvider.isDarkMode
-                          ? AppColors.primaryColor.withOpacity(0.8)
-                          : AppColors.buttonColorDark,
-                ),
-                SizedBox(height: _getResponsivePadding(context, 8)),
-                ...((experience['achievements'] as List<String>).map((
-                  achievement,
-                ) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      bottom: _getResponsivePadding(context, 4),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 4,
-                          height: 4,
-                          margin: EdgeInsets.only(
-                            top: _getResponsiveFontSize(context, 6),
-                            right: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color:
-                                themeProvider.isDarkMode
-                                    ? AppColors.primaryColor.withOpacity(0.8)
-                                    : AppColors.buttonColorDark,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        Expanded(
-                          child: CustomText(
-                            achievement,
-                            fontSize: _getResponsiveFontSize(context, 12),
-                            fontWeight: FontWeight.w400,
-                            color: faintTextColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList()),
-              ],
-
-              SizedBox(height: _getResponsivePadding(context, 16)),
-
-              // Technologies - Better responsive wrapping
-              Wrap(
-                spacing: isMobile ? 6 : 8,
-                runSpacing: isMobile ? 6 : 8,
-                children:
-                    (experience['technologies'] as List<String>)
-                        .map(
-                          (tech) =>
-                              _buildTechChip(tech, themeProvider, context),
-                        )
-                        .toList(),
-              ),
-            ],
-          ),
-        )
-        .animate(delay: (index * 200).ms)
-        .fadeIn(duration: 600.ms)
-        .slideY(begin: 0.3);
-  }
-
-  Widget _buildStatusChip(
-    String status,
-    Color statusColor,
-    BuildContext context,
-  ) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: _getResponsivePadding(context, 8),
-        vertical: _getResponsivePadding(context, 4),
-      ),
-      decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: statusColor.withOpacity(0.4), width: 1),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(
-              color: statusColor,
-              shape: BoxShape.circle,
-            ),
-          ),
-          const SizedBox(width: 4),
-          CustomText(
-            status,
-            fontSize: _getResponsiveFontSize(context, 10),
-            fontWeight: FontWeight.w600,
-            color: statusColor,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPeriodChip(
-    String period,
-    ThemeProvider themeProvider,
-    BuildContext context,
-  ) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: _getResponsivePadding(context, 10),
-        vertical: _getResponsivePadding(context, 6),
-      ),
-      decoration: BoxDecoration(
-        color:
-            themeProvider.isDarkMode
-                ? AppColors.primaryColor.withOpacity(0.3)
-                : AppColors.buttonColorDark,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: CustomText(
-        period,
-        fontSize: _getResponsiveFontSize(context, 11),
-        fontWeight: FontWeight.w500,
-        color: AppColors.primaryColor,
-      ),
-    );
-  }
-
-  Widget _buildDurationChip(
-    String duration,
-    ThemeProvider themeProvider,
-    Color faintTextColor,
-    BuildContext context,
-  ) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: _getResponsivePadding(context, 8),
-        vertical: _getResponsivePadding(context, 4),
-      ),
-      decoration: BoxDecoration(
-        color:
-            themeProvider.isDarkMode
-                ? AppColors.buttonColorDark.withOpacity(0.6)
-                : AppColors.cardLight.withOpacity(0.6),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: CustomText(
-        duration,
-        fontSize: _getResponsiveFontSize(context, 9),
-        fontWeight: FontWeight.w400,
-        color: faintTextColor,
-      ),
-    );
-  }
-
-  Widget _buildTechChip(
-    String technology,
-    ThemeProvider themeProvider,
-    BuildContext context,
-  ) {
-    final textColor =
-        themeProvider.isDarkMode
-            ? AppColors.white.withOpacity(0.9)
-            : AppColors.black.withOpacity(0.9);
-    final bgColor =
-        themeProvider.isDarkMode
-            ? AppColors.buttonColorDark
-            : AppColors.buttonColorLight;
-
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: _getResponsivePadding(context, 12),
-        vertical: _getResponsivePadding(context, 6),
-      ),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color:
-              themeProvider.isDarkMode
-                  ? AppColors.primaryColor.withOpacity(0.3)
-                  : AppColors.buttonColorDark,
-          width: 0.5,
-        ),
-      ),
-      child: CustomText(
-        technology,
-        fontSize: _getResponsiveFontSize(context, 11),
-        fontWeight: FontWeight.w500,
-        color: textColor,
-      ),
-    );
   }
 }

@@ -23,50 +23,31 @@ class BackgroundWidget extends StatefulWidget {
 }
 
 class _BackgroundWidgetState extends State<BackgroundWidget> {
-  LinearGradient _getBackgroundGradient(BuildContext context) {
+  // Cache the gradient to avoid recreating it on every build
+  LinearGradient? _cachedGradient;
+  bool? _lastThemeMode;
+
+  LinearGradient getBackgroundGradient(BuildContext context) {
     try {
       final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
-      return themeProvider.isDarkMode
-          ? const LinearGradient(
-            begin: Alignment(-0.8, -1.0),
-            end: Alignment(1.2, 1.0),
-            colors: [
-              Color(0xFF0A0A0F),
-              Color(0xFF1A1A2E),
-              Color(0xFF16213E),
-              Color(0xFF0F3460),
-              Color(0xFF1A1A2E),
-            ],
-            stops: [0.0, 0.25, 0.5, 0.75, 1.0],
-          )
-          : const LinearGradient(
-            begin: Alignment(-0.8, -1.0),
-            end: Alignment(1.2, 1.0),
-            colors: [
-              Color(0xFFFDFDFE),
-              Color(0xFFF8FAFF),
-              Color(0xFFF0F4FC),
-              Color(0xFFE8F0FF),
-              Color(0xFFF5F7FA),
-            ],
-            stops: [0.0, 0.25, 0.5, 0.75, 1.0],
-          );
+
+      // Only recreate gradient if theme changed
+      if (_cachedGradient == null ||
+          _lastThemeMode != themeProvider.isDarkMode) {
+        _lastThemeMode = themeProvider.isDarkMode;
+        _cachedGradient =
+            themeProvider.isDarkMode ? _darkModeGradient : _lightModeGradient;
+      }
+
+      return _cachedGradient!;
     } catch (e) {
-      return _modernBackgroundGradient;
+      return _darkModeGradient;
     }
   }
 
-  int _getResponsiveParticleCount() {
-    return WidgetsBinding
-                .instance
-                .platformDispatcher
-                .views
-                .first
-                .physicalSize
-                .width >
-            1000
-        ? 25
-        : 15;
+  int getResponsiveParticleCount(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return size.width > 1000 ? 25 : 15;
   }
 
   @override
@@ -75,9 +56,10 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
     final isDarkMode = themeProvider.isDarkMode;
 
     return Container(
-      decoration: BoxDecoration(gradient: _getBackgroundGradient(context)),
+      decoration: BoxDecoration(gradient: getBackgroundGradient(context)),
       child: Stack(
         children: [
+          // First depth layer
           Container(
             decoration: BoxDecoration(
               gradient:
@@ -86,6 +68,7 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
                       : _depthGradientLayer1Light,
             ),
           ),
+          // Second depth layer
           Container(
             decoration: BoxDecoration(
               gradient:
@@ -94,6 +77,7 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
                       : _depthGradientLayer2Light,
             ),
           ),
+          // Accent gradient
           Container(
             decoration: BoxDecoration(
               gradient: RadialGradient(
@@ -109,6 +93,7 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
               ),
             ),
           ),
+          // Light mode overlay
           if (!isDarkMode)
             Container(
               decoration: BoxDecoration(
@@ -130,8 +115,8 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
     );
   }
 
-  // Keep all the existing gradient definitions
-  static const LinearGradient _modernBackgroundGradient = LinearGradient(
+  // Static gradients for better performance
+  static const LinearGradient _darkModeGradient = LinearGradient(
     begin: Alignment(-0.8, -1.0),
     end: Alignment(1.2, 1.0),
     colors: [
@@ -140,6 +125,19 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
       Color(0xFF16213E),
       Color(0xFF0F3460),
       Color(0xFF1A1A2E),
+    ],
+    stops: [0.0, 0.25, 0.5, 0.75, 1.0],
+  );
+
+  static const LinearGradient _lightModeGradient = LinearGradient(
+    begin: Alignment(-0.8, -1.0),
+    end: Alignment(1.2, 1.0),
+    colors: [
+      Color(0xFFFDFDFE),
+      Color(0xFFF8FAFF),
+      Color(0xFFF0F4FC),
+      Color(0xFFE8F0FF),
+      Color(0xFFF5F7FA),
     ],
     stops: [0.0, 0.25, 0.5, 0.75, 1.0],
   );

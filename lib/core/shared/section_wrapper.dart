@@ -9,6 +9,9 @@ class SectionWrapper extends StatefulWidget {
   final GlobalKey? globalKey;
   final EdgeInsetsGeometry? padding;
   final Color? backgroundColor;
+  final double visibilityThreshold;
+  final Duration animationDuration;
+  final Curve animationCurve;
 
   const SectionWrapper({
     super.key,
@@ -17,37 +20,85 @@ class SectionWrapper extends StatefulWidget {
     this.globalKey,
     this.padding,
     this.backgroundColor,
+    this.visibilityThreshold = 0.1,
+    this.animationDuration = const Duration(milliseconds: 600),
+    this.animationCurve = Curves.easeOutCubic,
   });
 
   @override
   State<SectionWrapper> createState() => _SectionWrapperState();
 }
 
-class _SectionWrapperState extends State<SectionWrapper> {
+class _SectionWrapperState extends State<SectionWrapper>
+    with SingleTickerProviderStateMixin {
   bool _isVisible = false;
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      duration: widget.animationDuration,
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: widget.animationCurve,
+      ),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: widget.animationCurve,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _handleVisibilityChanged(VisibilityInfo info) {
+    // Trigger animation earlier for better user experience
+    if (info.visibleFraction > widget.visibilityThreshold && !_isVisible) {
+      setState(() => _isVisible = true);
+      _animationController.forward();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(
-      key: Key(widget.sectionKey),
-      onVisibilityChanged: (info) {
-        // Trigger animation much earlier - when just 5% is visible
-        if (info.visibleFraction > 0.05 && !_isVisible) {
-          setState(() => _isVisible = true);
-        }
-      },
+      key: Key('visibility_${widget.sectionKey}'),
+      onVisibilityChanged: _handleVisibilityChanged,
       child: Container(
         key: widget.globalKey,
         width: double.infinity,
         color: widget.backgroundColor,
         padding: widget.padding ?? Responsive.getPadding(context),
-        child:
-            _isVisible
-                ? widget.child.animate().fadeIn(
-                  duration: 200.ms, // Reduced from 300ms
-                  curve: Curves.easeOut, // Simpler curve
-                )
-                : Opacity(opacity: 0, child: widget.child),
+        child: AnimatedBuilder(
+          animation: _animationController,
+          builder: (context, child) {
+            return FadeTransition(
+              opacity: _fadeAnimation,
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: widget.child,
+              ),
+            );
+          },
+        ),
       ),
     );
   }

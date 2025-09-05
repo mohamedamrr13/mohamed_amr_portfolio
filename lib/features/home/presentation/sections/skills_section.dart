@@ -12,45 +12,26 @@ import 'package:provider/provider.dart';
 class SkillsSection extends StatelessWidget {
   const SkillsSection({super.key});
 
-  // Helper method to get responsive font sizes
-  double _getResponsiveFontSize(BuildContext context, double baseSize) {
-    if (Responsive.isMobile(context)) {
-      return baseSize * 0.8; // 80% on mobile
-    } else if (Responsive.isTablet(context)) {
-      return baseSize * 0.9; // 90% on tablet
-    }
-    return baseSize; // Full size on desktop
-  }
-
-  double _getResponsivePadding(BuildContext context, double basePadding) {
-    if (Responsive.isMobile(context)) {
-      return basePadding * 0.7; // 70% on mobile
-    } else if (Responsive.isTablet(context)) {
-      return basePadding * 0.85; // 85% on tablet
-    }
-    return basePadding; // Full padding on desktop
-  }
-
-  double _getResponsiveIconSize(BuildContext context, double baseSize) {
-    if (Responsive.isMobile(context)) {
-      return baseSize * 0.85; // 85% on mobile
-    } else if (Responsive.isTablet(context)) {
-      return baseSize * 0.9; // 90% on tablet
-    }
-    return baseSize; // Full size on desktop
-  }
-
   @override
   Widget build(BuildContext context) {
     return SectionWrapper(
       sectionKey: 'skills',
       globalKey: PortfolioScrollController.sectionKeys['skills'],
+      child: _buildContent(context),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: Responsive.getMaxContentWidth(context),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: _getResponsivePadding(context, 20)),
+          SizedBox(height: Responsive.getVerticalPadding(context)),
           _buildSectionTitle(context),
-          SizedBox(height: _getResponsivePadding(context, 40)),
+          SizedBox(height: Responsive.getSpacing(context, multiplier: 2.5)),
           _buildSkillsContent(context),
         ],
       ),
@@ -60,13 +41,11 @@ class SkillsSection extends StatelessWidget {
   Widget _buildSectionTitle(BuildContext context) {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
-        final textColor =
-            themeProvider.isDarkMode ? AppColors.white : AppColors.black;
         return CustomText(
           "Skills & Technologies",
-          fontSize: _getResponsiveFontSize(context, 28),
+          fontSize: Responsive.getFontSize(context, mobile: 28, desktop: 36),
           fontWeight: FontWeight.bold,
-          color: textColor,
+          color: themeProvider.isDarkMode ? AppColors.white : AppColors.black,
         ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.3);
       },
     );
@@ -77,17 +56,20 @@ class SkillsSection extends StatelessWidget {
       {
         'category': 'Mobile Development',
         'skills': ['Flutter', 'Dart', 'Android', 'iOS', 'Cross-platform'],
-        'color': Colors.blue,
-        'icon': Icons.phone_android,
+        'color': const Color(0xFF2196F3),
+        'icon': Icons.phone_android_rounded,
+        'description': 'Building beautiful cross-platform mobile applications',
       },
       {
-        'category': 'AI Tools',
+        'category': 'AI & Modern Tools',
         'skills': ['Docker', 'Whisper APIs', 'Dialog Flow', 'Gemini APIs'],
-        'color': Colors.orange,
-        'icon': Icons.smart_toy,
+        'color': const Color(0xFFFF9800),
+        'icon': Icons.smart_toy_rounded,
+        'description':
+            'Integrating AI capabilities and modern development tools',
       },
       {
-        'category': 'Backend & Tools',
+        'category': 'Backend & Development',
         'skills': [
           'Git',
           'REST APIs',
@@ -97,15 +79,16 @@ class SkillsSection extends StatelessWidget {
           'BLoC',
           'Postman',
         ],
-        'color': Colors.green,
-        'icon': Icons.storage,
+        'color': const Color(0xFF4CAF50),
+        'icon': Icons.storage_rounded,
+        'description': 'Full-stack development and database management',
       },
     ];
 
     return AnimationLimiter(
       child: Column(
         children: AnimationConfiguration.toStaggeredList(
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 400),
           childAnimationBuilder:
               (widget) => SlideAnimation(
                 horizontalOffset: 50.0,
@@ -129,263 +112,210 @@ class SkillsSection extends StatelessWidget {
   ) {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
-        final textColor =
-            themeProvider.isDarkMode ? AppColors.white : AppColors.black;
+        final categoryColor = category['color'] as Color;
 
         return Container(
               margin: EdgeInsets.only(
-                bottom: _getResponsivePadding(context, 24),
+                bottom: Responsive.getSpacing(context, multiplier: 1.5),
               ),
-              padding: EdgeInsets.all(_getResponsivePadding(context, 20)),
+              padding: EdgeInsets.all(
+                Responsive.getSpacing(context, multiplier: 1.5),
+              ),
               decoration: BoxDecoration(
                 color: (themeProvider.isDarkMode
                         ? AppColors.buttonColorDark
                         : AppColors.cardLight)
-                    .withOpacity(0.3),
-                borderRadius: BorderRadius.circular(12),
+                    .withOpacity(0.4),
+                borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: (category['color'] as Color).withOpacity(0.3),
-                  width: 1,
+                  color: categoryColor.withOpacity(0.2),
+                  width: 1.5,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: (category['color'] as Color).withOpacity(0.1),
-                    blurRadius: 8,
-                    spreadRadius: 1,
-                    offset: const Offset(0, 2),
+                    color: categoryColor.withOpacity(0.08),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                    spreadRadius: 0,
                   ),
                 ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header Row - Stack on mobile for better space usage
-                  if (Responsive.isMobile(context)) ...[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(
-                                _getResponsivePadding(context, 8),
-                              ),
-                              decoration: BoxDecoration(
-                                color: (category['color'] as Color).withOpacity(
-                                  0.2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Icon(
-                                category['icon'] as IconData,
-                                color: category['color'] as Color,
-                                size: _getResponsiveIconSize(context, 18),
-                              ),
-                            ),
-                            SizedBox(width: _getResponsivePadding(context, 12)),
-                            Expanded(
-                              child: CustomText(
-                                category['category'] as String,
-                                fontSize: _getResponsiveFontSize(context, 16),
-                                fontWeight: FontWeight.bold,
-                                color: textColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: _getResponsivePadding(context, 8)),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: _getResponsivePadding(context, 8),
-                            vertical: _getResponsivePadding(context, 4),
-                          ),
-                          decoration: BoxDecoration(
-                            color: (category['color'] as Color).withOpacity(
-                              0.1,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: CustomText(
-                            '${(category['skills'] as List).length} skills',
-                            fontSize: _getResponsiveFontSize(context, 9),
-                            fontWeight: FontWeight.w500,
-                            color: category['color'] as Color,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ] else ...[
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(
-                            _getResponsivePadding(context, 8),
-                          ),
-                          decoration: BoxDecoration(
-                            color: (category['color'] as Color).withOpacity(
-                              0.2,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            category['icon'] as IconData,
-                            color: category['color'] as Color,
-                            size: _getResponsiveIconSize(context, 20),
-                          ),
-                        ),
-                        SizedBox(width: _getResponsivePadding(context, 12)),
-                        Expanded(
-                          child: CustomText(
-                            category['category'] as String,
-                            fontSize: _getResponsiveFontSize(context, 18),
-                            fontWeight: FontWeight.bold,
-                            color: textColor,
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: _getResponsivePadding(context, 8),
-                            vertical: _getResponsivePadding(context, 4),
-                          ),
-                          decoration: BoxDecoration(
-                            color: (category['color'] as Color).withOpacity(
-                              0.1,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: CustomText(
-                            '${(category['skills'] as List).length} skills',
-                            fontSize: _getResponsiveFontSize(context, 10),
-                            fontWeight: FontWeight.w500,
-                            color: category['color'] as Color,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-
-                  SizedBox(height: _getResponsivePadding(context, 16)),
-                  _buildSkillChips(
-                    category['skills'] as List<String>,
-                    category['color'] as Color,
-                    context,
+                  _buildCategoryHeader(category, context, themeProvider),
+                  SizedBox(height: Responsive.getSpacing(context)),
+                  _buildCategoryDescription(category, context, themeProvider),
+                  SizedBox(
+                    height: Responsive.getSpacing(context, multiplier: 1.2),
                   ),
+                  _buildSkillChips(category, context, themeProvider),
                 ],
               ),
             )
-            .animate(delay: Duration(milliseconds: index * 100))
-            .fadeIn(duration: 500.ms)
-            .slideY(begin: 0.2, end: 0);
+            .animate(delay: Duration(milliseconds: index * 150))
+            .fadeIn(duration: 600.ms)
+            .slideY(begin: 0.3);
       },
     );
   }
 
-  Widget _buildSkillChips(
-    List<String> skills,
-    Color color,
+  Widget _buildCategoryHeader(
+    Map<String, dynamic> category,
     BuildContext context,
+    ThemeProvider themeProvider,
   ) {
-    return Wrap(
-      spacing: Responsive.isMobile(context) ? 6 : 8,
-      runSpacing: Responsive.isMobile(context) ? 6 : 8,
-      children:
-          skills.asMap().entries.map((entry) {
-            final index = entry.key;
-            final skill = entry.value;
+    final categoryColor = category['color'] as Color;
 
-            return Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: _getResponsivePadding(context, 12),
-                    vertical: _getResponsivePadding(context, 8),
-                  ),
-                  decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: color.withOpacity(0.3), width: 1),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: Responsive.isMobile(context) ? 5 : 6,
-                        height: Responsive.isMobile(context) ? 5 : 6,
-                        decoration: BoxDecoration(
-                          color: color,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      SizedBox(width: _getResponsivePadding(context, 6)),
-                      CustomText(
-                        skill,
-                        fontSize: _getResponsiveFontSize(context, 12),
-                        fontWeight: FontWeight.w500,
-                        color: color,
-                      ),
-                    ],
-                  ),
-                )
-                .animate(delay: Duration(milliseconds: index * 50))
-                .fadeIn(duration: 300.ms)
-                .scale(begin: const Offset(0.8, 0.8));
-          }).toList(),
+    return Responsive.responsive(
+      context,
+      mobile: _buildMobileCategoryHeader(category, context, themeProvider),
+      desktop: _buildDesktopCategoryHeader(category, context, themeProvider),
     );
   }
 
-  // Enhanced interactive skill chips with hover effects
-  Widget _buildInteractiveSkillChips(
-    List<String> skills,
-    Color color,
+  Widget _buildMobileCategoryHeader(
+    Map<String, dynamic> category,
+    BuildContext context,
+    ThemeProvider themeProvider,
+  ) {
+    final categoryColor = category['color'] as Color;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            _buildCategoryIcon(category, context),
+            SizedBox(width: Responsive.getSpacing(context, multiplier: 0.75)),
+            Expanded(
+              child: CustomText(
+                category['category'] as String,
+                fontSize: Responsive.getFontSize(
+                  context,
+                  mobile: 18,
+                  desktop: 20,
+                ),
+                fontWeight: FontWeight.bold,
+                color:
+                    themeProvider.isDarkMode
+                        ? AppColors.white
+                        : AppColors.black,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopCategoryHeader(
+    Map<String, dynamic> category,
+    BuildContext context,
+    ThemeProvider themeProvider,
+  ) {
+    return Row(
+      children: [
+        _buildCategoryIcon(category, context),
+        SizedBox(width: Responsive.getSpacing(context)),
+        Expanded(
+          child: CustomText(
+            category['category'] as String,
+            fontSize: Responsive.getFontSize(context, mobile: 18, desktop: 22),
+            fontWeight: FontWeight.bold,
+            color: themeProvider.isDarkMode ? AppColors.white : AppColors.black,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategoryIcon(
+    Map<String, dynamic> category,
     BuildContext context,
   ) {
+    final categoryColor = category['color'] as Color;
+
+    return Container(
+      padding: EdgeInsets.all(Responsive.getSpacing(context, multiplier: 0.75)),
+      decoration: BoxDecoration(
+        color: categoryColor.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: categoryColor.withOpacity(0.3), width: 1),
+      ),
+      child: Icon(
+        category['icon'] as IconData,
+        color: categoryColor,
+        size: Responsive.getIconSize(context, multiplier: 1.2),
+      ),
+    );
+  }
+
+  Widget _buildCategoryDescription(
+    Map<String, dynamic> category,
+    BuildContext context,
+    ThemeProvider themeProvider,
+  ) {
+    return CustomText(
+      category['description'] as String,
+      fontSize: Responsive.getFontSize(context, mobile: 14, desktop: 16),
+      fontWeight: FontWeight.w400,
+      color: (themeProvider.isDarkMode ? AppColors.white : AppColors.darkText)
+          .withOpacity(0.7),
+    );
+  }
+
+  Widget _buildSkillChips(
+    Map<String, dynamic> category,
+    BuildContext context,
+    ThemeProvider themeProvider,
+  ) {
+    final skills = category['skills'] as List<String>;
+    final categoryColor = category['color'] as Color;
+
     return Wrap(
-      spacing: Responsive.isMobile(context) ? 6 : 8,
-      runSpacing: Responsive.isMobile(context) ? 6 : 8,
+      spacing: Responsive.getSpacing(context, multiplier: 0.5),
+      runSpacing: Responsive.getSpacing(context, multiplier: 0.5),
       children:
           skills.asMap().entries.map((entry) {
             final index = entry.key;
             final skill = entry.value;
 
-            return _SkillChipHoverable(
+            return _SkillChip(
               skill: skill,
-              color: color,
+              color: categoryColor,
               index: index,
-              context: context,
-              getResponsiveFontSize: _getResponsiveFontSize,
-              getResponsivePadding: _getResponsivePadding,
+              themeProvider: themeProvider,
             );
           }).toList(),
     );
   }
 }
 
-// Separate hoverable skill chip widget for better performance
-class _SkillChipHoverable extends StatefulWidget {
+class _SkillChip extends StatefulWidget {
   final String skill;
   final Color color;
   final int index;
-  final BuildContext context;
-  final Function getResponsiveFontSize;
-  final Function getResponsivePadding;
+  final ThemeProvider themeProvider;
 
-  const _SkillChipHoverable({
+  const _SkillChip({
     required this.skill,
     required this.color,
     required this.index,
-    required this.context,
-    required this.getResponsiveFontSize,
-    required this.getResponsivePadding,
+    required this.themeProvider,
   });
 
   @override
-  State<_SkillChipHoverable> createState() => _SkillChipHoverableState();
+  State<_SkillChip> createState() => _SkillChipState();
 }
 
-class _SkillChipHoverableState extends State<_SkillChipHoverable>
-    with TickerProviderStateMixin {
+class _SkillChipState extends State<_SkillChip>
+    with SingleTickerProviderStateMixin {
   bool _isHovered = false;
   late AnimationController _hoverController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _elevationAnimation;
+  late Animation<double> _borderAnimation;
 
   @override
   void initState() {
@@ -396,11 +326,15 @@ class _SkillChipHoverableState extends State<_SkillChipHoverable>
     );
 
     _scaleAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
-      CurvedAnimation(parent: _hoverController, curve: Curves.easeOutQuart),
+      CurvedAnimation(parent: _hoverController, curve: Curves.easeOutCubic),
     );
 
-    _elevationAnimation = Tween<double>(begin: 0.0, end: 4.0).animate(
-      CurvedAnimation(parent: _hoverController, curve: Curves.easeOutQuart),
+    _elevationAnimation = Tween<double>(begin: 0.0, end: 8.0).animate(
+      CurvedAnimation(parent: _hoverController, curve: Curves.easeOutCubic),
+    );
+
+    _borderAnimation = Tween<double>(begin: 0.3, end: 0.6).animate(
+      CurvedAnimation(parent: _hoverController, curve: Curves.easeOutCubic),
     );
   }
 
@@ -410,12 +344,9 @@ class _SkillChipHoverableState extends State<_SkillChipHoverable>
     super.dispose();
   }
 
-  void _onHover(bool hovering) {
-    if (!Responsive.isMobile(widget.context)) {
-      setState(() {
-        _isHovered = hovering;
-      });
-
+  void _handleHover(bool hovering) {
+    if (!Responsive.isMobile(context)) {
+      setState(() => _isHovered = hovering);
       if (hovering) {
         _hoverController.forward();
       } else {
@@ -427,8 +358,8 @@ class _SkillChipHoverableState extends State<_SkillChipHoverable>
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-          onEnter: (_) => _onHover(true),
-          onExit: (_) => _onHover(false),
+          onEnter: (_) => _handleHover(true),
+          onExit: (_) => _handleHover(false),
           cursor: SystemMouseCursors.click,
           child: AnimatedBuilder(
             animation: _hoverController,
@@ -437,17 +368,17 @@ class _SkillChipHoverableState extends State<_SkillChipHoverable>
                 scale: _scaleAnimation.value,
                 child: Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: widget.getResponsivePadding(
-                      widget.context,
-                      12.0,
+                    horizontal: Responsive.getSpacing(
+                      context,
+                      multiplier: 0.75,
                     ),
-                    vertical: widget.getResponsivePadding(widget.context, 8.0),
+                    vertical: Responsive.getSpacing(context, multiplier: 0.5),
                   ),
                   decoration: BoxDecoration(
                     color: widget.color.withOpacity(_isHovered ? 0.15 : 0.1),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: widget.color.withOpacity(_isHovered ? 0.5 : 0.3),
+                      color: widget.color.withOpacity(_borderAnimation.value),
                       width: _isHovered ? 1.5 : 1,
                     ),
                     boxShadow:
@@ -458,7 +389,7 @@ class _SkillChipHoverableState extends State<_SkillChipHoverable>
                                 blurRadius: _elevationAnimation.value,
                                 offset: Offset(
                                   0,
-                                  _elevationAnimation.value * 0.5,
+                                  _elevationAnimation.value * 0.3,
                                 ),
                               ),
                             ]
@@ -468,21 +399,25 @@ class _SkillChipHoverableState extends State<_SkillChipHoverable>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        width: Responsive.isMobile(widget.context) ? 5 : 6,
-                        height: Responsive.isMobile(widget.context) ? 5 : 6,
+                        width: Responsive.isMobile(context) ? 5 : 6,
+                        height: Responsive.isMobile(context) ? 5 : 6,
                         decoration: BoxDecoration(
                           color: widget.color,
                           shape: BoxShape.circle,
                         ),
                       ),
                       SizedBox(
-                        width: widget.getResponsivePadding(widget.context, 6.0),
+                        width: Responsive.getSpacing(
+                          context,
+                          multiplier: 0.375,
+                        ),
                       ),
                       CustomText(
                         widget.skill,
-                        fontSize: widget.getResponsiveFontSize(
-                          widget.context,
-                          12.0,
+                        fontSize: Responsive.getFontSize(
+                          context,
+                          mobile: 12,
+                          desktop: 13,
                         ),
                         fontWeight: FontWeight.w500,
                         color: widget.color,
@@ -494,8 +429,8 @@ class _SkillChipHoverableState extends State<_SkillChipHoverable>
             },
           ),
         )
-        .animate(delay: Duration(milliseconds: widget.index * 50))
-        .fadeIn(duration: 300.ms)
+        .animate(delay: Duration(milliseconds: widget.index * 80))
+        .fadeIn(duration: 400.ms)
         .scale(begin: const Offset(0.8, 0.8));
   }
 }

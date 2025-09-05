@@ -26,7 +26,6 @@ class HomeScreenBody extends StatelessWidget {
           const SkillsSection(),
           SizedBox(height: Responsive.isMobile(context) ? 30 : 60),
           const ContactSection(),
-          SizedBox(height: Responsive.isMobile(context) ? 30 : 60),
         ],
       ),
     );
