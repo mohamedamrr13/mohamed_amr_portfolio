@@ -137,10 +137,10 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       'status': 'Completed',
       'hasRepo': true,
       'hasApk': true,
-      'hasGallery': false, // Add images later
+      'hasGallery': false, // Add images laters
       'repoUrl': 'https://github.com/mohamedamrr13/Minesweeper',
       'apkUrl':
-          'https://drive.google.com/file/d/17oZSD9cV-mbNt9nYxYFW2m98-ILLNjFp/view?usp=sharing',
+          'https://drive.google.com/file/d/17oZSD9cV-mbNt9nYxYFW2m98-ILLNjFp/view?usp=drive_link',
       'galleryImages': [], // Placeholder for future images
     },
     {
@@ -276,7 +276,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     if (screenWidth <= 800) {
       // Mobile: 1 column
       crossAxisCount = 1;
-      childAspectRatio = 0.85;
+      childAspectRatio = 0.7;
     } else if (screenWidth <= 1300) {
       // Tablet: 2 columns
       crossAxisCount = 2;
@@ -492,6 +492,7 @@ class _ProjectCardState extends State<_ProjectCard>
                                         multiplier: 0.75,
                                       ),
                                     ),
+
                                     Expanded(
                                       child: _buildProjectDescription(
                                         context,
@@ -546,9 +547,9 @@ class _ProjectCardState extends State<_ProjectCard>
 
     // Responsive image height
     double imageHeight;
-    if (screenWidth <= 1000) {
+    if (screenWidth <= 900) {
       imageHeight = 220;
-    } else if (screenWidth <= 1500) {
+    } else if (screenWidth <= 1300) {
       imageHeight = 250;
     } else {
       imageHeight = 280;
