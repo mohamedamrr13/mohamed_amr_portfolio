@@ -8,6 +8,7 @@ import 'package:mohamed_amr_portfolio/core/theming/app_colors.dart';
 import 'package:mohamed_amr_portfolio/core/theming/theme_provider.dart';
 import 'package:mohamed_amr_portfolio/core/utils/responsive.dart';
 import 'package:mohamed_amr_portfolio/core/utils/scroll_controller.dart';
+import 'package:mohamed_amr_portfolio/features/home/presentation/sections/project_image_page_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,9 +22,9 @@ class ProjectsSection extends StatefulWidget {
 class _ProjectsSectionState extends State<ProjectsSection> {
   int? _expandedCardIndex;
 
-  static const List<Map<String, dynamic>> _projects = [
+  static final List<Map<String, dynamic>> _projects = [
     {
-      'title': 'Muslim 🕌',
+      'title': 'Muslim',
       'description':
           'A modern prayer and spiritual assistant app that displays prayer times using location-based API, integrated Qiblah compass, daily Azkar screen, and native Android home screen widget for prayer times.',
       'image': 'assets/images/muslim_mockup.jpg',
@@ -38,9 +39,11 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       'status': 'Completed',
       'hasRepo': true,
       'hasApk': true,
+      'hasGallery': false, // Add images later
       'repoUrl': 'https://github.com/Fady4Mohamed/muslim',
       'apkUrl':
           'https://drive.google.com/file/d/1YH6agh5G4NxOqxa4PGoUORLG5eEggfIP/view?usp=drive_link',
+      'galleryImages': [], // Placeholder for future images
     },
     {
       'title': 'MugLife',
@@ -59,11 +62,19 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       'status': 'In Progress',
       'hasRepo': true,
       'hasApk': false,
+      'hasGallery': true,
       'repoUrl': 'https://github.com/mohamedamrr13/MugLife',
       'apkUrl': '',
+      'galleryImages': [
+        'assets/images/muglife splash.png',
+        ...List.generate(
+          11,
+          (index) => 'assets/images/muglife ${index + 1}.png',
+        ),
+      ],
     },
     {
-      'title': 'Sphinx Go 🧳',
+      'title': 'Sphinx Go',
       'description':
           'A comprehensive travel booking application for flights, tours, and hotels with integrated user authentication, RESTful API integration using Chopper, and an AI-powered chatbot using Dialogflow for interactive support.',
       'image': 'assets/images/sphinx_go_mockup.png',
@@ -82,9 +93,17 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       'type': 'Mobile App',
       'status': 'Completed',
       'hasRepo': false,
-      'hasApk': false,
+      'hasApk': true,
+      'hasGallery': true, // Add images later
       'repoUrl': '',
-      'apkUrl': '',
+      'apkUrl':
+          'https://drive.google.com/file/d/15-lBDJKZOBKvYRifmnqxvPz86KCmmTb5/view?usp=drive_link',
+      'galleryImages': [
+        ...List.generate(
+          11,
+          (index) => 'assets/images/sphinx ${index + 1}.png',
+        ),
+      ], // Placeholder for future images
     },
     {
       'title': 'Modern Weather App',
@@ -102,12 +121,30 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       'status': 'Completed',
       'hasRepo': true,
       'hasApk': true,
+      'hasGallery': false, // Add images later
       'repoUrl': 'https://github.com/mohamedamrr13/weather',
       'apkUrl':
           'https://drive.google.com/file/d/10kBV4FFv1WWqWQ1nw0tUqwTg5DLwig6w/view?usp=drive_link',
+      'galleryImages': [], // Placeholder for future images
     },
     {
-      'title': 'Balanced Meal 🥗',
+      'title': 'Minesweeper',
+      'description':
+          'A classic Minesweeper implementation built with Flutter, Highscore ranking using local database, featuring modern UI design and comprehensive gameplay mechanics.',
+      'image': 'assets/images/minesweeper_mockup.png',
+      'technologies': ['Flutter', 'Hive', 'Lottie', 'Dart Formulas', '2D'],
+      'type': 'Mobile Game',
+      'status': 'Completed',
+      'hasRepo': true,
+      'hasApk': true,
+      'hasGallery': false, // Add images later
+      'repoUrl': 'https://github.com/mohamedamrr13/Minesweeper',
+      'apkUrl':
+          'https://drive.google.com/file/d/17oZSD9cV-mbNt9nYxYFW2m98-ILLNjFp/view?usp=sharing',
+      'galleryImages': [], // Placeholder for future images
+    },
+    {
+      'title': 'Balanced Meal',
       'description':
           'A functional meal ordering app with calorie calculator based on user metrics, Firebase Firestore integration for meal ingredients, custom cart logic with dynamic pricing, and order validation system.',
       'image': 'assets/images/balanced_meal_mockup.png',
@@ -120,13 +157,15 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       ],
       'type': 'Mobile App',
       'status': 'Completed',
-      'hasRepo': false,
+      'hasRepo': true,
       'hasApk': false,
+      'hasGallery': false, // Add images later
       'repoUrl': 'https://app.flutterflow.io/project/balanced-meal-k26szy',
       'apkUrl': '',
+      'galleryImages': [], // Placeholder for future images
     },
     {
-      'title': 'Bookly 📚',
+      'title': 'Bookly',
       'description':
           'An online book browsing app built with Clean Architecture, integrated with Google Books API to fetch and display book data, and uses Hive for efficient local storage and state persistence.',
       'image': 'assets/images/bookly_app_mockup.png',
@@ -141,8 +180,10 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       'status': 'Completed',
       'hasRepo': true,
       'hasApk': false,
-      'repoUrl': 'https://github.com/mohamedamrr13/clean_arch_bookly',
+      'hasGallery': false, // Add images later
+      'repoUrl': 'https://github.com/mohamedamrr13/bookly',
       'apkUrl': '',
+      'galleryImages': [], // Placeholder for future images
     },
   ];
 
@@ -152,6 +193,34 @@ class _ProjectsSectionState extends State<ProjectsSection> {
         _expandedCardIndex = _expandedCardIndex == cardIndex ? null : cardIndex;
       });
     }
+  }
+
+  void _navigateToGallery(Map<String, dynamic> project) {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder:
+            (context, animation, secondaryAnimation) => ProjectGalleryPage(
+              projectTitle: project['title'],
+              imagePaths: List<String>.from(project['galleryImages']),
+            ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          var tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 400),
+      ),
+    );
   }
 
   @override
@@ -243,6 +312,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                   index: index,
                   isExpanded: _expandedCardIndex == index,
                   onExpansionChanged: () => _handleCardExpansion(index),
+                  onGalleryTap: () => _navigateToGallery(_projects[index]),
                 ),
               ),
             ),
@@ -258,12 +328,14 @@ class _ProjectCard extends StatefulWidget {
   final int index;
   final bool isExpanded;
   final VoidCallback onExpansionChanged;
+  final VoidCallback onGalleryTap;
 
   const _ProjectCard({
     required this.project,
     required this.index,
     required this.isExpanded,
     required this.onExpansionChanged,
+    required this.onGalleryTap,
   });
 
   @override
@@ -352,7 +424,8 @@ class _ProjectCardState extends State<_ProjectCard>
       builder: (context, themeProvider, child) {
         final hasRepo = widget.project['hasRepo'] ?? false;
         final hasApk = widget.project['hasApk'] ?? false;
-        final showButtons = hasRepo || hasApk;
+        final hasGallery = widget.project['hasGallery'] ?? false;
+        final showButtons = hasRepo || hasApk || hasGallery;
         final isMobile = MediaQuery.of(context).size.width <= 600;
         final shouldShowOverlay = isMobile ? widget.isExpanded : _isHovered;
 
@@ -454,6 +527,7 @@ class _ProjectCardState extends State<_ProjectCard>
                             shouldShowOverlay,
                             hasRepo,
                             hasApk,
+                            hasGallery,
                           ),
                       ],
                     ),
@@ -472,12 +546,12 @@ class _ProjectCardState extends State<_ProjectCard>
 
     // Responsive image height
     double imageHeight;
-    if (screenWidth <= 600) {
-      imageHeight = 160.0;
-    } else if (screenWidth <= 900) {
-      imageHeight = 180.0;
+    if (screenWidth <= 1000) {
+      imageHeight = 220;
+    } else if (screenWidth <= 1500) {
+      imageHeight = 250;
     } else {
-      imageHeight = 200.0;
+      imageHeight = 280;
     }
 
     return Container(
@@ -678,6 +752,7 @@ class _ProjectCardState extends State<_ProjectCard>
     bool shouldShowOverlay,
     bool hasRepo,
     bool hasApk,
+    bool hasGallery,
   ) {
     return Positioned.fill(
       child: AnimatedContainer(
@@ -701,13 +776,23 @@ class _ProjectCardState extends State<_ProjectCard>
                       if (hasRepo) ...[
                         _ActionButton(
                           onTap: () => _launchUrl(widget.project['repoUrl']),
-                          iconPath: 'assets/images/github.svg',
-                          label: 'Source Code',
+                          iconPath:
+                              widget.project['title'].toString().contains(
+                                    "Balanced",
+                                  )
+                                  ? 'assets/images/demo.svg'
+                                  : 'assets/images/github.svg',
+                          label:
+                              widget.project['title'].toString().contains(
+                                    "Balanced",
+                                  )
+                                  ? 'FlutterFlow Project'
+                                  : 'Source Code',
                           delay: 0,
                           themeProvider: themeProvider,
                         ),
                       ],
-                      if (hasRepo && hasApk)
+                      if ((hasRepo && hasApk) || (hasRepo && hasGallery))
                         SizedBox(
                           height: Responsive.getSpacing(
                             context,
@@ -717,9 +802,41 @@ class _ProjectCardState extends State<_ProjectCard>
                       if (hasApk) ...[
                         _ActionButton(
                           onTap: () => _launchUrl(widget.project['apkUrl']),
-                          iconPath: 'assets/images/apkIcon.svg',
-                          label: 'Download APK',
+                          iconPath:
+                              widget.project['title'].toString().contains(
+                                    'Sphinx',
+                                  )
+                                  ? 'assets/images/demo.svg'
+                                  : 'assets/images/apkIcon.svg',
+                          label:
+                              widget.project['title'].toString().contains(
+                                    'Sphinx',
+                                  )
+                                  ? 'Video Demo'
+                                  : 'Download APK',
                           delay: hasRepo ? 100 : 0,
+                          themeProvider: themeProvider,
+                        ),
+                      ],
+                      if ((hasApk && hasGallery) ||
+                          (hasRepo && hasApk && hasGallery))
+                        SizedBox(
+                          height: Responsive.getSpacing(
+                            context,
+                            multiplier: 0.75,
+                          ),
+                        ),
+                      if (hasGallery) ...[
+                        _ActionButton(
+                          onTap: widget.onGalleryTap,
+                          iconPath: 'assets/images/gallery.svg',
+                          label: 'View Gallery',
+                          delay:
+                              (hasRepo && hasApk)
+                                  ? 200
+                                  : (hasRepo || hasApk)
+                                  ? 100
+                                  : 0,
                           themeProvider: themeProvider,
                         ),
                       ],
@@ -853,15 +970,7 @@ class _ActionButtonState extends State<_ActionButton>
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        SvgPicture.asset(
-                          widget.iconPath,
-                          width: Responsive.getIconSize(context),
-                          height: Responsive.getIconSize(context),
-                          colorFilter: const ColorFilter.mode(
-                            AppColors.black,
-                            BlendMode.srcIn,
-                          ),
-                        ),
+                        _buildIcon(),
                         SizedBox(
                           width: Responsive.getSpacing(
                             context,
@@ -889,5 +998,23 @@ class _ActionButtonState extends State<_ActionButton>
         .animate(delay: Duration(milliseconds: widget.delay))
         .slideY(begin: 0.5, duration: 300.ms, curve: Curves.elasticOut)
         .fadeIn();
+  }
+
+  Widget _buildIcon() {
+    // Handle gallery icon differently since it might not be an SVG
+    if (widget.iconPath.contains('gallery')) {
+      return Icon(
+        Icons.photo_library_outlined,
+        size: Responsive.getIconSize(context),
+        color: AppColors.black,
+      );
+    }
+
+    return SvgPicture.asset(
+      widget.iconPath,
+      width: Responsive.getIconSize(context),
+      height: Responsive.getIconSize(context),
+      colorFilter: const ColorFilter.mode(AppColors.black, BlendMode.srcIn),
+    );
   }
 }
