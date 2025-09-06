@@ -100,7 +100,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
           'https://drive.google.com/file/d/15-lBDJKZOBKvYRifmnqxvPz86KCmmTb5/view?usp=drive_link',
       'galleryImages': [
         ...List.generate(
-          11,
+          24,
           (index) => 'assets/images/sphinx ${index + 1}.png',
         ),
       ], // Placeholder for future images
