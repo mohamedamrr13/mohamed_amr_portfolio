@@ -444,43 +444,6 @@ class ExperienceSection extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusChip(
-    String status,
-    Color statusColor,
-    BuildContext context,
-  ) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: Responsive.getSpacing(context, multiplier: 0.5),
-        vertical: Responsive.getSpacing(context, multiplier: 0.25),
-      ),
-      decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: statusColor.withOpacity(0.4), width: 1),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(
-              color: statusColor,
-              shape: BoxShape.circle,
-            ),
-          ),
-          SizedBox(width: Responsive.getSpacing(context, multiplier: 0.25)),
-          CustomText(
-            status,
-            fontSize: Responsive.getFontSize(context, mobile: 10, desktop: 11),
-            fontWeight: FontWeight.w600,
-            color: statusColor,
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildPeriodChip(
     String period,
@@ -518,33 +481,6 @@ class ExperienceSection extends StatelessWidget {
     );
   }
 
-  Widget _buildDurationChip(
-    String duration,
-    ThemeProvider themeProvider,
-    BuildContext context,
-  ) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: Responsive.getSpacing(context, multiplier: 0.5),
-        vertical: Responsive.getSpacing(context, multiplier: 0.25),
-      ),
-      decoration: BoxDecoration(
-        color:
-            themeProvider.isDarkMode
-                ? AppColors.buttonColorDark.withOpacity(0.6)
-                : AppColors.cardLight.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.withOpacity(0.2), width: 1),
-      ),
-      child: CustomText(
-        duration,
-        fontSize: Responsive.getFontSize(context, mobile: 9, desktop: 10),
-        fontWeight: FontWeight.w400,
-        color: (themeProvider.isDarkMode ? AppColors.white : AppColors.darkText)
-            .withOpacity(0.7),
-      ),
-    );
-  }
 
   // Helper methods
   String _calculateDuration(String period) {

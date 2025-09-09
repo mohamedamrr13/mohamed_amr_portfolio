@@ -303,15 +303,7 @@ class ContactSection extends StatelessWidget {
         ),
       ),
     ).animate().fadeIn(duration: 600.ms, delay: 1400.ms);
-  }
-
-  void _launchUrl(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    }
-  }
-}
+  }}
 
 class _SocialButton extends StatefulWidget {
   final Map<String, String> link;

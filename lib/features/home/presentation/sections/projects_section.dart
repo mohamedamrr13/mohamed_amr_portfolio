@@ -42,7 +42,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       'hasGallery': false, // Add images later
       'repoUrl': 'https://github.com/Fady4Mohamed/muslim',
       'apkUrl':
-          'https://drive.google.com/file/d/1YH6agh5G4NxOqxa4PGoUORLG5eEggfIP/view?usp=drive_link',
+          'https://drive.google.com/file/d/1YH6agh5G4NxOqxa4PGoUORLG5eEggfIP/view?usp=sharing',
       'galleryImages': [], // Placeholder for future images
     },
     {
@@ -124,7 +124,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       'hasGallery': false, // Add images later
       'repoUrl': 'https://github.com/mohamedamrr13/weather',
       'apkUrl':
-          'https://drive.google.com/file/d/10kBV4FFv1WWqWQ1nw0tUqwTg5DLwig6w/view?usp=drive_link',
+          'https://drive.google.com/file/d/10kBV4FFv1WWqWQ1nw0tUqwTg5DLwig6w/view?usp=sharing',
       'galleryImages': [], // Placeholder for future images
     },
     {
@@ -140,7 +140,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       'hasGallery': false, // Add images laters
       'repoUrl': 'https://github.com/mohamedamrr13/Minesweeper',
       'apkUrl':
-          'https://drive.google.com/file/d/17oZSD9cV-mbNt9nYxYFW2m98-ILLNjFp/view?usp=drive_link',
+          'https://drive.google.com/file/d/17oZSD9cV-mbNt9nYxYFW2m98-ILLNjFp/view?usp=sharing',
       'galleryImages': [], // Placeholder for future images
     },
     {
@@ -872,7 +872,6 @@ class _ActionButton extends StatefulWidget {
 class _ActionButtonState extends State<_ActionButton>
     with SingleTickerProviderStateMixin {
   bool _isPressed = false;
-  bool _isHovered = false;
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _elevationAnimation;
@@ -901,7 +900,6 @@ class _ActionButtonState extends State<_ActionButton>
   }
 
   void _handleHover(bool hovering) {
-    setState(() => _isHovered = hovering);
     if (hovering) {
       _animationController.forward();
     } else {

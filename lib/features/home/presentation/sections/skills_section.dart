@@ -165,7 +165,6 @@ class SkillsSection extends StatelessWidget {
     BuildContext context,
     ThemeProvider themeProvider,
   ) {
-    final categoryColor = category['color'] as Color;
 
     return Responsive.responsive(
       context,
@@ -179,7 +178,6 @@ class SkillsSection extends StatelessWidget {
     BuildContext context,
     ThemeProvider themeProvider,
   ) {
-    final categoryColor = category['color'] as Color;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
