@@ -42,7 +42,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       'hasGallery': false, // Add images later
       'repoUrl': 'https://github.com/Fady4Mohamed/muslim',
       'apkUrl':
-          'https://drive.google.com/file/d/1YH6agh5G4NxOqxa4PGoUORLG5eEggfIP/view?usp=sharing',
+          'https://drive.google.com/file/d/1SgerMdMCZ7QMuQYmuBXn4ke5XxY1ytnZ/view?usp=drive_link',
       'galleryImages': [], // Placeholder for future images
     },
     {
