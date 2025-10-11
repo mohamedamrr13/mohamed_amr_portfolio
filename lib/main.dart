@@ -1,6 +1,7 @@
 // lib/main.dart - Enhanced with theme and SEO
 import 'package:flutter/material.dart';
 import 'package:mohamed_amr_portfolio/core/seo/seo_wrapper.dart';
+import 'package:mohamed_amr_portfolio/features/home/presentation/sections/project_image_page_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:seo/seo.dart';
 import 'package:mohamed_amr_portfolio/core/theming/theme_provider.dart';
@@ -40,6 +41,54 @@ class MyPortfolio extends StatelessWidget {
               url: 'https://mamr.vercel.app',
 
               child: MaterialApp(
+                initialRoute: '/',
+                onGenerateRoute: (settings) {
+                  if (settings.name == '/') {
+                    return MaterialPageRoute(builder: (_) => HomeScreen());
+                  } else if (settings.name?.startsWith('/project/') ?? false) {
+                    // Extract project title from URL
+                    final projectTitle = settings.name!.substring(
+                      '/project/'.length,
+                    );
+                    final args = settings.arguments as Map<String, dynamic>?;
+
+                    return PageRouteBuilder(
+                      settings: settings, // Important for web URL
+                      pageBuilder:
+                          (context, animation, secondaryAnimation) =>
+                              ProjectGalleryPage(
+                                projectTitle:
+                                    args?['title'] ??
+                                    Uri.decodeComponent(projectTitle),
+                                imagePaths: List<String>.from(
+                                  args?['galleryImages'] ?? [],
+                                ),
+                              ),
+                      transitionsBuilder: (
+                        context,
+                        animation,
+                        secondaryAnimation,
+                        child,
+                      ) {
+                        const begin = Offset(1.0, 0.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOut;
+
+                        var tween = Tween(
+                          begin: begin,
+                          end: end,
+                        ).chain(CurveTween(curve: curve));
+
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                      transitionDuration: const Duration(milliseconds: 400),
+                    );
+                  }
+                  return null;
+                },
                 title: 'Mohamed Amr - Flutter Developer',
                 theme: AppThemes.lightTheme,
                 darkTheme: AppThemes.darkTheme,

@@ -196,31 +196,15 @@ class _ProjectsSectionState extends State<ProjectsSection> {
   }
 
   void _navigateToGallery(Map<String, dynamic> project) {
-    Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder:
-            (context, animation, secondaryAnimation) => ProjectGalleryPage(
-              projectTitle: project['title'],
-              imagePaths: List<String>.from(project['galleryImages']),
-            ),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(1.0, 0.0);
-          const end = Offset.zero;
-          const curve = Curves.easeInOut;
+    // Create a URL-friendly slug from the title
+    final slug = project['title']
+        .toString()
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]+'), '-')
+        .replaceAll(RegExp(r'-+'), '-')
+        .replaceAll(RegExp(r'^-|-$'), '');
 
-          var tween = Tween(
-            begin: begin,
-            end: end,
-          ).chain(CurveTween(curve: curve));
-
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
-        transitionDuration: const Duration(milliseconds: 400),
-      ),
-    );
+    Navigator.of(context).pushNamed('/project/$slug', arguments: project);
   }
 
   @override
