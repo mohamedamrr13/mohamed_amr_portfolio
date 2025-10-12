@@ -196,7 +196,7 @@ class ContactSection extends StatelessWidget {
         'name': 'CV',
         'icon': 'assets/images/cv.svg',
         'url':
-            'https://drive.google.com/file/d/1tuucD62OP1-L5m7p9fIbJcIoj0uCBNha/view?usp=drivesdk',
+            'https://drive.google.com/file/d/10qv80YqGuPZScvUMyYI5_C049KgHWXBL/view?usp=drive_link',
         'description': 'View my resume',
       },
       {
@@ -303,7 +303,8 @@ class ContactSection extends StatelessWidget {
         ),
       ),
     ).animate().fadeIn(duration: 600.ms, delay: 1400.ms);
-  }}
+  }
+}
 
 class _SocialButton extends StatefulWidget {
   final Map<String, String> link;

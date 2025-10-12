@@ -8,7 +8,6 @@ import 'package:mohamed_amr_portfolio/core/theming/app_colors.dart';
 import 'package:mohamed_amr_portfolio/core/theming/theme_provider.dart';
 import 'package:mohamed_amr_portfolio/core/utils/responsive.dart';
 import 'package:mohamed_amr_portfolio/core/utils/scroll_controller.dart';
-import 'package:mohamed_amr_portfolio/features/home/presentation/sections/project_image_page_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
