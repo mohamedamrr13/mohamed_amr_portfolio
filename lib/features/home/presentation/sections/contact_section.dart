@@ -196,7 +196,7 @@ class ContactSection extends StatelessWidget {
         'name': 'CV',
         'icon': 'assets/images/cv.svg',
         'url':
-            'https://drive.google.com/file/d/10qv80YqGuPZScvUMyYI5_C049KgHWXBL/view?usp=drive_link',
+            'https://drive.google.com/file/d/12ASvLzErGZJSYo6oUlKVlk0mewv8s8gr/view?usp=drive_link',
         'description': 'View my resume',
       },
       {
