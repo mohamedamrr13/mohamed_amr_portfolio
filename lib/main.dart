@@ -1,4 +1,3 @@
-// lib/main.dart - Enhanced with theme and SEO
 import 'package:flutter/material.dart';
 import 'package:mohamed_amr_portfolio/core/seo/seo_wrapper.dart';
 import 'package:mohamed_amr_portfolio/features/home/presentation/sections/project_image_page_screen.dart';
