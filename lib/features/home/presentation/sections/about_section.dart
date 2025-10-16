@@ -12,8 +12,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutSection extends StatelessWidget {
-  const AboutSection({super.key});
-
+  const AboutSection({super.key, required this.show});
+  final bool show;
   @override
   Widget build(BuildContext context) {
     return SectionWrapper(
@@ -252,10 +252,15 @@ class AboutSection extends StatelessWidget {
         'onPressed': () => _scrollToSection('projects'),
       },
       {
-        'title': 'Contact Me',
+        'title': !show ? 'My Github' : 'Contact Me',
         'icon': Icons.mail_outline_rounded,
         'isPrimary': false,
-        'onPressed': () => _launchUrl('mailto:mohamed.egypt140@gmail.com'),
+        'onPressed':
+            () => _launchUrl(
+              !show
+                  ? 'https://github.com/mohamedamrr13'
+                  : 'mailto:mohamed.egypt140@gmail.com',
+            ),
       },
     ];
 

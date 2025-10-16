@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mohamed_amr_portfolio/core/seo/seo_wrapper.dart';
 import 'package:mohamed_amr_portfolio/features/home/presentation/sections/project_image_page_screen.dart';
+import 'package:mohamed_amr_portfolio/portfolio_config.dart';
 import 'package:provider/provider.dart';
 import 'package:seo/seo.dart';
 import 'package:mohamed_amr_portfolio/core/theming/theme_provider.dart';
@@ -42,17 +43,31 @@ class MyPortfolio extends StatelessWidget {
               child: MaterialApp(
                 initialRoute: '/',
                 onGenerateRoute: (settings) {
-                  if (settings.name == '/') {
-                    return MaterialPageRoute(builder: (_) => HomeScreen());
-                  } else if (settings.name?.startsWith('/project/') ?? false) {
-                    // Extract project title from URL
+                  // Home route - full config (with contact)
+                  if (settings.name == '/' ||
+                      (settings.name?.isEmpty ?? false)) {
+                    return MaterialPageRoute(
+                      builder:
+                          (_) => HomeScreen(config: PortfolioConfig.full()),
+                    );
+                  }
+                  // Freelance route - without contact
+                  else if (settings.name == '/freelance') {
+                    return MaterialPageRoute(
+                      builder:
+                          (_) =>
+                              HomeScreen(config: PortfolioConfig.freelance()),
+                    );
+                  }
+                  // Project gallery route
+                  else if (settings.name?.startsWith('/project/') ?? false) {
                     final projectTitle = settings.name!.substring(
                       '/project/'.length,
                     );
                     final args = settings.arguments as Map<String, dynamic>?;
 
                     return PageRouteBuilder(
-                      settings: settings, // Important for web URL
+                      settings: settings,
                       pageBuilder:
                           (context, animation, secondaryAnimation) =>
                               ProjectGalleryPage(
@@ -86,6 +101,8 @@ class MyPortfolio extends StatelessWidget {
                       transitionDuration: const Duration(milliseconds: 400),
                     );
                   }
+
+                  // Default fallback
                   return null;
                 },
                 title: 'Mohamed Amr - Flutter Developer',

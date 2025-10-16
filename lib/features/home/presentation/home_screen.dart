@@ -1,5 +1,6 @@
 // lib/features/home/presentation/home_screen.dart
 import 'package:flutter/material.dart';
+import 'package:mohamed_amr_portfolio/portfolio_config.dart';
 import 'package:provider/provider.dart';
 import 'package:mohamed_amr_portfolio/core/shared/background_widget.dart';
 import 'package:mohamed_amr_portfolio/core/theming/app_colors.dart';
@@ -9,7 +10,8 @@ import 'package:mohamed_amr_portfolio/core/utils/scroll_controller.dart';
 import 'package:mohamed_amr_portfolio/features/home/presentation/widgets/home_screen_body.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.config = const PortfolioConfig()});
+  final PortfolioConfig config;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -103,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen>
               BackgroundWidget(
                 child: SingleChildScrollView(
                   controller: _scrollController,
-                  child: const HomeScreenBody(),
+                  child: HomeScreenBody(config: widget.config),
                 ),
               ),
               _buildAnimatedAppBar(context, themeProvider),
@@ -324,7 +326,8 @@ class _HomeScreenState extends State<HomeScreen>
         'icon': Icons.folder_copy_outlined,
       },
       {'value': 'skills', 'text': 'Skills', 'icon': Icons.code},
-      {'value': 'contact', 'text': 'Contact', 'icon': Icons.mail_outline},
+      if (widget.config.showContact)
+        {'value': 'contact', 'text': 'Contact', 'icon': Icons.mail_outline},
     ];
 
     return items.map((item) {
@@ -361,7 +364,7 @@ class _HomeScreenState extends State<HomeScreen>
       {'text': 'Experience', 'section': 'experience'},
       {'text': 'Projects', 'section': 'projects'},
       {'text': 'Skills', 'section': 'skills'},
-      {'text': 'Contact', 'section': 'contact'},
+      if (widget.config.showContact) {'text': 'Contact', 'section': 'contact'},
     ];
 
     return navItems.map((item) {
