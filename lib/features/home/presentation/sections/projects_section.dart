@@ -143,8 +143,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       'technologies': [
         'FlutterFlow',
         'Firebase',
-        'Dart Formulas',
-        'Custom Functions',
+        'Formulas & Custom Functions',
       ],
       'type': 'Mobile App',
       'status': 'Completed',
