@@ -32,7 +32,6 @@ class _ProjectsSectionState extends State<ProjectsSection> {
         'Kotlin',
         'Location API',
         'Native Android',
-        'Widget Development',
       ],
       'type': 'Mobile App',
       'status': 'Completed',
@@ -144,7 +143,6 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       'technologies': [
         'FlutterFlow',
         'Firebase',
-        'Firestore',
         'Dart Formulas',
         'Custom Functions',
       ],
